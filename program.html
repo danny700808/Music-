@@ -11,13 +11,12 @@
     body{min-height:100svh;background:linear-gradient(180deg,#050505,#15100a 52%,#050505);overflow-x:hidden;}
     header{position:sticky;top:0;z-index:10;padding:12px 14px;background:linear-gradient(180deg,rgba(0,0,0,.92),rgba(0,0,0,.65));backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
     .topbar{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .title{min-width:0}.title strong{display:block;font-size:18px;letter-spacing:.08em;color:var(--gold)}.title span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+    .title{min-width:0}.title strong{display:block;font-size:18px;letter-spacing:.08em;color:var(--gold)}
     .home{flex:0 0 auto;text-decoration:none;color:#20160a;background:linear-gradient(135deg,#f0d58a,#b98d3f);font-weight:800;border-radius:999px;padding:10px 14px;font-size:14px;box-shadow:0 8px 22px rgba(0,0,0,.25)}
     main{max-width:920px;margin:0 auto;padding:18px 14px 110px;text-align:center;}
     .viewer{position:relative;width:100%;touch-action:pan-y;}
     .pagebox{width:min(100%,720px);margin:0 auto;border-radius:20px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(240,213,138,.25);box-shadow:0 18px 52px rgba(0,0,0,.42);}
-    .pagebox img{display:block;width:100%;height:auto;max-height:calc(100svh - 188px);object-fit:contain;background:#111;}
-    .caption{margin:14px auto 8px;color:var(--muted);font-size:14px;line-height:1.6;}
+    .pagebox img{display:block;width:100%;height:auto;max-height:calc(100svh - 160px);object-fit:contain;background:#111;}
     .dots{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin:10px auto 0;}
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);border:0;padding:0}.dot.active{background:var(--gold);transform:scale(1.25)}
     .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(0,0,0,.94),rgba(0,0,0,.62),transparent);}
@@ -32,17 +31,16 @@
 <body>
   <header>
     <div class="topbar">
-      <div class="title"><strong>節目單</strong><span>左右滑動或使用下方按鈕翻頁</span></div>
-      <a class="home" href="index.html?v=12">回主頁</a>
+      <div class="title"><strong>節目單</strong></div>
+      <a class="home" href="index.html?v=10">回主頁</a>
     </div>
   </header>
 
   <main>
     <section class="viewer" id="viewer" aria-live="polite">
       <div class="pagebox" id="pagebox">
-        <img id="pageImage" src="cover.jpg" alt="節目單第 1 頁" />
+        <img id="pageImage" src="page01.jpg" alt="節目單第 1 頁" />
       </div>
-      <p class="caption" id="caption">左右滑動查看節目，也可按下方左右按鈕換頁</p>
       <div class="dots" id="dots" aria-label="頁碼指示"></div>
     </section>
   </main>
@@ -50,17 +48,16 @@
   <nav class="bottom-nav" aria-label="節目單翻頁">
     <div class="bottom-inner">
       <button class="navbtn" type="button" id="prevBtn">‹ 上一頁</button>
-      <div class="count" id="count">1 / 9</div>
+      <div class="count" id="count">1 / 8</div>
       <button class="navbtn" type="button" id="nextBtn">下一頁 ›</button>
     </div>
     <div style="max-width:520px;margin:10px auto 0;">
-      <a class="home2" href="index.html?v=12">回主頁</a>
+      <a class="home2" href="index.html?v=10">回主頁</a>
     </div>
   </nav>
 
   <script>
     const pages = [
-      { src: 'cover.jpg', label: '封面' },
       { src: 'page01.jpg', label: '第 1 頁' },
       { src: 'page02.jpg', label: '第 2 頁' },
       { src: 'page03.jpg', label: '第 3 頁' },
@@ -73,7 +70,6 @@
 
     let index = 0;
     const img = document.getElementById('pageImage');
-    const caption = document.getElementById('caption');
     const count = document.getElementById('count');
     const dots = document.getElementById('dots');
     const pagebox = document.getElementById('pagebox');
@@ -91,13 +87,12 @@
       index = (i + pages.length) % pages.length;
       img.src = pages[index].src;
       img.alt = `節目單${pages[index].label}`;
-      caption.textContent = pages[index].label + '｜左右滑動查看節目，也可按下方左右按鈕換頁';
       count.textContent = `${index + 1} / ${pages.length}`;
       [...dots.children].forEach((d, n) => d.classList.toggle('active', n === index));
     }
 
     img.onerror = function(){
-      pagebox.innerHTML = '<div class="empty">找不到這一頁圖片。請確認 GitHub 裡是否有 cover.jpg、page01.jpg 到 page08.jpg。</div>';
+      pagebox.innerHTML = '<div class="empty">找不到這一頁圖片。請確認 GitHub 裡是否有 page01.jpg 到 page08.jpg。</div>';
     };
 
     document.getElementById('prevBtn').addEventListener('click', () => show(index - 1));
