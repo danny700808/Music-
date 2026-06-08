@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>節目導覽影片</title>
+  <style>
+    :root{
+      --bg:#070707;
+      --gold:#d7b56d;
+      --gold2:#fff1bd;
+      --text:#fffaf0;
+      --muted:rgba(255,250,240,.72);
+      --line:rgba(255,255,255,.16);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;min-height:100%;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(215,181,109,.20), transparent 27%),
+        radial-gradient(circle at 80% 4%, rgba(255,255,255,.08), transparent 24%),
+        linear-gradient(180deg,#111 0%,#050505 100%);
+    }
+    .wrap{
+      width:min(940px,100%);
+      margin:0 auto;
+      min-height:100dvh;
+      padding:24px 14px max(26px, env(safe-area-inset-bottom));
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:18px;
+    }
+    .head{
+      text-align:center;
+      padding:6px 8px 0;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold2);
+      border:1px solid rgba(215,181,109,.30);
+      background:rgba(215,181,109,.10);
+      border-radius:999px;
+      padding:8px 13px;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.12em;
+      margin-bottom:14px;
+    }
+    h1{
+      margin:0;
+      color:var(--gold2);
+      font-size:clamp(28px,7vw,42px);
+      line-height:1.15;
+      letter-spacing:.08em;
+      font-weight:1000;
+    }
+    .sub{
+      margin:10px auto 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      font-weight:650;
+    }
+    .videoCard{
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.055));
+      box-shadow:0 22px 70px rgba(0,0,0,.46);
+      padding:10px;
+      overflow:hidden;
+    }
+    .videoBox{
+      position:relative;
+      width:100%;
+      aspect-ratio:16/9;
+      border-radius:20px;
+      overflow:hidden;
+      background:#000;
+    }
+    .videoBox iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+    }
+    .footer{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding-bottom:4px;
+    }
+    .homeBtn,
+    .programBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:48px;
+      padding:12px 20px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:1000;
+      letter-spacing:.06em;
+      border:1px solid rgba(215,181,109,.28);
+      box-shadow:0 12px 26px rgba(0,0,0,.28);
+    }
+    .homeBtn{
+      background:linear-gradient(135deg,var(--gold2),var(--gold));
+      color:#16120a;
+    }
+    .programBtn{
+      background:rgba(255,255,255,.08);
+      color:var(--gold2);
+      border-color:rgba(255,255,255,.18);
+    }
+    .homeBtn:active,.programBtn:active{transform:scale(.985);}
+    @media (max-width:520px){
+      .wrap{justify-content:flex-start;padding-top:32px;}
+      .videoCard{border-radius:22px;padding:8px;}
+      .videoBox{border-radius:16px;}
+      .homeBtn,.programBtn{width:100%;}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <div class="eyebrow">VIDEO</div>
+      <h1>節目導覽影片</h1>
+      <p class="sub">點擊影片即可播放，播放完可回主頁或前往節目單。</p>
+    </header>
+
+    <section class="videoCard" aria-label="節目導覽影片播放器">
+      <div class="videoBox">
+        <iframe
+          src="https://www.youtube.com/embed/pCR04zNOtsU"
+          title="節目導覽影片"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <a class="homeBtn" href="index.html">回主頁</a>
+      <a class="programBtn" href="program.html">前往節目單</a>
+    </footer>
+  </main>
+</body>
+</html>
