@@ -127,7 +127,7 @@
   <main>
     <section class="viewer" id="viewer" aria-live="polite">
       <div class="pagebox" id="pagebox">
-        <img id="pageImage" src="page02.jpg?v=20260608c" alt="節目單第 1 頁" />
+        <img id="pageImage" src="page01.jpg?v=20260608d" alt="節目單第 1 頁" />
       </div>
     </section>
   </main>
@@ -135,7 +135,7 @@
   <nav class="bottom-nav" aria-label="節目單翻頁">
     <div class="bottom-inner">
       <button class="navbtn" type="button" id="prevBtn">‹ 上一頁</button>
-      <div class="count" id="count">1 / 7</div>
+      <div class="count" id="count">1 / 8</div>
       <button class="navbtn" type="button" id="nextBtn">下一頁 ›</button>
     </div>
     <div class="home-wrap">
@@ -145,13 +145,14 @@
 
   <script>
     const pages = [
-      { src: 'page02.jpg?v=20260608c', label: '第 1 頁' },
-      { src: 'page03.jpg?v=20260608c', label: '第 2 頁' },
-      { src: 'page04.jpg?v=20260608c', label: '第 3 頁' },
-      { src: 'page05.jpg?v=20260608c', label: '第 4 頁' },
-      { src: 'page06.jpg?v=20260608c', label: '第 5 頁' },
-      { src: 'page07.jpg?v=20260608c', label: '第 6 頁' },
-      { src: 'page08.jpg?v=20260608c', label: '第 7 頁' }
+      { src: 'page01.jpg?v=20260608d', label: '第 1 頁' },
+      { src: 'page02.jpg?v=20260608d', label: '第 2 頁' },
+      { src: 'page03.jpg?v=20260608d', label: '第 3 頁' },
+      { src: 'page04.jpg?v=20260608d', label: '第 4 頁' },
+      { src: 'page05.jpg?v=20260608d', label: '第 5 頁' },
+      { src: 'page06.jpg?v=20260608d', label: '第 6 頁' },
+      { src: 'page07.jpg?v=20260608d', label: '第 7 頁' },
+      { src: 'page08.jpg?v=20260608d', label: '第 8 頁' }
     ];
 
     let index = 0;
@@ -167,7 +168,7 @@
     }
 
     img.onerror = function() {
-      pagebox.innerHTML = '<div class="empty">找不到這一頁圖片。請確認 GitHub 裡是否有 page02.jpg 到 page08.jpg。</div>';
+      pagebox.innerHTML = '<div class="empty">找不到這一頁圖片。請確認 GitHub 裡是否有 page01.jpg 到 page08.jpg。</div>';
     };
 
     document.getElementById('prevBtn').addEventListener('click', () => show(index - 1));
