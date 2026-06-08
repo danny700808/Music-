@@ -1,206 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>節目單｜入口</title>
+  <title>夏至狂響曲｜入口</title>
   <style>
     :root{
-      --bg:#070707;
-      --card:rgba(255,255,255,.075);
-      --card2:rgba(255,255,255,.11);
-      --gold:#d7b56d;
-      --gold2:#fff1bd;
+      --bg:#080808;
+      --card:rgba(255,255,255,.085);
+      --line:rgba(255,255,255,.18);
       --text:#fffaf0;
-      --muted:rgba(255,250,240,.72);
-      --line:rgba(255,255,255,.16);
-      --shadow:0 22px 70px rgba(0,0,0,.52);
+      --muted:rgba(255,250,240,.76);
+      --gold:#f0d58a;
+      --gold2:#b98d3f;
     }
-    *{box-sizing:border-box;}
-    html,body{margin:0;min-height:100%;}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;}
     body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-      color:var(--text);
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 18px calc(28px + env(safe-area-inset-bottom));
       background:
-        radial-gradient(circle at 16% 10%, rgba(215,181,109,.22), transparent 28%),
-        radial-gradient(circle at 86% 14%, rgba(255,255,255,.10), transparent 24%),
-        radial-gradient(circle at 50% 100%, rgba(215,181,109,.13), transparent 34%),
-        linear-gradient(180deg,#111 0%,#050505 100%);
+        radial-gradient(circle at 20% 15%, rgba(240,213,138,.18), transparent 30%),
+        radial-gradient(circle at 85% 80%, rgba(185,141,63,.18), transparent 35%),
+        linear-gradient(145deg,#050505 0%,#17110a 48%,#050505 100%);
       overflow-x:hidden;
     }
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background-image:
-        linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.026) 1px, transparent 1px);
-      background-size:34px 34px;
-      mask-image:linear-gradient(180deg,rgba(0,0,0,.82),transparent 78%);
-    }
-    .page{
-      position:relative;
-      min-height:100dvh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px 18px max(28px, env(safe-area-inset-bottom));
-    }
-    .panel{
-      width:min(460px,100%);
-      border:1px solid var(--line);
-      border-radius:34px;
-      background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.055));
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(14px);
-      padding:26px 20px 22px;
-      text-align:center;
-      overflow:hidden;
-      position:relative;
-    }
-    .panel::before{
-      content:"";
-      position:absolute;
-      left:20px;right:20px;top:0;
-      height:5px;
-      border-radius:0 0 999px 999px;
-      background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);
-    }
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      color:var(--gold2);
-      border:1px solid rgba(215,181,109,.30);
-      background:rgba(215,181,109,.10);
-      border-radius:999px;
-      padding:8px 13px;
-      font-size:13px;
-      font-weight:800;
-      letter-spacing:.12em;
-      margin-bottom:18px;
-    }
-    h1{
-      margin:0;
-      font-size:clamp(31px,8vw,44px);
-      line-height:1.08;
-      letter-spacing:.08em;
-      color:var(--gold2);
-      text-shadow:0 4px 24px rgba(215,181,109,.25);
-      font-weight:1000;
-    }
-    .sub{
-      margin:14px auto 26px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.8;
-      max-width:330px;
-      font-weight:650;
-    }
-    .choices{
-      display:grid;
-      gap:14px;
-    }
-    .choice{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      text-align:left;
-      text-decoration:none;
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.16);
-      background:linear-gradient(135deg,var(--card2),var(--card));
+    .shell{width:min(520px,100%);text-align:center;}
+    .cover{
+      width:100%;
+      max-width:360px;
+      margin:0 auto 22px;
       border-radius:24px;
-      padding:17px 17px;
-      min-height:88px;
-      box-shadow:0 14px 34px rgba(0,0,0,.26);
-      transition:transform .16s ease, border-color .16s ease, background .16s ease;
+      overflow:hidden;
+      border:1px solid rgba(240,213,138,.32);
+      box-shadow:0 22px 60px rgba(0,0,0,.46);
+      background:rgba(255,255,255,.06);
     }
-    .choice:active{transform:scale(.985);}
-    .choice:hover{border-color:rgba(215,181,109,.42);}
+    .cover img{display:block;width:100%;height:auto;}
+    .brand{letter-spacing:.14em;color:var(--gold);font-size:13px;margin:0 0 8px;font-weight:700;}
+    h1{font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 10px;font-weight:900;letter-spacing:.04em;}
+    .sub{margin:0 auto 24px;color:var(--muted);font-size:16px;line-height:1.65;}
+    .menu{display:grid;gap:14px;margin-top:20px;}
+    .btn{
+      display:flex;align-items:center;gap:14px;
+      width:100%;padding:18px 18px;border-radius:20px;
+      text-decoration:none;color:var(--text);text-align:left;
+      background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.06));
+      border:1px solid var(--line);
+      box-shadow:0 12px 26px rgba(0,0,0,.26);
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn:active{transform:scale(.985)}
     .icon{
-      width:48px;height:48px;
-      border-radius:18px;
-      flex:0 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(135deg,rgba(215,181,109,.30),rgba(255,241,189,.12));
-      border:1px solid rgba(215,181,109,.25);
-      font-size:24px;
+      flex:0 0 54px;width:54px;height:54px;border-radius:18px;
+      display:grid;place-items:center;font-size:28px;
+      color:#1c1408;background:linear-gradient(135deg,var(--gold),var(--gold2));
     }
-    .choiceText{min-width:0;flex:1;}
-    .choiceTitle{
-      font-size:21px;
-      font-weight:1000;
-      letter-spacing:.08em;
-      color:#fff6d2;
-      margin-bottom:5px;
-    }
-    .choiceDesc{
-      font-size:13px;
-      line-height:1.55;
-      color:rgba(255,250,240,.65);
-      font-weight:650;
-    }
-    .arrow{
-      flex:0 0 auto;
-      width:34px;height:34px;
-      display:flex;align-items:center;justify-content:center;
-      border-radius:999px;
-      color:#111;
-      background:linear-gradient(135deg,var(--gold2),var(--gold));
-      font-size:22px;
-      font-weight:1000;
-    }
-    .note{
-      margin:20px 0 0;
-      color:rgba(255,250,240,.52);
-      font-size:12px;
-      line-height:1.7;
-      font-weight:650;
-    }
+    .txt strong{display:block;font-size:22px;letter-spacing:.05em;margin-bottom:4px;}
+    .txt span{display:block;color:var(--muted);font-size:14px;line-height:1.45;}
+    .foot{margin-top:22px;color:rgba(255,250,240,.58);font-size:13px;line-height:1.6;}
     @media (max-width:420px){
-      .page{padding-left:14px;padding-right:14px;}
-      .panel{border-radius:28px;padding:24px 16px 18px;}
-      .choice{padding:15px 14px;min-height:82px;border-radius:22px;}
-      .icon{width:44px;height:44px;border-radius:16px;}
-      .choiceTitle{font-size:20px;}
+      body{padding:22px 14px calc(22px + env(safe-area-inset-bottom));}
+      .cover{max-width:300px;border-radius:20px;margin-bottom:18px;}
+      .btn{padding:16px;border-radius:18px;}
+      .icon{width:50px;height:50px;flex-basis:50px;font-size:25px;}
+      .txt strong{font-size:20px;}
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="panel" aria-label="節目單入口">
-      <div class="eyebrow">WELCOME</div>
-      <h1>節目單</h1>
-      <p class="sub">請選擇要查看的內容，點選後即可進入節目單或觀看節目導覽影片。</p>
+  <main class="shell" aria-label="主選單">
+    <div class="cover" aria-hidden="true">
+      <img src="cover.jpg" alt="夏至狂響曲封面" onerror="this.parentElement.style.display='none'" />
+    </div>
+    <p class="brand">114學年度成果發表會</p>
+    <h1>夏至狂響曲</h1>
+    <p class="sub">請選擇要查看的內容</p>
 
-      <div class="choices">
-        <a class="choice" href="program.html">
-          <div class="icon" aria-hidden="true">♫</div>
-          <div class="choiceText">
-            <div class="choiceTitle">節目單</div>
-            <div class="choiceDesc">查看演出節目與頁面內容</div>
-          </div>
-          <div class="arrow" aria-hidden="true">›</div>
-        </a>
+    <nav class="menu">
+      <a class="btn" href="program.html?v=12" aria-label="進入節目單">
+        <span class="icon">📖</span>
+        <span class="txt"><strong>節目單</strong><span>查看完整節目內容，左右滑動翻頁。</span></span>
+      </a>
+      <a class="btn" href="video.html?v=12" aria-label="進入節目導覽影片">
+        <span class="icon">▶</span>
+        <span class="txt"><strong>節目導覽影片</strong><span>觀看 YouTube 導覽影片。</span></span>
+      </a>
+    </nav>
 
-        <a class="choice" href="video.html">
-          <div class="icon" aria-hidden="true">▶</div>
-          <div class="choiceText">
-            <div class="choiceTitle">節目導覽影片</div>
-            <div class="choiceDesc">觀看 YouTube 導覽影片</div>
-          </div>
-          <div class="arrow" aria-hidden="true">›</div>
-        </a>
-      </div>
-
-      <p class="note">建議用手機直式觀看，按鈕已依手機版調整。</p>
-    </section>
+    <p class="foot">臺中市立豐東國中管樂團</p>
   </main>
 </body>
 </html>

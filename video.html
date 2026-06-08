@@ -1,157 +1,52 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>節目導覽影片</title>
+  <title>夏至狂響曲｜節目導覽影片</title>
   <style>
-    :root{
-      --bg:#070707;
-      --gold:#d7b56d;
-      --gold2:#fff1bd;
-      --text:#fffaf0;
-      --muted:rgba(255,250,240,.72);
-      --line:rgba(255,255,255,.16);
-    }
-    *{box-sizing:border-box;}
-    html,body{margin:0;min-height:100%;}
-    body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 18% 8%, rgba(215,181,109,.20), transparent 27%),
-        radial-gradient(circle at 80% 4%, rgba(255,255,255,.08), transparent 24%),
-        linear-gradient(180deg,#111 0%,#050505 100%);
-    }
-    .wrap{
-      width:min(940px,100%);
-      margin:0 auto;
-      min-height:100dvh;
-      padding:24px 14px max(26px, env(safe-area-inset-bottom));
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:18px;
-    }
-    .head{
-      text-align:center;
-      padding:6px 8px 0;
-    }
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--gold2);
-      border:1px solid rgba(215,181,109,.30);
-      background:rgba(215,181,109,.10);
-      border-radius:999px;
-      padding:8px 13px;
-      font-size:13px;
-      font-weight:800;
-      letter-spacing:.12em;
-      margin-bottom:14px;
-    }
-    h1{
-      margin:0;
-      color:var(--gold2);
-      font-size:clamp(28px,7vw,42px);
-      line-height:1.15;
-      letter-spacing:.08em;
-      font-weight:1000;
-    }
-    .sub{
-      margin:10px auto 0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.75;
-      font-weight:650;
-    }
-    .videoCard{
-      border:1px solid var(--line);
-      border-radius:26px;
-      background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.055));
-      box-shadow:0 22px 70px rgba(0,0,0,.46);
-      padding:10px;
-      overflow:hidden;
-    }
-    .videoBox{
-      position:relative;
-      width:100%;
-      aspect-ratio:16/9;
-      border-radius:20px;
-      overflow:hidden;
-      background:#000;
-    }
-    .videoBox iframe{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      border:0;
-    }
-    .footer{
-      display:flex;
-      justify-content:center;
-      gap:12px;
-      flex-wrap:wrap;
-      padding-bottom:4px;
-    }
-    .homeBtn,
-    .programBtn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:48px;
-      padding:12px 20px;
-      border-radius:999px;
-      text-decoration:none;
-      font-weight:1000;
-      letter-spacing:.06em;
-      border:1px solid rgba(215,181,109,.28);
-      box-shadow:0 12px 26px rgba(0,0,0,.28);
-    }
-    .homeBtn{
-      background:linear-gradient(135deg,var(--gold2),var(--gold));
-      color:#16120a;
-    }
-    .programBtn{
-      background:rgba(255,255,255,.08);
-      color:var(--gold2);
-      border-color:rgba(255,255,255,.18);
-    }
-    .homeBtn:active,.programBtn:active{transform:scale(.985);}
-    @media (max-width:520px){
-      .wrap{justify-content:flex-start;padding-top:32px;}
-      .videoCard{border-radius:22px;padding:8px;}
-      .videoBox{border-radius:16px;}
-      .homeBtn,.programBtn{width:100%;}
-    }
+    :root{--bg:#070707;--text:#fffaf0;--muted:rgba(255,250,240,.74);--gold:#f0d58a;--gold2:#b98d3f;--line:rgba(255,255,255,.16)}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;}
+    body{min-height:100svh;background:linear-gradient(180deg,#050505,#15100a 52%,#050505);padding:18px 14px calc(26px + env(safe-area-inset-bottom));}
+    .wrap{max-width:920px;margin:0 auto;text-align:center;}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
+    .title{text-align:left;min-width:0}.title strong{display:block;font-size:20px;letter-spacing:.08em;color:var(--gold)}.title span{display:block;margin-top:4px;font-size:13px;color:var(--muted)}
+    .home{flex:0 0 auto;text-decoration:none;color:#20160a;background:linear-gradient(135deg,var(--gold),var(--gold2));font-weight:900;border-radius:999px;padding:11px 15px;font-size:14px;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+    .video-card{padding:12px;border:1px solid rgba(240,213,138,.26);border-radius:22px;background:rgba(255,255,255,.07);box-shadow:0 18px 52px rgba(0,0,0,.42);}
+    .video-wrap{position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;background:#000;}
+    .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+    .note{color:var(--muted);font-size:14px;line-height:1.7;margin:18px 6px 0;}
+    .actions{display:grid;gap:10px;margin:22px auto 0;max-width:520px;}
+    .btn{display:block;text-decoration:none;color:var(--text);border:1px solid var(--line);background:rgba(255,255,255,.11);border-radius:16px;padding:15px 16px;font-weight:900;-webkit-tap-highlight-color:transparent;}
+    .btn.primary{color:#20160a;background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;}
+    .btn:active{transform:scale(.985)}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <header class="head">
-      <div class="eyebrow">VIDEO</div>
-      <h1>節目導覽影片</h1>
-      <p class="sub">點擊影片即可播放，播放完可回主頁或前往節目單。</p>
-    </header>
+    <div class="top">
+      <div class="title"><strong>節目導覽影片</strong><span>夏至狂響曲</span></div>
+      <a class="home" href="index.html?v=12">回主頁</a>
+    </div>
 
-    <section class="videoCard" aria-label="節目導覽影片播放器">
-      <div class="videoBox">
+    <section class="video-card" aria-label="YouTube 導覽影片">
+      <div class="video-wrap">
         <iframe
           src="https://www.youtube.com/embed/pCR04zNOtsU"
           title="節目導覽影片"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen>
         </iframe>
       </div>
     </section>
 
-    <footer class="footer">
-      <a class="homeBtn" href="index.html">回主頁</a>
-      <a class="programBtn" href="program.html">前往節目單</a>
-    </footer>
+    <p class="note">影片若無法播放，可點下方按鈕直接用 YouTube 開啟。</p>
+    <div class="actions">
+      <a class="btn primary" href="https://youtu.be/pCR04zNOtsU" target="_blank" rel="noopener">用 YouTube 開啟影片</a>
+      <a class="btn" href="program.html?v=12">前往節目單</a>
+      <a class="btn" href="index.html?v=12">回主頁</a>
+    </div>
   </main>
 </body>
 </html>
