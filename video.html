@@ -8,6 +8,7 @@
     :root {
       --bg: #060606;
       --text: #fffaf0;
+      --muted: rgba(255,250,240,.72);
       --gold: #f0d58a;
       --gold-dark: #20160a;
       --line: rgba(255,255,255,.16);
@@ -36,6 +37,19 @@
       max-width: 920px;
       margin: 0 auto;
       padding: 22px 14px calc(26px + env(safe-area-inset-bottom));
+    }
+
+    .head-title {
+      margin-bottom: 18px;
+    }
+
+    .head-title h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: .06em;
+      color: var(--gold);
+      font-weight: 900;
     }
 
     .video-card {
@@ -96,6 +110,10 @@
 </head>
 <body>
   <main>
+    <section class="head-title" aria-label="頁面標題">
+      <h1>節目導覽影片</h1>
+    </section>
+
     <section class="video-card" aria-label="節目導覽影片播放器">
       <div class="video-wrap">
         <iframe
