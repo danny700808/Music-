@@ -5,14 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>節目單</title>
   <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body {
       margin: 0;
-      padding: 0;
       width: 100%;
       min-height: 100%;
       background: #05090d;
@@ -20,12 +15,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
       overflow-x: hidden;
     }
-
-    body {
-      display: flex;
-      justify-content: center;
-    }
-
+    body { display: flex; justify-content: center; }
     .app {
       position: relative;
       width: 100%;
@@ -34,7 +24,6 @@
       background: #05090d;
       overflow: hidden;
     }
-
     .top-label {
       position: fixed;
       top: 28px;
@@ -42,15 +31,14 @@
       transform: translateX(-50%);
       z-index: 20;
       padding: 7px 16px;
-      border: 1px solid rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,.22);
       border-radius: 999px;
-      background: rgba(5, 9, 13, 0.55);
-      color: rgba(255,255,255,0.85);
+      background: rgba(5,9,13,.62);
+      color: rgba(255,255,255,.86);
       font-size: 15px;
-      letter-spacing: 0.08em;
+      letter-spacing: .08em;
       backdrop-filter: blur(6px);
     }
-
     .viewer {
       position: relative;
       width: 100%;
@@ -58,14 +46,12 @@
       overflow: hidden;
       touch-action: pan-y;
     }
-
     .track {
       display: flex;
       width: 100%;
       height: 100%;
-      transition: transform 0.38s ease;
+      transition: transform .38s ease;
     }
-
     .slide {
       flex: 0 0 100%;
       width: 100%;
@@ -73,10 +59,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0;
       background: #05090d;
+      position: relative;
     }
-
     .slide img {
       display: block;
       width: 100%;
@@ -85,16 +70,7 @@
       object-position: center center;
       background: #05090d;
     }
-
-    .slide-cover {
-      position: relative;
-      background: #05090d;
-    }
-
-    .slide-cover img {
-      opacity: 0;
-    }
-
+    .slide-cover img { opacity: 0; }
     .cover-content {
       position: absolute;
       inset: 0;
@@ -106,10 +82,9 @@
       padding: 0 24px 70px;
       text-align: center;
       background:
-        radial-gradient(circle at 50% 30%, rgba(255,255,255,0.04), transparent 34%),
-        linear-gradient(to bottom, rgba(5,9,13,0.15), rgba(5,9,13,0.96) 72%);
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,.04), transparent 34%),
+        linear-gradient(to bottom, rgba(5,9,13,.15), rgba(5,9,13,.96) 72%);
     }
-
     .cover-line {
       width: 70%;
       max-width: 310px;
@@ -117,65 +92,42 @@
       background: linear-gradient(to right, transparent, #f7d777, transparent);
       margin: 0 auto 22px;
     }
-
     .cover-title {
       margin: 0;
       color: #ffe99f;
-      font-size: clamp(54px, 16vw, 78px);
+      font-size: clamp(54px,16vw,78px);
       font-weight: 900;
-      letter-spacing: 0.14em;
+      letter-spacing: .14em;
       line-height: 1;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      text-shadow: 0 2px 10px rgba(0,0,0,.35);
     }
-
-    .cover-line.bottom {
-      margin: 22px auto 34px;
-    }
-
+    .cover-line.bottom { margin: 22px auto 34px; }
     .cover-subtitle {
-      color: rgba(255,255,255,0.75);
-      font-size: clamp(18px, 5vw, 25px);
-      letter-spacing: 0.18em;
+      color: rgba(255,255,255,.75);
+      font-size: clamp(18px,5vw,25px);
+      letter-spacing: .18em;
       margin-bottom: 18px;
     }
-
     .swipe-hint {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 26px;
-      color: rgba(255,255,255,0.88);
-      font-size: clamp(34px, 10vw, 46px);
+      color: rgba(255,255,255,.88);
+      font-size: clamp(34px,10vw,46px);
       line-height: 1;
       margin-bottom: 34px;
     }
-
-    .finger {
-      font-size: clamp(36px, 11vw, 48px);
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45));
-    }
-
-    .dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      height: 18px;
-    }
-
+    .finger { font-size: clamp(36px,11vw,48px); filter: drop-shadow(0 2px 4px rgba(0,0,0,.45)); }
+    .dots { display: flex; justify-content: center; align-items: center; gap: 10px; height: 18px; }
     .dot {
       width: 9px;
       height: 9px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,.35);
       transition: width .25s ease, background .25s ease;
     }
-
-    .dot.active {
-      width: 34px;
-      background: #fff;
-    }
-
+    .dot.active { width: 34px; background: #fff; }
     .nav-btn {
       position: fixed;
       top: 51%;
@@ -183,8 +135,8 @@
       width: 58px;
       height: 58px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(5,9,13,0.55);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(5,9,13,.58);
       color: #fff;
       display: flex;
       align-items: center;
@@ -196,73 +148,56 @@
       backdrop-filter: blur(5px);
       user-select: none;
     }
-
-    .nav-btn.left {
-      left: 14px;
-    }
-
-    .nav-btn.right {
-      right: 14px;
-    }
-
-    .nav-btn:disabled {
-      opacity: 0.25;
-      cursor: default;
-    }
-
+    .nav-btn.left { left: 14px; }
+    .nav-btn.right { right: 14px; }
+    .nav-btn:disabled { opacity: .25; cursor: default; }
     .fallback {
       color: #fff;
       text-align: center;
       padding: 30px;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 1.7;
+      word-break: break-all;
     }
-
-    @media (max-width: 390px) {
-      .cover-content {
-        padding-bottom: 56px;
-      }
-
-      .nav-btn {
-        width: 52px;
-        height: 52px;
-        font-size: 38px;
-      }
-
-      .nav-btn.left {
-        left: 10px;
-      }
-
-      .nav-btn.right {
-        right: 10px;
-      }
+    @media (max-width:390px) {
+      .cover-content { padding-bottom: 56px; }
+      .nav-btn { width: 52px; height: 52px; font-size: 38px; }
+      .nav-btn.left { left: 10px; }
+      .nav-btn.right { right: 10px; }
     }
   </style>
 </head>
 <body>
   <main class="app">
     <div class="top-label" id="pageLabel">封面</div>
-
-    <section class="viewer" id="viewer">
-      <div class="track" id="track"></div>
-    </section>
-
+    <section class="viewer" id="viewer"><div class="track" id="track"></div></section>
     <button class="nav-btn left" id="prevBtn" type="button" aria-label="上一頁">‹</button>
     <button class="nav-btn right" id="nextBtn" type="button" aria-label="下一頁">›</button>
   </main>
 
   <script>
-    // 這裡已經改成你 GitHub 目前實際上傳的檔名，不需要重新上傳圖片。
+    /*
+      這版只用你目前 GitHub 上已存在的圖片：
+      cover.jpg、page01.jpg～page08.jpg
+      不需要重新上傳圖片。
+
+      另外這版加了：
+      1. ./ 相對路徑，避免 Pages 子路徑讀不到。
+      2. ?v=20260608 強制更新快取，避免手機還讀舊檔。
+      3. 圖片錯誤時會直接顯示失敗檔名，方便判斷。
+    */
+    const VERSION = "20260608-2105";
+
     const pages = [
-      "cover.jpg",
-      "page01.jpg",
-      "page02.jpg",
-      "page03.jpg",
-      "page04.jpg",
-      "page05.jpg",
-      "page06.jpg",
-      "page07.jpg",
-      "page08.jpg"
+      { file: "cover.jpg", label: "封面" },
+      { file: "page01.jpg", label: "第 1 頁" },
+      { file: "page02.jpg", label: "第 2 頁" },
+      { file: "page03.jpg", label: "第 3 頁" },
+      { file: "page04.jpg", label: "第 4 頁" },
+      { file: "page05.jpg", label: "第 5 頁" },
+      { file: "page06.jpg", label: "第 6 頁" },
+      { file: "page07.jpg", label: "第 7 頁" },
+      { file: "page08.jpg", label: "第 8 頁" }
     ];
 
     const track = document.getElementById("track");
@@ -276,22 +211,28 @@
     let currentX = 0;
     let isDragging = false;
 
+    function assetUrl(file) {
+      return "./" + file + "?v=" + VERSION;
+    }
+
     function buildSlides() {
       track.innerHTML = "";
 
-      pages.forEach((src, index) => {
+      pages.forEach((item, index) => {
         const slide = document.createElement("div");
         slide.className = "slide" + (index === 0 ? " slide-cover" : "");
 
         const img = document.createElement("img");
-        img.src = src;
-        img.alt = index === 0 ? "節目單封面" : `節目單第 ${index} 頁`;
+        img.src = assetUrl(item.file);
+        img.alt = item.label;
+        img.loading = index === 0 ? "eager" : "lazy";
 
         img.onerror = () => {
           slide.innerHTML = `
             <div class="fallback">
               圖片讀取失敗<br>
-              請確認檔名：${src}
+              檔名：${item.file}<br>
+              請直接測試網址最後加：/${item.file}
             </div>
           `;
         };
@@ -326,7 +267,6 @@
     function buildDots() {
       const dots = document.getElementById("dots");
       if (!dots) return;
-
       dots.innerHTML = "";
       pages.forEach((_, index) => {
         const dot = document.createElement("span");
@@ -336,15 +276,14 @@
     }
 
     function updateDots() {
-      const dots = document.querySelectorAll(".dot");
-      dots.forEach((dot, index) => {
+      document.querySelectorAll(".dot").forEach((dot, index) => {
         dot.classList.toggle("active", index === current);
       });
     }
 
     function update() {
       track.style.transform = `translateX(${-current * 100}%)`;
-      pageLabel.textContent = current === 0 ? "封面" : `第 ${current} 頁`;
+      pageLabel.textContent = pages[current].label;
       prevBtn.disabled = current === 0;
       nextBtn.disabled = current === pages.length - 1;
       updateDots();
@@ -372,15 +311,9 @@
     viewer.addEventListener("touchend", () => {
       if (!isDragging) return;
       const diff = currentX - startX;
-
       if (Math.abs(diff) > 55) {
-        if (diff < 0) {
-          goTo(current + 1);
-        } else {
-          goTo(current - 1);
-        }
+        goTo(diff < 0 ? current + 1 : current - 1);
       }
-
       isDragging = false;
     });
 
