@@ -37,18 +37,19 @@
 
     .top-label {
       position: fixed;
-      top: 28px;
+      top: 18px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
-      padding: 7px 16px;
-      border: 1px solid rgba(255,255,255,0.22);
+      padding: 8px 18px;
+      border: 1px solid rgba(255,255,255,0.20);
       border-radius: 999px;
-      background: rgba(5, 9, 13, 0.58);
-      color: rgba(255,255,255,0.9);
+      background: rgba(5, 9, 13, 0.56);
+      color: rgba(255,255,255,0.92);
       font-size: 15px;
       letter-spacing: 0.08em;
       backdrop-filter: blur(6px);
+      white-space: nowrap;
     }
 
     .viewer {
@@ -75,6 +76,7 @@
       justify-content: center;
       background: #05090d;
       position: relative;
+      padding: 0;
     }
 
     .slide img {
@@ -86,57 +88,67 @@
       background: #05090d;
     }
 
-    .nav-btn {
+    /* 底部控制列：不再把箭頭放在左右中間，避免擋住封面文字 */
+    .bottom-controls {
       position: fixed;
-      top: 51%;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
       z-index: 30;
-      width: 58px;
-      height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(5,9,13,0.55);
+      background: rgba(5, 9, 13, 0.68);
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.24);
+    }
+
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
-      font-weight: 500;
+      font-size: 28px;
+      font-weight: 600;
       line-height: 1;
       cursor: pointer;
-      backdrop-filter: blur(5px);
       user-select: none;
     }
 
-    .nav-btn.left {
-      left: 14px;
-    }
-
-    .nav-btn.right {
-      right: 14px;
-    }
-
     .nav-btn:disabled {
-      opacity: 0.25;
+      opacity: 0.32;
       cursor: default;
     }
 
-    .bottom-hint {
-      position: fixed;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
-      z-index: 25;
+    .hint-wrap {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(5, 9, 13, 0.58);
-      color: rgba(255,255,255,0.9);
-      font-size: 15px;
+      min-width: 110px;
+      padding: 0 2px;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.2;
+    }
+
+    .hint-main {
+      font-size: 14px;
       letter-spacing: 0.06em;
-      backdrop-filter: blur(5px);
+      white-space: nowrap;
+    }
+
+    .hint-sub {
+      margin-top: 3px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.62);
       white-space: nowrap;
     }
 
@@ -149,24 +161,26 @@
       word-break: break-all;
     }
 
-    @media (max-width: 390px) {
+    @media (max-width: 520px) {
+      .top-label {
+        top: 16px;
+      }
+
+      .bottom-controls {
+        bottom: max(18px, env(safe-area-inset-bottom));
+        width: calc(100% - 24px);
+        max-width: 360px;
+        justify-content: space-between;
+      }
+
       .nav-btn {
-        width: 52px;
-        height: 52px;
-        font-size: 38px;
+        width: 46px;
+        height: 46px;
+        font-size: 27px;
       }
 
-      .nav-btn.left {
-        left: 10px;
-      }
-
-      .nav-btn.right {
-        right: 10px;
-      }
-
-      .bottom-hint {
-        bottom: 22px;
-        font-size: 14px;
+      .hint-main {
+        font-size: 13px;
       }
     }
   </style>
@@ -179,15 +193,18 @@
       <div class="track" id="track"></div>
     </section>
 
-    <button class="nav-btn left" id="prevBtn" type="button" aria-label="上一頁">‹</button>
-    <button class="nav-btn right" id="nextBtn" type="button" aria-label="下一頁">›</button>
-    <div class="bottom-hint">左右滑動查看節目</div>
+    <div class="bottom-controls">
+      <button class="nav-btn" id="prevBtn" type="button" aria-label="上一頁">‹</button>
+      <div class="hint-wrap">
+        <div class="hint-main">左右滑動查看</div>
+        <div class="hint-sub">也可按左右按鈕換頁</div>
+      </div>
+      <button class="nav-btn" id="nextBtn" type="button" aria-label="下一頁">›</button>
+    </div>
   </main>
 
   <script>
-    // 使用你 GitHub 現有檔案，不需要重新上傳圖片。
-    // 第一張封面就是 cover.jpg，不再用黑底大字封面蓋住它。
-    const VERSION = "20260608-2120";
+    const VERSION = "20260608-2148";
 
     const pages = [
       { file: "cover.jpg", label: "封面" },
@@ -219,21 +236,20 @@
     function buildSlides() {
       track.innerHTML = "";
 
-      pages.forEach((item, index) => {
+      pages.forEach((item) => {
         const slide = document.createElement("div");
         slide.className = "slide";
 
         const img = document.createElement("img");
         img.src = assetUrl(item.file);
         img.alt = item.label;
-        img.loading = index === 0 ? "eager" : "lazy";
+        img.loading = item.file === "cover.jpg" ? "eager" : "lazy";
 
         img.onerror = () => {
           slide.innerHTML = `
             <div class="fallback">
               圖片讀取失敗<br>
-              檔名：${item.file}<br>
-              請測試網址最後加：/${item.file}
+              檔名：${item.file}
             </div>
           `;
         };
