@@ -2,96 +2,195 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>夏至狂響曲｜入口</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>夏至狂響曲｜節目單入口</title>
   <style>
-    :root{
-      --bg:#080808;
-      --card:rgba(255,255,255,.085);
-      --line:rgba(255,255,255,.18);
-      --text:#fffaf0;
-      --muted:rgba(255,250,240,.76);
-      --gold:#f0d58a;
-      --gold2:#b98d3f;
+    :root {
+      --bg: #101010;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.16);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+      --accent: #f2d28c;
+      --accent-dark: #16120a;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;}
-    body{
-      min-height:100svh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px 18px calc(28px + env(safe-area-inset-bottom));
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 20% 15%, rgba(240,213,138,.18), transparent 30%),
-        radial-gradient(circle at 85% 80%, rgba(185,141,63,.18), transparent 35%),
-        linear-gradient(145deg,#050505 0%,#17110a 48%,#050505 100%);
-      overflow-x:hidden;
+        radial-gradient(circle at top left, rgba(242, 210, 140, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 34%),
+        linear-gradient(135deg, #0d0d0d 0%, #1b1b1b 45%, #0b0b0b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 18px;
     }
-    .shell{width:min(520px,100%);text-align:center;}
-    .cover{
-      width:100%;
-      max-width:360px;
-      margin:0 auto 22px;
-      border-radius:24px;
-      overflow:hidden;
-      border:1px solid rgba(240,213,138,.32);
-      box-shadow:0 22px 60px rgba(0,0,0,.46);
-      background:rgba(255,255,255,.06);
+
+    .page {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
     }
-    .cover img{display:block;width:100%;height:auto;}
-    .brand{letter-spacing:.14em;color:var(--gold);font-size:13px;margin:0 0 8px;font-weight:700;}
-    h1{font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 10px;font-weight:900;letter-spacing:.04em;}
-    .sub{margin:0 auto 24px;color:var(--muted);font-size:16px;line-height:1.65;}
-    .menu{display:grid;gap:14px;margin-top:20px;}
-    .btn{
-      display:flex;align-items:center;gap:14px;
-      width:100%;padding:18px 18px;border-radius:20px;
-      text-decoration:none;color:var(--text);text-align:left;
-      background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.06));
-      border:1px solid var(--line);
-      box-shadow:0 12px 26px rgba(0,0,0,.26);
-      -webkit-tap-highlight-color:transparent;
+
+    .card {
+      width: 100%;
+      padding: 34px 22px 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      background: var(--card);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(10px);
     }
-    .btn:active{transform:scale(.985)}
-    .icon{
-      flex:0 0 54px;width:54px;height:54px;border-radius:18px;
-      display:grid;place-items:center;font-size:28px;
-      color:#1c1408;background:linear-gradient(135deg,var(--gold),var(--gold2));
+
+    .school {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 600;
     }
-    .txt strong{display:block;font-size:22px;letter-spacing:.05em;margin-bottom:4px;}
-    .txt span{display:block;color:var(--muted);font-size:14px;line-height:1.45;}
-    .foot{margin-top:22px;color:rgba(255,250,240,.58);font-size:13px;line-height:1.6;}
-    @media (max-width:420px){
-      body{padding:22px 14px calc(22px + env(safe-area-inset-bottom));}
-      .cover{max-width:300px;border-radius:20px;margin-bottom:18px;}
-      .btn{padding:16px;border-radius:18px;}
-      .icon{width:50px;height:50px;flex-basis:50px;font-size:25px;}
-      .txt strong{font-size:20px;}
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 8vw, 46px);
+      letter-spacing: 0.08em;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .subtitle {
+      margin: 16px 0 28px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: 100%;
+      min-height: 76px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--accent-dark);
+      background: linear-gradient(135deg, #fff7de, var(--accent));
+      box-shadow: 0 12px 28px rgba(242, 210, 140, 0.18);
+      transition: transform 0.16s ease, opacity 0.16s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      opacity: 0.92;
+    }
+
+    .btn.secondary {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.11);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: none;
+    }
+
+    .btn-title {
+      display: block;
+      text-align: left;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-note {
+      display: block;
+      margin-top: 4px;
+      text-align: left;
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.58);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .secondary .btn-note {
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .arrow {
+      flex: 0 0 auto;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .footer {
+      margin: 22px 0 0;
+      color: rgba(255, 255, 255, 0.52);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 380px) {
+      body {
+        padding: 18px 12px;
+      }
+
+      .card {
+        padding: 30px 18px 24px;
+        border-radius: 24px;
+      }
+
+      .btn {
+        min-height: 70px;
+        padding: 16px 17px;
+      }
+
+      .btn-title {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="shell" aria-label="主選單">
-    <div class="cover" aria-hidden="true">
-      <img src="cover.jpg" alt="夏至狂響曲封面" onerror="this.parentElement.style.display='none'" />
-    </div>
-    <p class="brand">114學年度成果發表會</p>
-    <h1>夏至狂響曲</h1>
-    <p class="sub">請選擇要查看的內容</p>
+  <main class="page">
+    <section class="card" aria-label="節目入口">
+      <p class="school">114學年度成果發表會</p>
+      <h1>夏至狂響曲</h1>
+      <p class="subtitle">請選擇要查看的內容</p>
 
-    <nav class="menu">
-      <a class="btn" href="program.html?v=12" aria-label="進入節目單">
-        <span class="icon">📖</span>
-        <span class="txt"><strong>節目單</strong><span>查看完整節目內容，左右滑動翻頁。</span></span>
-      </a>
-      <a class="btn" href="video.html?v=12" aria-label="進入節目導覽影片">
-        <span class="icon">▶</span>
-        <span class="txt"><strong>節目導覽影片</strong><span>觀看 YouTube 導覽影片。</span></span>
-      </a>
-    </nav>
+      <div class="actions">
+        <a class="btn" href="program.html">
+          <span>
+            <span class="btn-title">節目單</span>
+            <span class="btn-note">查看完整演出流程與曲目</span>
+          </span>
+          <span class="arrow">›</span>
+        </a>
 
-    <p class="foot">臺中市立豐東國中管樂團</p>
+        <a class="btn secondary" href="video.html">
+          <span>
+            <span class="btn-title">節目導覽影片</span>
+            <span class="btn-note">觀看活動導覽影片</span>
+          </span>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+
+      <p class="footer">建議使用手機直式瀏覽，點選後即可進入對應內容。</p>
+    </section>
   </main>
 </body>
 </html>
