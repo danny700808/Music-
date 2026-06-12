@@ -112,6 +112,35 @@ textarea { min-height:150px; resize:vertical; }
 .field { margin-bottom:12px; }
 .field.hidden { display:none; }
 .modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; flex-wrap:wrap; }
+
+.replyLine {
+  margin:7px 0 0;
+  padding-left:14px;
+  border-left:3px solid color-mix(in srgb, var(--roleAccent) 35%, #fff);
+  white-space:pre-wrap;
+  color:#3f392f;
+}
+.inlineActions {
+  display:inline-flex;
+  gap:5px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.miniBtn {
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:999px;
+  padding:2px 8px;
+  font-size:12px;
+  line-height:1.6;
+  cursor:pointer;
+  font-weight:800;
+}
+.dangerMini {
+  color:var(--danger);
+  border-color:color-mix(in srgb, var(--danger) 30%, #fff);
+}
 @media (max-width:920px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media (max-width:620px) {
   header { padding:12px 10px 6px; }
@@ -162,7 +191,7 @@ textarea { min-height:150px; resize:vertical; }
   </div>
 </div>
 
-<script>
+<script type="module">
 const BASE_RECORDS = [
   {
     "id": "前期分工表-2",
@@ -853,36 +882,49 @@ const roleColors = {
   '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
 };
 
-const STORE_KEY = 'fengtung_handover_simple_v2';
-const OLD_STORE_KEY = 'fengtung_handover_v1';
-let currentRole = '團務老師';
-let state = loadState();
-let editing = null;
 
-function loadState() {
-  try {
-    const v2 = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (v2 && Array.isArray(v2.entries)) return v2;
-  } catch(e) {}
-  try {
-    const old = JSON.parse(localStorage.getItem(OLD_STORE_KEY) || 'null');
-    if (old) {
-      const entries = [];
-      (old.tasks || []).forEach(t => entries.push({
-        id: t.id || uid('item'), type:'item', role: t.ownerRole || t.main || '團務老師', content: [t.item, t.description].filter(Boolean).join('\n'), createdAt: new Date().toISOString()
-      }));
-      (old.supplements || []).forEach(s => entries.push({
-        id: s.id || uid('reply'), type:'reply', role: s.role || '團務老師', parentId: s.recordId, content: s.content || '', createdAt: s.createdAt || new Date().toISOString()
-      }));
-      return { entries };
-    }
-  } catch(e) {}
-  return { entries: [] };
-}
-function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+  onSnapshot,
+  query
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",
+  authDomain: "youzi-c1b74.firebaseapp.com",
+  projectId: "youzi-c1b74",
+  storageBucket: "youzi-c1b74.firebasestorage.app",
+  messagingSenderId: "187002582910",
+  appId: "1:187002582910:web:f5c73a46e5a773a860a52f",
+  measurementId: "G-WLYK892EDW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const entriesRef = collection(db, 'fengtungHandoverEntries');
+
+let currentRole = '團務老師';
+let state = { entries: [] };
+let editing = null;
+let currentUser = null;
+let unsubscribeEntries = null;
+
 function uid(prefix='id') { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
 function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
+function roleName(role) {
+  if (role === '全體幹部') return '全體／新增';
+  return role;
+}
 function setRoleVars(role) {
   const c = roleStyle(role);
   document.documentElement.style.setProperty('--roleBg', c.bg);
@@ -890,7 +932,7 @@ function setRoleVars(role) {
 }
 function expandsToRole(value, role) {
   if(!value) return false;
-  const v = value === '全體' || value === '幹部／全體幹部' ? '全體幹部' : value;
+  const v = value === '全體' || value === '幹部／全體幹部' || value === '全體／新增' ? '全體幹部' : value;
   if(v === role) return true;
   if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
@@ -912,11 +954,18 @@ function bodyForEntry(e) {
   const lines = String(e.content || '').split(/\n+/).map(x=>x.trim()).filter(Boolean);
   return lines.length > 1 ? lines.slice(1).join('\n') : (e.content || '');
 }
+function canEdit(entry) {
+  return currentUser && entry.ownerUid && entry.ownerUid === currentUser.uid;
+}
+function smallActions(entry) {
+  if (!canEdit(entry)) return '';
+  return `<span class="inlineActions"><button class="miniBtn" onclick="openEdit('${entry.id}')">修改</button><button class="miniBtn dangerMini" onclick="deleteEntry('${entry.id}')">刪除</button></span>`;
+}
 
 function renderRoles() {
   document.getElementById('roleGrid').innerHTML = ROLES.map(r => {
     const c = roleStyle(r.id);
-    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" onclick="selectRole('${r.id}')">${esc(r.name)}</button>`;
+    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" onclick="selectRole('${r.id}')">${esc(roleName(r.id))}</button>`;
   }).join('');
 }
 function selectRole(role) { currentRole = role; render(); }
@@ -927,7 +976,7 @@ function renderBaseCard(r) {
     <article class="item">
       <h3>${esc(r.item)}</h3>
       ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
-      ${replies.map(renderReplyCard).join('')}
+      ${replies.map(renderReplyLine).join('')}
       <div class="itemActions"><button class="btn ghost" onclick="openReply('${r.id}')">＋補充內容</button></div>
     </article>`;
 }
@@ -936,23 +985,13 @@ function renderCustomItemCard(e) {
   const body = bodyForEntry(e);
   return `<article class="item added">
     <h3>${esc(titleForEntry(e))}</h3>
-    ${body ? `<p>${esc(body)}</p>` : ''}
-    ${replies.map(renderReplyCard).join('')}
-    <div class="itemActions">
-      <button class="btn ghost" onclick="openReply('${e.id}')">＋補充內容</button>
-      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
-      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
-    </div>
+    ${body ? `<p>${esc(body)} ${smallActions(e)}</p>` : `<p>${smallActions(e)}</p>`}
+    ${replies.map(renderReplyLine).join('')}
+    <div class="itemActions"><button class="btn ghost" onclick="openReply('${e.id}')">＋補充內容</button></div>
   </article>`;
 }
-function renderReplyCard(e) {
-  return `<article class="item added">
-    <p>${esc(e.content)}</p>
-    <div class="itemActions">
-      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
-      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
-    </div>
-  </article>`;
+function renderReplyLine(e) {
+  return `<div class="replyLine"><span>${esc(e.content)}</span>${smallActions(e)}</div>`;
 }
 function renderContent() {
   const bases = baseRecordsForRole(currentRole);
@@ -966,7 +1005,7 @@ function renderContent() {
 function render() {
   setRoleVars(currentRole);
   renderRoles();
-  document.getElementById('currentRoleTitle').textContent = currentRole;
+  document.getElementById('currentRoleTitle').textContent = roleName(currentRole);
   renderContent();
 }
 
@@ -980,11 +1019,11 @@ function configureModal(mode) {
   const titleField = document.getElementById('titleField');
   const contentLabel = document.getElementById('contentLabel');
   const contentInput = document.getElementById('contentInput');
-  if(mode === 'newItem') {
+  if(mode === 'newItem' || mode === 'editItem') {
     titleField.classList.remove('hidden');
     document.getElementById('titleInput').required = true;
     contentLabel.textContent = '小項';
-    contentInput.placeholder = '把這一個大項底下的第一筆細項內容寫在這裡';
+    contentInput.placeholder = '把這個大項底下的細項內容寫在這裡';
   } else {
     titleField.classList.add('hidden');
     document.getElementById('titleInput').required = false;
@@ -999,16 +1038,18 @@ function showModal(title, value='', titleValue='') {
   document.getElementById('contentInput').value = value;
   document.getElementById('modalBackdrop').classList.add('show');
   setTimeout(()=>{
-    const target = editing?.mode === 'newItem' ? 'titleInput' : 'contentInput';
+    const target = editing?.mode === 'newItem' || editing?.mode === 'editItem' ? 'titleInput' : 'contentInput';
     document.getElementById(target).focus();
   }, 60);
 }
-document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
-document.getElementById('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
-function openReply(parentId) { editing = { mode:'reply', parentId }; showModal('補充內容'); }
+function openReply(parentId) {
+  if (!currentUser) { alert('Firebase 連線尚未完成，請稍等或確認是否已啟用匿名登入。'); return; }
+  editing = { mode:'reply', parentId };
+  showModal('補充內容');
+}
 function openEdit(id) {
   const entry = state.entries.find(e => e.id === id);
-  if(!entry) return;
+  if(!entry || !canEdit(entry)) return;
   editing = { mode:'edit', id };
   if(entry.type === 'item') {
     editing.mode = 'editItem';
@@ -1017,34 +1058,103 @@ function openEdit(id) {
     showModal('修改內容', entry.content || '');
   }
 }
-function deleteEntry(id) {
+async function deleteEntry(id) {
+  const entry = state.entries.find(e => e.id === id);
+  if(!entry || !canEdit(entry)) return;
   if(!confirm('確定刪除這一筆內容？')) return;
-  state.entries = state.entries.filter(e => e.id !== id && e.parentId !== id);
-  saveState();
-  renderContent();
+  try {
+    if(entry.type === 'item') {
+      const batch = writeBatch(db);
+      batch.delete(doc(db, 'fengtungHandoverEntries', id));
+      state.entries.filter(e => e.parentId === id && canEdit(e)).forEach(child => batch.delete(doc(db, 'fengtungHandoverEntries', child.id)));
+      await batch.commit();
+    } else {
+      await deleteDoc(doc(db, 'fengtungHandoverEntries', id));
+    }
+  } catch (err) {
+    alert('刪除失敗，請確認 Firebase 權限設定。');
+    console.error(err);
+  }
 }
-document.getElementById('modalForm').addEventListener('submit', e => {
-  e.preventDefault();
+async function saveEntryFromModal() {
   const title = document.getElementById('titleInput').value.trim();
   const content = document.getElementById('contentInput').value.trim();
-  if(!content) return;
-  if(editing?.mode === 'edit') {
-    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, content, updatedAt:new Date().toISOString() } : x);
-  } else if(editing?.mode === 'editItem') {
-    if(!title) return;
-    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, title, content, updatedAt:new Date().toISOString() } : x);
-  } else if(editing?.mode === 'reply') {
-    state.entries.push({ id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString() });
-  } else {
-    if(!title) return;
-    state.entries.push({ id:uid('item'), type:'item', role:currentRole, title, content, createdAt:new Date().toISOString() });
+  if(!content || !currentUser) return;
+  try {
+    if(editing?.mode === 'edit') {
+      await updateDoc(doc(db, 'fengtungHandoverEntries', editing.id), { content, updatedAt: Date.now() });
+    } else if(editing?.mode === 'editItem') {
+      if(!title) return;
+      await updateDoc(doc(db, 'fengtungHandoverEntries', editing.id), { title, content, updatedAt: Date.now() });
+    } else if(editing?.mode === 'reply') {
+      await addDoc(entriesRef, {
+        type:'reply',
+        role:currentRole,
+        parentId:editing.parentId,
+        content,
+        ownerUid:currentUser.uid,
+        createdAt:Date.now(),
+        updatedAt:Date.now()
+      });
+    } else {
+      if(!title) return;
+      await addDoc(entriesRef, {
+        type:'item',
+        role:currentRole,
+        title,
+        content,
+        ownerUid:currentUser.uid,
+        createdAt:Date.now(),
+        updatedAt:Date.now()
+      });
+    }
+    closeModal();
+  } catch (err) {
+    alert('儲存失敗，請確認 Firestore 規則與匿名登入是否已啟用。');
+    console.error(err);
   }
-  saveState();
-  closeModal();
-  renderContent();
+}
+function startListening() {
+  if (unsubscribeEntries) unsubscribeEntries();
+  unsubscribeEntries = onSnapshot(query(entriesRef), snap => {
+    state.entries = snap.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+    renderContent();
+  }, err => {
+    console.error(err);
+    alert('讀取 Firebase 資料失敗，請確認 Firestore Database 已建立，且規則允許讀取。');
+  });
+}
+
+document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
+document.getElementById('addItemBtn').addEventListener('click', () => {
+  if (!currentUser) { alert('Firebase 連線尚未完成，請稍等或確認是否已啟用匿名登入。'); return; }
+  editing = { mode:'newItem' };
+  showModal('新增一項');
+});
+document.getElementById('modalForm').addEventListener('submit', e => {
+  e.preventDefault();
+  saveEntryFromModal();
 });
 
+window.selectRole = selectRole;
+window.closeModal = closeModal;
+window.openReply = openReply;
+window.openEdit = openEdit;
+window.deleteEntry = deleteEntry;
+
 render();
+signInAnonymously(auth).catch(err => {
+  console.error(err);
+  alert('Firebase 匿名登入失敗，請到 Firebase Authentication 啟用「匿名」登入方式。');
+});
+onAuthStateChanged(auth, user => {
+  if (user) {
+    currentUser = user;
+    startListening();
+    render();
+  }
+});
+
 </script>
 </body>
 </html>
