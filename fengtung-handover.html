@@ -26,81 +26,37 @@ body {
 }
 .wrap { max-width:1080px; margin:0 auto; }
 header { padding:22px 14px 8px; }
-.hero {
-  background:#ffffff;
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:22px 20px;
-  box-shadow:var(--shadow);
-}
+.hero { background:#fff; border:1px solid var(--line); border-radius:22px; padding:22px 20px; box-shadow:var(--shadow); }
 .hero h1 { margin:0; font-size:clamp(26px,5vw,40px); letter-spacing:.05em; text-align:center; }
 main { padding:10px 14px 34px; }
-.roleGrid {
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:12px;
-  margin:16px 0 18px;
-}
-.roleBtn {
-  appearance:none;
-  border:2px solid transparent;
-  border-radius:18px;
-  padding:18px 10px;
-  min-height:76px;
-  cursor:pointer;
-  font-weight:900;
-  font-size:20px;
-  color:#2d2922;
-  box-shadow:0 7px 18px rgba(41,32,18,.07);
-  transition:.16s;
-}
+.roleGrid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin:16px 0 18px; }
+.roleBtn { appearance:none; border:2px solid transparent; border-radius:18px; padding:18px 10px; min-height:76px; cursor:pointer; font-weight:900; font-size:20px; color:#2d2922; box-shadow:0 7px 18px rgba(41,32,18,.07); transition:.16s; }
 .roleBtn:hover { transform:translateY(-2px); }
-.roleBtn.active {
-  border-color:var(--roleAccent);
-  box-shadow:0 0 0 4px rgba(255,255,255,.8), 0 0 0 7px color-mix(in srgb, var(--roleAccent) 28%, transparent), var(--shadow);
-}
-.rolePanel {
-  background:var(--roleBg);
-  border:2px solid color-mix(in srgb, var(--roleAccent) 46%, #fff);
-  border-radius:24px;
-  padding:16px;
-  box-shadow:var(--shadow);
-}
-.rolePanelTop {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
+.roleBtn.active { border-color:var(--roleAccent); box-shadow:0 0 0 4px rgba(255,255,255,.8), var(--shadow); }
+.rolePanel { background:var(--roleBg); border:2px solid rgba(0,0,0,.08); border-radius:24px; padding:16px; box-shadow:var(--shadow); }
+.rolePanelTop { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
 .rolePanel h2 { margin:0; font-size:clamp(24px,4.5vw,34px); }
 button, textarea, input { font:inherit; }
-.btn {
-  border:none;
-  border-radius:13px;
-  padding:10px 14px;
-  cursor:pointer;
-  font-weight:800;
-  background:var(--roleAccent);
-  color:#fff;
-}
+.btn { border:none; border-radius:13px; padding:10px 14px; cursor:pointer; font-weight:800; background:var(--roleAccent); color:#fff; }
 .btn.secondary { background:#fff; color:var(--text); border:1px solid var(--line); }
-.btn.ghost { background:#fff; color:var(--roleAccent); border:1px solid color-mix(in srgb, var(--roleAccent) 48%, #fff); }
+.btn.ghost { background:#fff; color:var(--roleAccent); border:1px solid var(--line); }
 .btn.danger { background:var(--danger); color:#fff; }
+.btn.small { padding:3px 8px; border-radius:999px; font-size:13px; line-height:1.5; margin-left:6px; vertical-align:baseline; }
 .list { display:flex; flex-direction:column; gap:10px; }
-.item {
-  background:rgba(255,255,255,.86);
-  border:1px solid rgba(120,100,70,.18);
-  border-left:8px solid var(--roleAccent);
-  border-radius:18px;
-  padding:14px 14px 13px;
-}
+.item { background:rgba(255,255,255,.88); border:1px solid rgba(120,100,70,.18); border-left:8px solid var(--roleAccent); border-radius:18px; padding:14px 14px 13px; }
 .item h3 { margin:0; font-size:19px; line-height:1.35; }
 .item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
 .item.added { border-left-style:dashed; background:#fff; }
 .itemActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:11px; }
+.childList { margin-top:10px; display:flex; flex-direction:column; gap:7px; }
+.childLine { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
+.childText { white-space:pre-wrap; }
+.attachments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.attachment { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
+.attachment a { color:var(--roleAccent); font-weight:800; text-decoration:none; }
+.attachment img { display:block; max-width:220px; max-height:160px; border-radius:10px; margin-top:6px; border:1px solid var(--line); object-fit:cover; }
 .empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
+.status { color:var(--muted); font-size:14px; margin:0 0 10px; }
 .modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
 .modalBackdrop.show { display:flex; }
 .modal { width:min(680px,100%); max-height:88vh; overflow:auto; background:#fffdf8; border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:18px; }
@@ -125,9 +81,7 @@ textarea { min-height:150px; resize:vertical; }
 </head>
 <body>
 <header>
-  <div class="wrap hero">
-    <h1>豐東管樂交接資料庫</h1>
-  </div>
+  <div class="wrap hero"><h1>豐東管樂交接資料庫</h1></div>
 </header>
 <main>
   <div class="wrap">
@@ -137,6 +91,7 @@ textarea { min-height:150px; resize:vertical; }
         <h2 id="currentRoleTitle"></h2>
         <button class="btn" id="addItemBtn">＋新增一項</button>
       </div>
+      <p class="status" id="statusText">連線中…</p>
       <div id="content" class="list"></div>
     </section>
   </div>
@@ -155,14 +110,37 @@ textarea { min-height:150px; resize:vertical; }
         <textarea id="contentInput" name="content" required placeholder="把這一項要記錄的細項內容寫在這裡"></textarea>
       </div>
       <div class="modalActions">
-        <button type="button" class="btn secondary" onclick="closeModal()">取消</button>
+        <button type="button" class="btn secondary" id="cancelModalBtn">取消</button>
         <button type="submit" class="btn">儲存</button>
       </div>
     </form>
   </div>
 </div>
 
-<script>
+<input id="fileInput" type="file" style="display:none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",
+  authDomain: "youzi-c1b74.firebaseapp.com",
+  projectId: "youzi-c1b74",
+  storageBucket: "youzi-c1b74.firebasestorage.app",
+  messagingSenderId: "187002582910",
+  appId: "1:187002582910:web:f5c73a46e5a773a860a52f",
+  measurementId: "G-WLYK892EDW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const entriesCol = collection(db, 'fengtungHandoverEntries');
+
 const BASE_RECORDS = [
   {
     "id": "前期分工表-2",
@@ -841,7 +819,7 @@ const ROLES = [
   { id:'總務', name:'總務' },
   { id:'文書', name:'文書' },
   { id:'攝影', name:'攝影' },
-  { id:'全體幹部', name:'全體幹部' }
+  { id:'全體幹部', name:'全體／新增' }
 ];
 
 const roleColors = {
@@ -853,34 +831,13 @@ const roleColors = {
   '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
 };
 
-const STORE_KEY = 'fengtung_handover_simple_v2';
-const OLD_STORE_KEY = 'fengtung_handover_v1';
 let currentRole = '團務老師';
-let state = loadState();
+let entries = [];
+let currentUser = null;
 let editing = null;
+let uploadTarget = null;
 
-function loadState() {
-  try {
-    const v2 = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (v2 && Array.isArray(v2.entries)) return v2;
-  } catch(e) {}
-  try {
-    const old = JSON.parse(localStorage.getItem(OLD_STORE_KEY) || 'null');
-    if (old) {
-      const entries = [];
-      (old.tasks || []).forEach(t => entries.push({
-        id: t.id || uid('item'), type:'item', role: t.ownerRole || t.main || '團務老師', content: [t.item, t.description].filter(Boolean).join('\n'), createdAt: new Date().toISOString()
-      }));
-      (old.supplements || []).forEach(s => entries.push({
-        id: s.id || uid('reply'), type:'reply', role: s.role || '團務老師', parentId: s.recordId, content: s.content || '', createdAt: s.createdAt || new Date().toISOString()
-      }));
-      return { entries };
-    }
-  } catch(e) {}
-  return { entries: [] };
-}
-function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-function uid(prefix='id') { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
+const $ = id => document.getElementById(id);
 function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
 function setRoleVars(role) {
@@ -895,156 +852,234 @@ function expandsToRole(value, role) {
   if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
 }
-function visibleForRole(record, role) {
-  return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role));
-}
+function visibleForRole(record, role) { return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role)); }
 function baseRecordsForRole(role) { return BASE_RECORDS.filter(r => visibleForRole(r, role)); }
-function customItemsForRole(role) { return state.entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
-function repliesFor(parentId) { return state.entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
+function customItemsForRole(role) { return entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
+function repliesFor(parentId) { return entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
+function filesFor(parentId) { return entries.filter(e => e.type === 'file' && e.parentId === parentId); }
+function isMine(e) { return currentUser && e.ownerUid === currentUser.uid; }
 function textForBase(r) { return (r.description || '').trim(); }
-function titleForEntry(e) {
-  if (e.title) return e.title;
-  const lines = String(e.content || '').split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  return lines[0] || '新增項目';
-}
-function bodyForEntry(e) {
-  if (e.title) return e.content || '';
-  const lines = String(e.content || '').split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  return lines.length > 1 ? lines.slice(1).join('\n') : (e.content || '');
-}
+function roleDisplayName(role) { return ROLES.find(r => r.id === role)?.name || role; }
+function safePart(s) { return String(s || 'file').replace(/[\/#?%*:|"<>]/g, '_').slice(0,80); }
 
 function renderRoles() {
-  document.getElementById('roleGrid').innerHTML = ROLES.map(r => {
+  $('roleGrid').innerHTML = ROLES.map(r => {
     const c = roleStyle(r.id);
-    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" onclick="selectRole('${r.id}')">${esc(r.name)}</button>`;
+    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" data-role="${esc(r.id)}">${esc(r.name)}</button>`;
   }).join('');
 }
-function selectRole(role) { currentRole = role; render(); }
+
+function childLines(parentId) {
+  const replies = repliesFor(parentId);
+  if(!replies.length) return '';
+  return `<div class="childList">${replies.map(e => `
+    <div class="childLine"><span class="childText">${esc(e.content)}</span>${isMine(e) ? ` <button class="btn secondary small" data-edit="${e.id}">修改</button><button class="btn danger small" data-delete="${e.id}">刪除</button>` : ''}</div>
+  `).join('')}</div>`;
+}
+
+function attachmentLines(parentId) {
+  const files = filesFor(parentId);
+  if(!files.length) return '';
+  return `<div class="attachments">${files.map(f => `
+    <div class="attachment">
+      <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener">📎 ${esc(f.fileName || '附件')}</a>
+      ${f.contentType && f.contentType.startsWith('image/') ? `<img src="${esc(f.fileUrl)}" alt="${esc(f.fileName || '圖片')}">` : ''}
+      ${isMine(f) ? ` <button class="btn danger small" data-file-delete="${f.id}">刪除</button>` : ''}
+    </div>
+  `).join('')}</div>`;
+}
+
+function actionButtons(parentId) {
+  return `<div class="itemActions">
+    <button class="btn ghost" data-reply="${esc(parentId)}">＋補充內容</button>
+    <button class="btn ghost" data-upload="${esc(parentId)}">＋上傳檔案</button>
+  </div>`;
+}
 
 function renderBaseCard(r) {
-  const replies = repliesFor(r.id);
-  return `
-    <article class="item">
-      <h3>${esc(r.item)}</h3>
-      ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
-      ${replies.map(renderReplyCard).join('')}
-      <div class="itemActions"><button class="btn ghost" onclick="openReply('${r.id}')">＋補充內容</button></div>
-    </article>`;
+  return `<article class="item">
+    <h3>${esc(r.item)}</h3>
+    ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
+    ${childLines(r.id)}
+    ${attachmentLines(r.id)}
+    ${actionButtons(r.id)}
+  </article>`;
 }
+
 function renderCustomItemCard(e) {
-  const replies = repliesFor(e.id);
-  const body = bodyForEntry(e);
   return `<article class="item added">
-    <h3>${esc(titleForEntry(e))}</h3>
-    ${body ? `<p>${esc(body)}</p>` : ''}
-    ${replies.map(renderReplyCard).join('')}
-    <div class="itemActions">
-      <button class="btn ghost" onclick="openReply('${e.id}')">＋補充內容</button>
-      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
-      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
-    </div>
+    <h3>${esc(e.title || '新增項目')}</h3>
+    ${e.content ? `<p>${esc(e.content)}</p>` : ''}
+    ${isMine(e) ? `<div><button class="btn secondary small" data-edit="${e.id}">修改</button><button class="btn danger small" data-delete="${e.id}">刪除</button></div>` : ''}
+    ${childLines(e.id)}
+    ${attachmentLines(e.id)}
+    ${actionButtons(e.id)}
   </article>`;
 }
-function renderReplyCard(e) {
-  return `<article class="item added">
-    <p>${esc(e.content)}</p>
-    <div class="itemActions">
-      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
-      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
-    </div>
-  </article>`;
-}
+
 function renderContent() {
   const bases = baseRecordsForRole(currentRole);
   const customs = customItemsForRole(currentRole);
-  const html = [
-    ...bases.map(renderBaseCard),
-    ...customs.map(renderCustomItemCard)
-  ].join('');
-  document.getElementById('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
+  const html = [...bases.map(renderBaseCard), ...customs.map(renderCustomItemCard)].join('');
+  $('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
 }
+
 function render() {
   setRoleVars(currentRole);
   renderRoles();
-  document.getElementById('currentRoleTitle').textContent = currentRole;
+  $('currentRoleTitle').textContent = roleDisplayName(currentRole);
   renderContent();
 }
 
 function closeModal() {
-  document.getElementById('modalBackdrop').classList.remove('show');
-  document.getElementById('titleInput').value = '';
-  document.getElementById('contentInput').value = '';
+  $('modalBackdrop').classList.remove('show');
+  $('titleInput').value = '';
+  $('contentInput').value = '';
   editing = null;
 }
-function configureModal(mode) {
-  const titleField = document.getElementById('titleField');
-  const contentLabel = document.getElementById('contentLabel');
-  const contentInput = document.getElementById('contentInput');
-  if(mode === 'newItem') {
-    titleField.classList.remove('hidden');
-    document.getElementById('titleInput').required = true;
-    contentLabel.textContent = '小項';
-    contentInput.placeholder = '把這一個大項底下的第一筆細項內容寫在這裡';
-  } else {
-    titleField.classList.add('hidden');
-    document.getElementById('titleInput').required = false;
-    contentLabel.textContent = mode === 'reply' ? '補充內容' : '內容';
-    contentInput.placeholder = mode === 'reply' ? '把這個項目要補充的內容寫在這裡' : '修改這一筆內容';
-  }
+
+function configureModal() {
+  const isNewItem = editing?.mode === 'newItem';
+  $('titleField').classList.toggle('hidden', !isNewItem);
+  $('titleInput').required = isNewItem;
+  $('contentLabel').textContent = isNewItem ? '小項' : '補充內容';
+  $('contentInput').placeholder = isNewItem ? '把這一項要記錄的細項內容寫在這裡' : '把要補充的內容寫在這裡';
 }
-function showModal(title, value='', titleValue='') {
-  document.getElementById('modalTitle').textContent = title;
-  configureModal(editing?.mode || 'reply');
-  document.getElementById('titleInput').value = titleValue || '';
-  document.getElementById('contentInput').value = value;
-  document.getElementById('modalBackdrop').classList.add('show');
-  setTimeout(()=>{
-    const target = editing?.mode === 'newItem' ? 'titleInput' : 'contentInput';
-    document.getElementById(target).focus();
-  }, 60);
+
+function showModal(title, contentValue='', titleValue='') {
+  $('modalTitle').textContent = title;
+  $('contentInput').value = contentValue || '';
+  $('titleInput').value = titleValue || '';
+  configureModal();
+  $('modalBackdrop').classList.add('show');
+  setTimeout(() => (editing?.mode === 'newItem' ? $('titleInput') : $('contentInput')).focus(), 60);
 }
-document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
-document.getElementById('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
-function openReply(parentId) { editing = { mode:'reply', parentId }; showModal('補充內容'); }
-function openEdit(id) {
-  const entry = state.entries.find(e => e.id === id);
-  if(!entry) return;
-  editing = { mode:'edit', id };
-  if(entry.type === 'item') {
-    editing.mode = 'editItem';
-    showModal('修改項目', bodyForEntry(entry), titleForEntry(entry));
-  } else {
-    showModal('修改內容', entry.content || '');
-  }
-}
-function deleteEntry(id) {
-  if(!confirm('確定刪除這一筆內容？')) return;
-  state.entries = state.entries.filter(e => e.id !== id && e.parentId !== id);
-  saveState();
-  renderContent();
-}
-document.getElementById('modalForm').addEventListener('submit', e => {
+
+async function saveModal(e) {
   e.preventDefault();
-  const title = document.getElementById('titleInput').value.trim();
-  const content = document.getElementById('contentInput').value.trim();
+  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
+  const content = $('contentInput').value.trim();
+  const title = $('titleInput').value.trim();
   if(!content) return;
-  if(editing?.mode === 'edit') {
-    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, content, updatedAt:new Date().toISOString() } : x);
-  } else if(editing?.mode === 'editItem') {
-    if(!title) return;
-    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, title, content, updatedAt:new Date().toISOString() } : x);
-  } else if(editing?.mode === 'reply') {
-    state.entries.push({ id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString() });
-  } else {
-    if(!title) return;
-    state.entries.push({ id:uid('item'), type:'item', role:currentRole, title, content, createdAt:new Date().toISOString() });
+  try {
+    if(editing?.mode === 'edit') {
+      const data = { content, updatedAt: serverTimestamp() };
+      if(editing.editType === 'item') data.title = title || '新增項目';
+      await updateDoc(doc(db, 'fengtungHandoverEntries', editing.id), data);
+    } else if(editing?.mode === 'reply') {
+      await addDoc(entriesCol, { type:'reply', role:currentRole, parentId:editing.parentId, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
+    } else if(editing?.mode === 'newItem') {
+      if(!title) return;
+      await addDoc(entriesCol, { type:'item', role:currentRole, title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
+    }
+    closeModal();
+  } catch(err) {
+    console.error(err);
+    alert('儲存失敗：' + (err.message || err));
   }
-  saveState();
-  closeModal();
-  renderContent();
+}
+
+function openEdit(id) {
+  const entry = entries.find(e => e.id === id);
+  if(!entry || !isMine(entry)) return;
+  editing = { mode:'edit', id, editType:entry.type };
+  showModal(entry.type === 'item' ? '修改項目' : '修改內容', entry.content || '', entry.title || '');
+}
+
+async function deleteEntry(id) {
+  const entry = entries.find(e => e.id === id);
+  if(!entry || !isMine(entry)) return;
+  if(!confirm('確定刪除這一筆內容？')) return;
+  try { await deleteDoc(doc(db, 'fengtungHandoverEntries', id)); }
+  catch(err) { alert('刪除失敗：' + (err.message || err)); }
+}
+
+function openUpload(parentId) {
+  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
+  uploadTarget = parentId;
+  $('fileInput').value = '';
+  $('fileInput').click();
+}
+
+async function handleFilePicked(e) {
+  const file = e.target.files && e.target.files[0];
+  if(!file || !uploadTarget || !currentUser) return;
+  if(file.size > 20 * 1024 * 1024) { alert('檔案不能超過 20MB。'); return; }
+  $('statusText').textContent = '檔案上傳中…';
+  const path = `fengtung-handover/${safePart(currentRole)}/${safePart(uploadTarget)}/${Date.now()}-${safePart(file.name)}`;
+  try {
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file, { contentType: file.type || 'application/octet-stream' });
+    const fileUrl = await getDownloadURL(storageRef);
+    await addDoc(entriesCol, {
+      type:'file', role:currentRole, parentId:uploadTarget,
+      fileName:file.name, fileUrl, storagePath:path, contentType:file.type || '', size:file.size,
+      ownerUid:currentUser.uid, createdAt:serverTimestamp()
+    });
+    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
+  } catch(err) {
+    console.error(err);
+    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
+    alert('上傳失敗：' + (err.message || err));
+  }
+}
+
+async function deleteFileEntry(id) {
+  const f = entries.find(e => e.id === id);
+  if(!f || !isMine(f)) return;
+  if(!confirm('確定刪除這個附件？')) return;
+  try {
+    if(f.storagePath) await deleteObject(ref(storage, f.storagePath)).catch(() => {});
+    await deleteDoc(doc(db, 'fengtungHandoverEntries', id));
+  } catch(err) { alert('刪除附件失敗：' + (err.message || err)); }
+}
+
+$('roleGrid').addEventListener('click', e => {
+  const btn = e.target.closest('[data-role]');
+  if(!btn) return;
+  currentRole = btn.dataset.role;
+  render();
 });
+$('content').addEventListener('click', e => {
+  const reply = e.target.closest('[data-reply]');
+  const edit = e.target.closest('[data-edit]');
+  const del = e.target.closest('[data-delete]');
+  const upload = e.target.closest('[data-upload]');
+  const fileDel = e.target.closest('[data-file-delete]');
+  if(reply) { editing = { mode:'reply', parentId:reply.dataset.reply }; showModal('補充內容'); }
+  if(edit) openEdit(edit.dataset.edit);
+  if(del) deleteEntry(del.dataset.delete);
+  if(upload) openUpload(upload.dataset.upload);
+  if(fileDel) deleteFileEntry(fileDel.dataset.fileDelete);
+});
+$('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
+$('cancelModalBtn').addEventListener('click', closeModal);
+$('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
+$('modalForm').addEventListener('submit', saveModal);
+$('fileInput').addEventListener('change', handleFilePicked);
 
 render();
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if(user) {
+    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
+    renderContent();
+  }
+});
+
+signInAnonymously(auth).catch(err => {
+  console.error(err);
+  $('statusText').textContent = 'Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。';
+});
+
+onSnapshot(query(entriesCol, orderBy('createdAt', 'asc')), snap => {
+  entries = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  renderContent();
+}, err => {
+  console.error(err);
+  $('statusText').textContent = 'Firestore 讀取失敗，請確認規則已發布。';
+});
 </script>
 </body>
 </html>
