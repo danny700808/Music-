@@ -45,9 +45,10 @@ button, textarea, input { font:inherit; }
 .list { display:flex; flex-direction:column; gap:10px; }
 .sectionBlock { display:flex; flex-direction:column; gap:10px; }
 .sectionBlock + .sectionBlock { margin-top:18px; }
-.sectionTitle { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:900; margin:4px 2px 2px; color:#2d2922; }
+.sectionTitle { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; margin:8px 2px 6px; color:#2d2922; }
 .sectionTitle::after { content:""; height:1px; background:rgba(120,100,70,.22); flex:1; }
-.sectionHint { font-size:14px; color:var(--muted); font-weight:700; margin-left:2px; }
+.sectionHint { font-size:15px; color:var(--muted); font-weight:700; margin:0 2px 12px; line-height:1.5; }
+.status { display:none !important; }
 .item { background:rgba(255,255,255,.88); border:1px solid rgba(120,100,70,.18); border-left:8px solid var(--roleAccent); border-radius:18px; padding:14px 14px 13px; }
 .itemHead { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .itemHead h3 { flex:1; min-width:0; }
@@ -952,14 +953,19 @@ function sectionHtml(title, hint, cards) {
   return `<div class="sectionBlock"><div><div class="sectionTitle">${esc(title)}</div>${hint ? `<div class="sectionHint">${esc(hint)}</div>` : ''}</div>${cards.join('')}</div>`;
 }
 
+function backupSectionHtml() {
+  return `<div class="sectionBlock backupBlock"><div><div class="sectionTitle">備援負責</div><div class="sectionHint">原負責人不方便時，需要能接手的事情。</div></div></div>`;
+}
+
 function renderContent() {
   const primaryBases = primaryBaseRecordsForRole(currentRole).map(r => renderBaseCard(r, 'main'));
   const customs = customItemsForRole(currentRole).map(renderCustomItemCard);
   const collabs = collabBaseRecordsForRole(currentRole).map(r => renderBaseCard(r, 'collab'));
   const primaryCards = [...primaryBases, ...customs];
   const html = [
-    sectionHtml('主要負責', '這一區是這個幹部要主要扛起來的事情。', primaryCards),
-    sectionHtml('協作部分', '這一區是需要協助別人的事情，主責不在這個幹部身上。', collabs)
+    sectionHtml('主要負責', '', primaryCards),
+    sectionHtml('協助事項', '', collabs),
+    backupSectionHtml()
   ].join('');
   $('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
 }
