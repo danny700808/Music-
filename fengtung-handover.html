@@ -953,10 +953,6 @@ function sectionHtml(title, hint, cards) {
   return `<div class="sectionBlock"><div><div class="sectionTitle">${esc(title)}</div>${hint ? `<div class="sectionHint">${esc(hint)}</div>` : ''}</div>${cards.join('')}</div>`;
 }
 
-function backupSectionHtml() {
-  return `<div class="sectionBlock backupBlock"><div><div class="sectionTitle">備援負責</div><div class="sectionHint">原負責人不方便時，需要能接手的事情。</div></div></div>`;
-}
-
 function renderContent() {
   const primaryBases = primaryBaseRecordsForRole(currentRole).map(r => renderBaseCard(r, 'main'));
   const customs = customItemsForRole(currentRole).map(renderCustomItemCard);
@@ -964,8 +960,7 @@ function renderContent() {
   const primaryCards = [...primaryBases, ...customs];
   const html = [
     sectionHtml('主要負責', '', primaryCards),
-    sectionHtml('協助事項', '', collabs),
-    backupSectionHtml()
+    sectionHtml('備援負責', '原負責人不方便時，需要能接手的事情。', collabs)
   ].join('');
   $('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
 }
