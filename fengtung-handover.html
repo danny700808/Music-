@@ -5,43 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>豐東管樂交接資料庫</title>
 <style>
-:root{
+:root {
   --bg:#f7f4ed;
   --panel:#fffdf8;
   --text:#2d2922;
   --muted:#7a7166;
   --line:#e4d9c8;
-  --role-bg:#DDEBF7;
-  --role-accent:#5B9BD5;
+  --roleBg:#DDEBF7;
+  --roleAccent:#5B9BD5;
   --danger:#b94a48;
   --shadow:0 12px 28px rgba(48,39,24,.10);
 }
-*{box-sizing:border-box;}
-body{
+* { box-sizing:border-box; }
+body {
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
   background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%);
   color:var(--text);
-  line-height:1.65;
+  line-height:1.7;
 }
-.wrap{max-width:1080px;margin:0 auto;}
-header{padding:22px 14px 8px;}
-.hero{
-  background:#fff;
+.wrap { max-width:1080px; margin:0 auto; }
+header { padding:22px 14px 8px; }
+.hero {
+  background:#ffffff;
   border:1px solid var(--line);
   border-radius:22px;
-  padding:22px 18px;
+  padding:22px 20px;
   box-shadow:var(--shadow);
 }
-.hero h1{margin:0;text-align:center;font-size:clamp(26px,5vw,40px);letter-spacing:.04em;}
-main{padding:10px 14px 34px;}
-.roleGrid{
+.hero h1 { margin:0; font-size:clamp(26px,5vw,40px); letter-spacing:.05em; text-align:center; }
+main { padding:10px 14px 34px; }
+.roleGrid {
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
   gap:12px;
   margin:16px 0 18px;
 }
-.roleBtn{
+.roleBtn {
   appearance:none;
   border:2px solid transparent;
   border-radius:18px;
@@ -54,19 +54,19 @@ main{padding:10px 14px 34px;}
   box-shadow:0 7px 18px rgba(41,32,18,.07);
   transition:.16s;
 }
-.roleBtn:hover{transform:translateY(-2px);}
-.roleBtn.active{
-  border-color:var(--role-accent);
-  box-shadow:0 0 0 4px rgba(255,255,255,.82),0 0 0 7px rgba(91,155,213,.22),var(--shadow);
+.roleBtn:hover { transform:translateY(-2px); }
+.roleBtn.active {
+  border-color:var(--roleAccent);
+  box-shadow:0 0 0 4px rgba(255,255,255,.8), 0 0 0 7px color-mix(in srgb, var(--roleAccent) 28%, transparent), var(--shadow);
 }
-.rolePanel{
-  background:var(--role-bg);
-  border:2px solid var(--role-accent);
+.rolePanel {
+  background:var(--roleBg);
+  border:2px solid color-mix(in srgb, var(--roleAccent) 46%, #fff);
   border-radius:24px;
   padding:16px;
   box-shadow:var(--shadow);
 }
-.rolePanelTop{
+.rolePanelTop {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -74,63 +74,60 @@ main{padding:10px 14px 34px;}
   flex-wrap:wrap;
   margin-bottom:12px;
 }
-.rolePanel h2{margin:0;font-size:clamp(24px,4.5vw,34px);}
-button,textarea{font:inherit;}
-.btn{
+.rolePanel h2 { margin:0; font-size:clamp(24px,4.5vw,34px); }
+button, textarea, input { font:inherit; }
+.btn {
   border:none;
-  border-radius:999px;
-  padding:10px 16px;
-  font-weight:800;
+  border-radius:13px;
+  padding:10px 14px;
   cursor:pointer;
-  background:var(--role-accent);
+  font-weight:800;
+  background:var(--roleAccent);
   color:#fff;
-  box-shadow:0 6px 14px rgba(0,0,0,.12);
 }
-.btn.secondary{background:#fff;color:#3f382f;border:1px solid var(--line);box-shadow:none;}
-.btn.ghost{background:#fff;color:#3f382f;border:1px solid var(--line);box-shadow:none;padding:8px 12px;font-size:15px;}
-.btn.danger{background:var(--danger);}
-.list{display:grid;gap:10px;}
-.item{
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(255,255,255,.9);
-  border-left:8px solid var(--role-accent);
+.btn.secondary { background:#fff; color:var(--text); border:1px solid var(--line); }
+.btn.ghost { background:#fff; color:var(--roleAccent); border:1px solid color-mix(in srgb, var(--roleAccent) 48%, #fff); }
+.btn.danger { background:var(--danger); color:#fff; }
+.list { display:flex; flex-direction:column; gap:10px; }
+.item {
+  background:rgba(255,255,255,.86);
+  border:1px solid rgba(120,100,70,.18);
+  border-left:8px solid var(--roleAccent);
   border-radius:18px;
-  padding:14px 14px 12px;
+  padding:14px 14px 13px;
 }
-.item.added{
-  margin-left:22px;
-  background:rgba(255,255,255,.72);
-  border-left-style:dashed;
+.item h3 { margin:0; font-size:19px; line-height:1.35; }
+.item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
+.item.added { border-left-style:dashed; background:#fff; }
+.itemActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:11px; }
+.empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
+.modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
+.modalBackdrop.show { display:flex; }
+.modal { width:min(680px,100%); max-height:88vh; overflow:auto; background:#fffdf8; border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:18px; }
+.modal h2 { margin:0 0 10px; }
+label { display:block; font-weight:900; margin-bottom:6px; }
+input[type="text"], textarea { width:100%; border:1px solid var(--line); border-radius:14px; padding:11px; background:#fff; color:var(--text); }
+input[type="text"] { min-height:46px; }
+textarea { min-height:150px; resize:vertical; }
+.field { margin-bottom:12px; }
+.field.hidden { display:none; }
+.modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; flex-wrap:wrap; }
+@media (max-width:920px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:620px) {
+  header { padding:12px 10px 6px; }
+  main { padding:8px 10px 26px; }
+  .hero { padding:18px 14px; border-radius:18px; }
+  .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .roleBtn { min-height:64px; font-size:18px; padding:14px 8px; }
+  .rolePanel { padding:12px; border-radius:20px; }
 }
-.item h3{margin:0 0 6px;font-size:20px;line-height:1.4;}
-.item p{margin:0;white-space:pre-wrap;font-size:17px;}
-.itemActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-.empty{background:#fff;border-radius:16px;padding:18px;text-align:center;color:var(--muted);}
-.modalBackdrop{
-  position:fixed;inset:0;background:rgba(27,22,15,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:20;
-}
-.modalBackdrop.show{display:flex;}
-.modal{
-  width:min(640px,100%);
-  background:#fffdf8;
-  border-radius:24px;
-  padding:20px;
-  box-shadow:0 20px 48px rgba(0,0,0,.28);
-}
-.modal h2{margin:0 0 12px;font-size:24px;}
-label{display:block;font-weight:800;margin-bottom:8px;}
-textarea{
-  width:100%;min-height:170px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--text);outline:none;
-}
-textarea:focus{border-color:var(--role-accent);box-shadow:0 0 0 4px rgba(91,155,213,.14);}
-.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
-@media(max-width:850px){.roleGrid{grid-template-columns:repeat(3,minmax(0,1fr));}.roleBtn{font-size:18px;min-height:68px;}}
-@media(max-width:560px){header{padding-top:14px}.hero{padding:16px 12px}.roleGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.roleBtn{font-size:17px;min-height:62px}.rolePanel{padding:12px;border-radius:20px}.item{padding:12px;border-radius:16px}.item.added{margin-left:12px}.modal{padding:16px}.btn{padding:9px 13px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="wrap hero"><h1>豐東管樂交接資料庫</h1></div>
+  <div class="wrap hero">
+    <h1>豐東管樂交接資料庫</h1>
+  </div>
 </header>
 <main>
   <div class="wrap">
@@ -138,7 +135,7 @@ textarea:focus{border-color:var(--role-accent);box-shadow:0 0 0 4px rgba(91,155,
     <section id="rolePanel" class="rolePanel">
       <div class="rolePanelTop">
         <h2 id="currentRoleTitle"></h2>
-        <button class="btn" id="addItemBtn">＋新增一筆</button>
+        <button class="btn" id="addItemBtn">＋新增一項</button>
       </div>
       <div id="content" class="list"></div>
     </section>
@@ -149,10 +146,16 @@ textarea:focus{border-color:var(--role-accent);box-shadow:0 0 0 4px rgba(91,155,
   <div class="modal">
     <h2 id="modalTitle">新增內容</h2>
     <form id="modalForm">
-      <label for="contentInput">補充內容</label>
-      <textarea id="contentInput" name="content" required placeholder="把要補充的事情寫在這裡"></textarea>
+      <div class="field" id="titleField">
+        <label for="titleInput">大項</label>
+        <input type="text" id="titleInput" name="title" placeholder="例如：學生請假與臨時狀況">
+      </div>
+      <div class="field" id="contentField">
+        <label for="contentInput" id="contentLabel">小項</label>
+        <textarea id="contentInput" name="content" required placeholder="把這一項要記錄的細項內容寫在這裡"></textarea>
+      </div>
       <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelBtn">取消</button>
+        <button type="button" class="btn secondary" onclick="closeModal()">取消</button>
         <button type="submit" class="btn">儲存</button>
       </div>
     </form>
@@ -163,390 +166,672 @@ textarea:focus{border-color:var(--role-accent);box-shadow:0 0 0 4px rgba(91,155,
 const BASE_RECORDS = [
   {
     "id": "前期分工表-2",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [],
     "item": "場地申請與票務申請",
-    "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。"
+    "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。",
+    "note": "可邀會長或有空幹部一起勘場。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-3",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "全體"
     ],
     "item": "休息區、化妝區、樂器放置區確認",
-    "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。"
+    "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。",
+    "note": "此項以學生與演出後勤需求為主。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-4",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "會長",
     "collabs": [
       "團務老師"
     ],
     "item": "貴賓席、觀眾席視角與入口動線規劃",
-    "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。"
+    "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。",
+    "note": "可與團務老師及幹部一起看場地；重點是接待與觀眾動線。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-5",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "文書"
     ],
     "item": "領票與票券控管",
-    "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。"
+    "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。",
+    "note": "貴賓區票券先由老師預留。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-6",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "會長",
       "文書"
     ],
     "item": "貴賓票預留",
-    "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。"
+    "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。",
+    "note": "後續幹部配票時需先扣除這些票。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-7",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-場地票務",
+    "timeOrder": "最優先",
     "main": "文書",
     "collabs": [
       "全體"
     ],
     "item": "劃位表與票券分配表",
-    "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。"
+    "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。",
+    "note": "以禮遇與畢業年級優先為原則，盡量讓家長坐在能看見孩子的位置。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-8",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-文宣影像",
+    "timeOrder": "前期",
     "main": "文書",
     "collabs": [],
     "item": "製作影片集",
-    "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。"
+    "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。",
+    "note": "需提早收素材，避免最後趕工。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-9",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-文宣影像",
+    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [],
     "item": "節目單內容與製作規劃",
-    "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。"
+    "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。",
+    "note": "可參照每年節目單格式；文書可協助排版與檔案整理。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-10",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-文宣影像",
+    "timeOrder": "前期",
     "main": "文書",
     "collabs": [
       "攝影"
     ],
     "item": "線上節目單與 QR Code",
-    "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。"
+    "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。",
+    "note": "需確認連結穩定、手機可讀。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-11",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-文宣影像",
+    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [
       "全體"
     ],
     "item": "海報與邀請卡初稿",
-    "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。"
+    "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。",
+    "note": "完成後可請幹部確認文字、活動資訊與修正需求。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-12",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-文宣影像",
+    "timeOrder": "前期",
     "main": "會長",
     "collabs": [
       "全體"
     ],
     "item": "海報張貼與宣傳安排",
-    "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。"
+    "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。",
+    "note": "網路分享效果通常較好，可鼓勵 IG、FB、LINE 群組轉發。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-13",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-邀請接待",
+    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "擬定貴賓名冊",
-    "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。"
+    "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。",
+    "note": "確認是否需新增或刪除名單。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-14",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-邀請接待",
+    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "歷屆會長與貴賓邀請",
-    "description": "進行簡訊、電話、邀請函寄送或親送安排。"
+    "description": "進行簡訊、電話、邀請函寄送或親送安排。",
+    "note": "可詢問學校是否有需一併邀請或發放的對象。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-15",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-邀請接待",
+    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "邀請函資料整理",
-    "description": "協助整理邀請函內容、收件資料、名單與列印資料。"
+    "description": "協助整理邀請函內容、收件資料、名單與列印資料。",
+    "note": "寄送由會長統一處理較清楚。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-16",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-餐飲禮品",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "餐飲需求統計",
-    "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。"
+    "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。",
+    "note": "下午活動需考量提早練習與幫忙人員用餐。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-17",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-餐飲禮品",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "訂餐與發餐規劃",
-    "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。"
+    "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。",
+    "note": "原本訂餐盒、便當、飯卷可合併成同一大項。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-18",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-餐飲禮品",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "飲料與水準備",
-    "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。"
+    "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。",
+    "note": "例如 100 人可準備 120 至 140 瓶，水與飲料各約一半。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-19",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-餐飲禮品",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [],
     "item": "指揮花束與指揮禮",
-    "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。"
+    "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。",
+    "note": "可考慮將感謝信與禮金一起包裝，但要避免遺失。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-20",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-餐飲禮品",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [],
     "item": "三年級送別禮物",
-    "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。"
+    "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。",
+    "note": "人數需向團務老師確認，因老師有正式名單。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-21",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-採購佈置",
+    "timeOrder": "前期",
     "main": "全體幹部",
     "collabs": [],
     "item": "各組物品請購",
-    "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。"
+    "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。",
+    "note": "總務可能物品最多，但每位幹部都要提出需求。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-22",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-採購佈置",
+    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "團務老師"
     ],
     "item": "發餐與回收安排",
-    "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。"
+    "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。",
+    "note": "要考量場地是否方便用餐。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-23",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-採購佈置",
+    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "幹部服裝規定",
-    "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。"
+    "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。",
+    "note": "活動前再提醒一次。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-24",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-採購佈置",
+    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [],
     "item": "學生服裝規定",
-    "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。"
+    "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。",
+    "note": "由老師對學生發布最清楚。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "前期分工表-25",
+    "sourceSheet": "前期分工表",
+    "stage": "前期-採購佈置",
+    "timeOrder": "前期",
     "main": "攝影",
     "collabs": [
       "全體"
     ],
     "item": "羅馬旗座與旗桿確認",
-    "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。"
+    "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。",
+    "note": "可暫由攝影協助追蹤，實際仍需全體幫忙。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-2",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-學生與場地",
+    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [],
     "item": "學生集合與抵達方式",
-    "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。"
+    "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。",
+    "note": "學生端由團務老師統一宣布。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-3",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-學生與場地",
+    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [],
     "item": "樂器與彩排準備",
-    "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。"
+    "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。",
+    "note": "需與指揮、文化中心現場限制配合。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-4",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-學生與場地",
+    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [
       "攝影"
     ],
     "item": "換裝與化妝時間",
-    "description": "規劃換團服、妝髮、化妝組時間與分批順序。"
+    "description": "規劃換團服、妝髮、化妝組時間與分批順序。",
+    "note": "建議抓上台前 2 至 3 小時完成主要妝髮。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-5",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-學生與場地",
+    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [
       "攝影",
       "會長"
     ],
     "item": "大合照安排",
-    "description": "安排學生、年級、幹部、家長或師長合照順序與地點。"
+    "description": "安排學生、年級、幹部、家長或師長合照順序與地點。",
+    "note": "可在舞台、TRUSS 架或文化中心適合位置拍攝。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-6",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-前台接待",
+    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "前台票務與簽到資料",
-    "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。"
+    "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。",
+    "note": "前台人員要能快速查資料。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-7",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-前台接待",
+    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "前台動線與人員分配",
-    "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。"
+    "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。",
+    "note": "若免費入場也要有人處理臨時來賓。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-8",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-前台接待",
+    "timeOrder": "開演前",
     "main": "會長",
     "collabs": [],
     "item": "貴賓接待與引導",
-    "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。"
+    "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。",
+    "note": "貴賓票多半已在現場，需協助取票與帶位。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-9",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-前台接待",
+    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "節目單發放與 QR Code",
-    "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。"
+    "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。",
+    "note": "線上節目單可包含影片與曲目資訊。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-10",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-前台接待",
+    "timeOrder": "演出中",
     "main": "文書",
     "collabs": [
       "團務老師"
     ],
     "item": "留守前台與遲到入場",
-    "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。"
+    "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。",
+    "note": "活動中心外面建議一定要有人留守。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-11",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-舞台後台",
+    "timeOrder": "活動前",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "舞台布置與紅布條",
-    "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。"
+    "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。",
+    "note": "需與團務老師一起看位置。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-12",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-舞台後台",
+    "timeOrder": "活動前",
     "main": "會長",
     "collabs": [
       "攝影"
     ],
     "item": "花籃與花圈位置確認",
-    "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。"
+    "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。",
+    "note": "當天才知道實際有哪些花籃，因此移到當日分工。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-13",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-舞台後台",
+    "timeOrder": "演出中",
     "main": "團務老師",
     "collabs": [
       "會長"
     ],
     "item": "後台控管",
-    "description": "控管學生、樂器、上下台、獻花或演出流程。"
+    "description": "控管學生、樂器、上下台、獻花或演出流程。",
+    "note": "後台可安排熟悉學生與流程的家長協助。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-14",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-舞台後台",
+    "timeOrder": "演出中",
     "main": "團務老師",
     "collabs": [
       "文書",
       "攝影"
     ],
     "item": "影片播放確認",
-    "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。"
+    "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。",
+    "note": "先保留此項，等確認影片定位後再細化。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-15",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-攝影紀錄",
+    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "活動照片紀錄",
-    "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。"
+    "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。",
+    "note": "不只側拍，必要時要主動 cue 大家看鏡頭。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-16",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-攝影紀錄",
+    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "主動引導拍照",
-    "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。"
+    "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。",
+    "note": "避免只拍到側面或看不出誰有出席。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-17",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-攝影紀錄",
+    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "花籃拍照留存",
-    "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。"
+    "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。",
+    "note": "需拍清楚送花單位與整體位置。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-18",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-攝影紀錄",
+    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [
       "團務老師"
     ],
     "item": "錄影與錄音協調",
-    "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。"
+    "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。",
+    "note": "可預留兩位幹部分前台與後台拍攝。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-19",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-餐飲清潔",
+    "timeOrder": "用餐前後",
     "main": "總務",
     "collabs": [
       "團務老師"
     ],
     "item": "餐點發放與用餐秩序",
-    "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。"
+    "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。",
+    "note": "需同步處理水、飲料與垃圾。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-20",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-餐飲清潔",
+    "timeOrder": "用餐前後",
     "main": "總務",
     "collabs": [
       "會長",
       "團務老師"
     ],
     "item": "垃圾與清潔",
-    "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。"
+    "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。",
+    "note": "用餐後先整理一次，撤場再整理一次。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-21",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-撤場復原",
+    "timeOrder": "演出後",
     "main": "會長",
     "collabs": [
       "總務",
       "團務老師"
     ],
     "item": "撤場總控",
-    "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。"
+    "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。",
+    "note": "目標是場地恢復原狀。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-22",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-撤場復原",
+    "timeOrder": "演出後",
     "main": "團務老師",
     "collabs": [
       "會長",
       "全體"
     ],
     "item": "學生與樂器撤離",
-    "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。"
+    "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。",
+    "note": "需與學生動線分流。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-23",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-撤場復原",
+    "timeOrder": "演出後",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "剩餘物資與垃圾處理",
-    "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。"
+    "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。",
+    "note": "避免遺漏在文化中心。",
+    "year": "原始資料",
+    "kind": "base"
   },
   {
     "id": "當日分工表-24",
+    "sourceSheet": "當日分工表",
+    "stage": "當日-撤場復原",
+    "timeOrder": "演出後",
     "main": "攝影",
     "collabs": [],
     "item": "撤場前最後紀錄",
-    "description": "補拍花籃、場地復原、幹部合照或重要留存照片。"
+    "description": "補拍花籃、場地復原、幹部合照或重要留存照片。",
+    "note": "提供後續感謝文與紀錄使用。",
+    "year": "原始資料",
+    "kind": "base"
   }
 ];
 
@@ -568,188 +853,191 @@ const roleColors = {
   '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
 };
 
-const STORE_KEY = 'fengtung_handover_simple_v3';
-const OLD_KEYS = ['fengtung_handover_simple_v2','fengtung_handover_v1'];
+const STORE_KEY = 'fengtung_handover_simple_v2';
+const OLD_STORE_KEY = 'fengtung_handover_v1';
 let currentRole = '團務老師';
 let state = loadState();
 let editing = null;
 
-function uid(prefix='id'){
-  return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7);
+function loadState() {
+  try {
+    const v2 = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (v2 && Array.isArray(v2.entries)) return v2;
+  } catch(e) {}
+  try {
+    const old = JSON.parse(localStorage.getItem(OLD_STORE_KEY) || 'null');
+    if (old) {
+      const entries = [];
+      (old.tasks || []).forEach(t => entries.push({
+        id: t.id || uid('item'), type:'item', role: t.ownerRole || t.main || '團務老師', content: [t.item, t.description].filter(Boolean).join('\n'), createdAt: new Date().toISOString()
+      }));
+      (old.supplements || []).forEach(s => entries.push({
+        id: s.id || uid('reply'), type:'reply', role: s.role || '團務老師', parentId: s.recordId, content: s.content || '', createdAt: s.createdAt || new Date().toISOString()
+      }));
+      return { entries };
+    }
+  } catch(e) {}
+  return { entries: [] };
 }
-function esc(s=''){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function normalizeRole(value){
-  if(!value) return '';
-  if(value === '全體' || value === '幹部／全體幹部') return '全體幹部';
-  return value;
-}
-function roleStyle(role){ return roleColors[role] || roleColors['團務老師']; }
-function setRoleVars(role){
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function uid(prefix='id') { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
+function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
+function setRoleVars(role) {
   const c = roleStyle(role);
-  document.documentElement.style.setProperty('--role-bg', c.bg);
-  document.documentElement.style.setProperty('--role-accent', c.accent);
+  document.documentElement.style.setProperty('--roleBg', c.bg);
+  document.documentElement.style.setProperty('--roleAccent', c.accent);
 }
-function expandsToRole(value, role){
-  const v = normalizeRole(value);
+function expandsToRole(value, role) {
+  if(!value) return false;
+  const v = value === '全體' || value === '幹部／全體幹部' ? '全體幹部' : value;
   if(v === role) return true;
   if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
 }
-function visibleForRole(record, role){
+function visibleForRole(record, role) {
   return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role));
 }
-function baseRecordsForRole(role){
-  return BASE_RECORDS.filter(r => visibleForRole(r, role));
+function baseRecordsForRole(role) { return BASE_RECORDS.filter(r => visibleForRole(r, role)); }
+function customItemsForRole(role) { return state.entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
+function repliesFor(parentId) { return state.entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
+function textForBase(r) { return (r.description || '').trim(); }
+function titleForEntry(e) {
+  if (e.title) return e.title;
+  const lines = String(e.content || '').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  return lines[0] || '新增項目';
 }
-function customItemsForRole(role){
-  return state.entries.filter(e => e.type === 'item' && e.role === role && !e.parentId);
+function bodyForEntry(e) {
+  if (e.title) return e.content || '';
+  const lines = String(e.content || '').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  return lines.length > 1 ? lines.slice(1).join('\n') : (e.content || '');
 }
-function repliesFor(parentId){
-  return state.entries.filter(e => e.type === 'reply' && e.parentId === parentId);
-}
-function migrateOldState(old){
-  const entries = [];
-  if(old && Array.isArray(old.entries)){
-    old.entries.forEach(e => {
-      if(e && e.content){
-        entries.push({
-          id: e.id || uid(e.type || 'item'),
-          type: e.type === 'reply' ? 'reply' : 'item',
-          role: normalizeRole(e.role) || '團務老師',
-          parentId: e.parentId || null,
-          content: String(e.content),
-          createdAt: e.createdAt || new Date().toISOString()
-        });
-      }
-    });
-    return entries;
-  }
-  if(old && Array.isArray(old.tasks)){
-    old.tasks.forEach(t => {
-      const content = [t.item, t.description].filter(Boolean).join('\n');
-      if(content){
-        entries.push({id:t.id || uid('item'), type:'item', role:normalizeRole(t.ownerRole || t.main) || '團務老師', parentId:null, content, createdAt:new Date().toISOString()});
-      }
-    });
-  }
-  if(old && Array.isArray(old.supplements)){
-    old.supplements.forEach(s => {
-      if(s.content){
-        entries.push({id:s.id || uid('reply'), type:'reply', role:normalizeRole(s.role) || '團務老師', parentId:s.recordId || s.parentId || null, content:String(s.content), createdAt:s.createdAt || new Date().toISOString()});
-      }
-    });
-  }
-  return entries;
-}
-function loadState(){
-  try{
-    const now = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if(now && Array.isArray(now.entries)) return now;
-  }catch(e){}
-  for(const key of OLD_KEYS){
-    try{
-      const old = JSON.parse(localStorage.getItem(key) || 'null');
-      const entries = migrateOldState(old);
-      if(entries.length){
-        const next = { entries };
-        localStorage.setItem(STORE_KEY, JSON.stringify(next));
-        return next;
-      }
-    }catch(e){}
-  }
-  return { entries: [] };
-}
-function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 
-function renderRoles(){
+function renderRoles() {
   document.getElementById('roleGrid').innerHTML = ROLES.map(r => {
     const c = roleStyle(r.id);
-    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" data-role="${esc(r.id)}">${esc(r.name)}</button>`;
+    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" onclick="selectRole('${r.id}')">${esc(r.name)}</button>`;
   }).join('');
-  document.querySelectorAll('.roleBtn').forEach(btn => {
-    btn.addEventListener('click', () => selectRole(btn.dataset.role));
-  });
 }
-function selectRole(role){ currentRole = role; render(); }
-function renderBaseCard(r){
+function selectRole(role) { currentRole = role; render(); }
+
+function renderBaseCard(r) {
   const replies = repliesFor(r.id);
   return `
     <article class="item">
       <h3>${esc(r.item)}</h3>
-      ${r.description ? `<p>${esc(r.description)}</p>` : ''}
-      <div class="itemActions"><button class="btn ghost" data-reply="${esc(r.id)}">＋補充內容</button></div>
-    </article>
-    ${replies.map(renderEntryCard).join('')}`;
+      ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
+      ${replies.map(renderReplyCard).join('')}
+      <div class="itemActions"><button class="btn ghost" onclick="openReply('${r.id}')">＋補充內容</button></div>
+    </article>`;
 }
-function renderEntryCard(e){
+function renderCustomItemCard(e) {
+  const replies = repliesFor(e.id);
+  const body = bodyForEntry(e);
   return `<article class="item added">
-    <p>${esc(e.content)}</p>
+    <h3>${esc(titleForEntry(e))}</h3>
+    ${body ? `<p>${esc(body)}</p>` : ''}
+    ${replies.map(renderReplyCard).join('')}
     <div class="itemActions">
-      <button class="btn secondary" data-edit="${esc(e.id)}">修改</button>
-      <button class="btn danger" data-delete="${esc(e.id)}">刪除</button>
+      <button class="btn ghost" onclick="openReply('${e.id}')">＋補充內容</button>
+      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
+      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
     </div>
   </article>`;
 }
-function renderContent(){
+function renderReplyCard(e) {
+  return `<article class="item added">
+    <p>${esc(e.content)}</p>
+    <div class="itemActions">
+      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
+      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
+    </div>
+  </article>`;
+}
+function renderContent() {
   const bases = baseRecordsForRole(currentRole);
   const customs = customItemsForRole(currentRole);
-  const html = [...bases.map(renderBaseCard), ...customs.map(renderEntryCard)].join('');
+  const html = [
+    ...bases.map(renderBaseCard),
+    ...customs.map(renderCustomItemCard)
+  ].join('');
   document.getElementById('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
-  document.querySelectorAll('[data-reply]').forEach(btn => btn.addEventListener('click', () => openReply(btn.dataset.reply)));
-  document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => openEdit(btn.dataset.edit)));
-  document.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => deleteEntry(btn.dataset.delete)));
 }
-function render(){
+function render() {
   setRoleVars(currentRole);
   renderRoles();
   document.getElementById('currentRoleTitle').textContent = currentRole;
   renderContent();
 }
-function showModal(title, value=''){
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('contentInput').value = value;
-  document.getElementById('modalBackdrop').classList.add('show');
-  setTimeout(() => document.getElementById('contentInput').focus(), 60);
-}
-function closeModal(){
+
+function closeModal() {
   document.getElementById('modalBackdrop').classList.remove('show');
+  document.getElementById('titleInput').value = '';
   document.getElementById('contentInput').value = '';
   editing = null;
 }
-function openReply(parentId){ editing = { mode:'reply', parentId }; showModal('補充內容'); }
-function openEdit(id){
+function configureModal(mode) {
+  const titleField = document.getElementById('titleField');
+  const contentLabel = document.getElementById('contentLabel');
+  const contentInput = document.getElementById('contentInput');
+  if(mode === 'newItem') {
+    titleField.classList.remove('hidden');
+    document.getElementById('titleInput').required = true;
+    contentLabel.textContent = '小項';
+    contentInput.placeholder = '把這一個大項底下的第一筆細項內容寫在這裡';
+  } else {
+    titleField.classList.add('hidden');
+    document.getElementById('titleInput').required = false;
+    contentLabel.textContent = mode === 'reply' ? '補充內容' : '內容';
+    contentInput.placeholder = mode === 'reply' ? '把這個項目要補充的內容寫在這裡' : '修改這一筆內容';
+  }
+}
+function showModal(title, value='', titleValue='') {
+  document.getElementById('modalTitle').textContent = title;
+  configureModal(editing?.mode || 'reply');
+  document.getElementById('titleInput').value = titleValue || '';
+  document.getElementById('contentInput').value = value;
+  document.getElementById('modalBackdrop').classList.add('show');
+  setTimeout(()=>{
+    const target = editing?.mode === 'newItem' ? 'titleInput' : 'contentInput';
+    document.getElementById(target).focus();
+  }, 60);
+}
+document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
+document.getElementById('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
+function openReply(parentId) { editing = { mode:'reply', parentId }; showModal('補充內容'); }
+function openEdit(id) {
   const entry = state.entries.find(e => e.id === id);
   if(!entry) return;
   editing = { mode:'edit', id };
-  showModal('修改內容', entry.content || '');
+  if(entry.type === 'item') {
+    editing.mode = 'editItem';
+    showModal('修改項目', bodyForEntry(entry), titleForEntry(entry));
+  } else {
+    showModal('修改內容', entry.content || '');
+  }
 }
-function deleteEntry(id){
+function deleteEntry(id) {
   if(!confirm('確定刪除這一筆內容？')) return;
-  state.entries = state.entries.filter(e => e.id !== id);
+  state.entries = state.entries.filter(e => e.id !== id && e.parentId !== id);
   saveState();
   renderContent();
 }
-
-document.getElementById('addItemBtn').addEventListener('click', () => {
-  editing = { mode:'newItem' };
-  showModal('新增內容');
-});
-document.getElementById('cancelBtn').addEventListener('click', closeModal);
-document.getElementById('modalBackdrop').addEventListener('click', e => {
-  if(e.target.id === 'modalBackdrop') closeModal();
-});
 document.getElementById('modalForm').addEventListener('submit', e => {
   e.preventDefault();
+  const title = document.getElementById('titleInput').value.trim();
   const content = document.getElementById('contentInput').value.trim();
   if(!content) return;
-  if(editing && editing.mode === 'edit'){
-    state.entries = state.entries.map(x => x.id === editing.id ? {...x, content, updatedAt:new Date().toISOString()} : x);
-  }else if(editing && editing.mode === 'reply'){
-    state.entries.push({id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString()});
-  }else{
-    state.entries.push({id:uid('item'), type:'item', role:currentRole, parentId:null, content, createdAt:new Date().toISOString()});
+  if(editing?.mode === 'edit') {
+    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, content, updatedAt:new Date().toISOString() } : x);
+  } else if(editing?.mode === 'editItem') {
+    if(!title) return;
+    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, title, content, updatedAt:new Date().toISOString() } : x);
+  } else if(editing?.mode === 'reply') {
+    state.entries.push({ id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString() });
+  } else {
+    if(!title) return;
+    state.entries.push({ id:uid('item'), type:'item', role:currentRole, title, content, createdAt:new Date().toISOString() });
   }
   saveState();
   closeModal();
