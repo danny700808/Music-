@@ -43,12 +43,18 @@ button, textarea, input { font:inherit; }
 .btn.danger { background:var(--danger); color:#fff; }
 .btn.small { padding:3px 8px; border-radius:999px; font-size:13px; line-height:1.5; margin-left:6px; vertical-align:baseline; }
 .list { display:flex; flex-direction:column; gap:10px; }
+.sectionBlock { display:flex; flex-direction:column; gap:10px; }
+.sectionBlock + .sectionBlock { margin-top:18px; }
+.sectionTitle { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:900; margin:4px 2px 2px; color:#2d2922; }
+.sectionTitle::after { content:""; height:1px; background:rgba(120,100,70,.22); flex:1; }
+.sectionHint { font-size:14px; color:var(--muted); font-weight:700; margin-left:2px; }
 .item { background:rgba(255,255,255,.88); border:1px solid rgba(120,100,70,.18); border-left:8px solid var(--roleAccent); border-radius:18px; padding:14px 14px 13px; }
 .itemHead { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .itemHead h3 { flex:1; min-width:0; }
 .item h3 { margin:0; font-size:19px; line-height:1.35; }
 .item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
 .item.added { border-left-style:dashed; background:#fff; }
+.item.collab { background:rgba(255,255,255,.70); border-left-width:5px; }
 .itemActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:11px; }
 .childList { margin-top:10px; display:flex; flex-direction:column; gap:7px; }
 .childLine { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
@@ -859,8 +865,12 @@ function expandsToRole(value, role) {
   if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
 }
-function visibleForRole(record, role) { return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role)); }
-function baseRecordsForRole(role) { return BASE_RECORDS.filter(r => visibleForRole(r, role)); }
+function primaryForRole(record, role) { return expandsToRole(record.main, role); }
+function collabForRole(record, role) {
+  return !primaryForRole(record, role) && (record.collabs || []).some(c => expandsToRole(c, role));
+}
+function primaryBaseRecordsForRole(role) { return BASE_RECORDS.filter(r => primaryForRole(r, role)); }
+function collabBaseRecordsForRole(role) { return BASE_RECORDS.filter(r => collabForRole(r, role)); }
 function customItemsForRole(role) { return entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
 function repliesFor(parentId) { return entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
 function filesFor(parentId) { return entries.filter(e => e.type === 'file' && e.parentId === parentId); }
@@ -918,8 +928,8 @@ function actionButtons(parentId) {
   </div>`;
 }
 
-function renderBaseCard(r) {
-  return `<article class="item">
+function renderBaseCard(r, mode='main') {
+  return `<article class="item ${mode === 'collab' ? 'collab' : ''}">
     <div class="itemHead"><h3>${esc(r.item)}</h3>${relatedMaterials(r.id)}</div>
     ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
     ${childLines(r.id)}
@@ -937,10 +947,20 @@ function renderCustomItemCard(e) {
   </article>`;
 }
 
+function sectionHtml(title, hint, cards) {
+  if(!cards.length) return '';
+  return `<div class="sectionBlock"><div><div class="sectionTitle">${esc(title)}</div>${hint ? `<div class="sectionHint">${esc(hint)}</div>` : ''}</div>${cards.join('')}</div>`;
+}
+
 function renderContent() {
-  const bases = baseRecordsForRole(currentRole);
-  const customs = customItemsForRole(currentRole);
-  const html = [...bases.map(renderBaseCard), ...customs.map(renderCustomItemCard)].join('');
+  const primaryBases = primaryBaseRecordsForRole(currentRole).map(r => renderBaseCard(r, 'main'));
+  const customs = customItemsForRole(currentRole).map(renderCustomItemCard);
+  const collabs = collabBaseRecordsForRole(currentRole).map(r => renderBaseCard(r, 'collab'));
+  const primaryCards = [...primaryBases, ...customs];
+  const html = [
+    sectionHtml('主要負責', '這一區是這個幹部要主要扛起來的事情。', primaryCards),
+    sectionHtml('協作部分', '這一區是需要協助別人的事情，主責不在這個幹部身上。', collabs)
+  ].join('');
   $('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
 }
 
