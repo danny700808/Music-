@@ -116,6 +116,7 @@ textarea { min-height:150px; resize:vertical; }
   .eventDot { font-size:22px; }
   .item p.eventBody { font-size:16px; }
   .ownerPill, .itemActions .btn.ghost { font-size:12px; }
+  .childText { font-size:16px; }
   .relatedBox { margin-top:2px; }
 }
 
@@ -1005,7 +1006,7 @@ function childLines(parentId) {
   return `<div class="childList">${replies.map(e => {
     const edit = replyEditFor(e.id);
     const content = edit?.content ?? e.content;
-    return `<div class="childLine"><span class="childText">${esc(content)}</span> <button class="textEditLink" data-edit-reply="${esc(e.id)}">修改</button>${isMine(e) ? ` <button class="btn danger small" data-delete="${e.id}">刪除</button>` : ''}</div>`;
+    return `<div class="childLine"><span class="childDot">•</span><span class="childText">${esc(content)}</span><button class="textEditLink" data-edit-reply="${esc(e.id)}">修改</button>${isMine(e) ? ` <button class="btn danger small" data-delete="${e.id}">刪除</button>` : ''}</div>`;
   }).join('')}</div>`;
 }
 
@@ -1044,16 +1045,20 @@ function actionButtons(parentId) {
 function ownerMeta(d) {
   return `<div class="ownerMeta"><span class="ownerPill">主要：<span>${esc(roleDisplayName(d.main))}</span></span><span class="ownerPill">備援：<span>${esc(roleDisplayName(d.backup))}</span></span></div>`;
 }
+function topContentLine(id, content) {
+  if(!content) return '';
+  return `<div class="childList baseChildList"><div class="childLine baseChildLine"><span class="childDot">•</span><span class="childText">${esc(content)}</span><button class="textEditLink" data-edit-top="${esc(id)}">修改</button></div></div>`;
+}
 function renderCardShell(id, title, content, d, mode='', deletable=false) {
   return `<article class="item ${mode}">
     <div class="itemHead">
-      <div class="eventTitleWrap"><span class="eventDot">•</span><span class="eventTitle">${esc(title)}</span><button class="textEditLink" data-edit-top="${esc(id)}">修改</button></div>
+      <div class="eventTitleWrap"><span class="eventTitle">${esc(title)}</span><button class="textEditLink" data-edit-top="${esc(id)}">修改</button></div>
       ${relatedMaterials(id)}
     </div>
-    ${content ? `<p class="eventBody">${esc(content)}</p>` : ''}
+    ${topContentLine(id, content)}
+    ${childLines(id)}
     ${ownerMeta(d)}
     ${deletable ? `<div style="margin-top:5px"><button class="btn danger small" data-delete="${esc(id)}">刪除</button></div>` : ''}
-    ${childLines(id)}
     ${actionButtons(id)}
   </article>`;
 }
