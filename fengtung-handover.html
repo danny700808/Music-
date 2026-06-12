@@ -3,111 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>豐東管樂成發交接資料庫</title>
+<title>豐東管樂交接資料庫</title>
 <style>
 :root {
-  --bg:#f7f4ed; --panel:#fffdf8; --text:#2d2922; --muted:#776f62; --line:#e6dccb;
-  --accent:#6b8f71; --accent2:#b8874a; --danger:#b94a48; --shadow:0 14px 34px rgba(48,39,24,.10);
-  --role:#6b8f71;
+  --bg:#f7f4ed;
+  --panel:#fffdf8;
+  --text:#2d2922;
+  --muted:#7a7166;
+  --line:#e4d9c8;
+  --roleBg:#DDEBF7;
+  --roleAccent:#5B9BD5;
+  --danger:#b94a48;
+  --shadow:0 12px 28px rgba(48,39,24,.10);
 }
 * { box-sizing:border-box; }
-body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif; background:radial-gradient(circle at top left,#fff7df 0,#f7f4ed 38%,#eee6d8 100%); color:var(--text); line-height:1.65; }
-header { padding:28px 18px 12px; }
-.wrap { max-width:1180px; margin:0 auto; }
-.hero { background:linear-gradient(135deg,#314434,#6b8f71); color:#fff; border-radius:28px; padding:28px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
-.hero:after { content:""; position:absolute; width:260px; height:260px; border-radius:50%; right:-80px; top:-90px; background:rgba(255,255,255,.12); }
-.hero h1 { margin:0 0 6px; font-size:clamp(25px,4.5vw,42px); letter-spacing:.04em; }
-.hero p { margin:0; max-width:760px; color:rgba(255,255,255,.86); font-size:16px; }
-.notice { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
-.notice span { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.24); padding:6px 10px; border-radius:999px; font-size:13px; }
-main { padding:12px 18px 36px; }
-.roleGrid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin:18px 0; }
-.roleBtn { appearance:none; border:1px solid var(--line); background:var(--panel); border-radius:18px; padding:14px 12px; text-align:left; cursor:pointer; box-shadow:0 8px 20px rgba(41,32,18,.06); transition:.18s; min-height:95px; }
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+  background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%);
+  color:var(--text);
+  line-height:1.7;
+}
+.wrap { max-width:1080px; margin:0 auto; }
+header { padding:22px 14px 8px; }
+.hero {
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px 20px;
+  box-shadow:var(--shadow);
+}
+.hero h1 { margin:0; font-size:clamp(26px,5vw,40px); letter-spacing:.05em; text-align:center; }
+main { padding:10px 14px 34px; }
+.roleGrid {
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:12px;
+  margin:16px 0 18px;
+}
+.roleBtn {
+  appearance:none;
+  border:2px solid transparent;
+  border-radius:18px;
+  padding:18px 10px;
+  min-height:76px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:20px;
+  color:#2d2922;
+  box-shadow:0 7px 18px rgba(41,32,18,.07);
+  transition:.16s;
+}
 .roleBtn:hover { transform:translateY(-2px); }
-.roleBtn.active { border-color:var(--role); box-shadow:0 0 0 3px color-mix(in srgb, var(--role) 20%, transparent), var(--shadow); }
-.roleName { display:flex; align-items:center; gap:8px; font-weight:800; font-size:18px; margin-bottom:4px; }
-.dot { width:12px; height:12px; border-radius:999px; background:var(--role); display:inline-block; flex:0 0 auto; }
-.roleSub { color:var(--muted); font-size:13px; line-height:1.45; }
-.toolbar { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; background:rgba(255,253,248,.72); border:1px solid var(--line); padding:12px; border-radius:20px; margin-bottom:14px; backdrop-filter:blur(8px); }
-.summary { display:flex; gap:8px; flex-wrap:wrap; }
-.pill { border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 10px; color:var(--muted); font-size:13px; }
-.pill strong { color:var(--text); }
-.actions { display:flex; gap:8px; flex-wrap:wrap; }
-button, select, input, textarea { font:inherit; }
-.btn { border:none; background:var(--role); color:#fff; padding:9px 13px; border-radius:12px; cursor:pointer; font-weight:700; }
-.btn.secondary { color:var(--text); background:#fff; border:1px solid var(--line); }
-.btn.ghost { color:var(--role); background:transparent; border:1px solid color-mix(in srgb, var(--role) 45%, #fff); }
-.btn.danger { background:var(--danger); }
-.filter { border:1px solid var(--line); border-radius:12px; padding:8px 10px; background:#fff; min-width:180px; }
-.sectionTitle { margin:22px 0 10px; display:flex; align-items:center; gap:10px; font-size:21px; }
-.sectionTitle:before { content:""; width:7px; height:24px; background:var(--role); border-radius:999px; display:inline-block; }
-.cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-.card { background:var(--panel); border:1px solid var(--line); border-radius:22px; padding:16px; box-shadow:0 8px 22px rgba(41,32,18,.06); }
-.cardHeader { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:1px dashed var(--line); padding-bottom:10px; margin-bottom:10px; }
-.card h3 { margin:0; font-size:19px; line-height:1.35; }
-.badges { display:flex; gap:6px; flex-wrap:wrap; margin-top:7px; }
-.badge { border-radius:999px; padding:3px 8px; font-size:12px; border:1px solid var(--line); color:var(--muted); background:#fff; }
-.badge.main { background:color-mix(in srgb, var(--role) 14%, #fff); color:var(--role); border-color:color-mix(in srgb, var(--role) 35%, #fff); font-weight:800; }
-.badge.collab { background:#fff8ed; color:#9a672c; border-color:#ecd3af; font-weight:800; }
-.desc { margin:8px 0 0; }
-.note { color:#675f52; background:#f6efe1; border-left:4px solid #c9a367; border-radius:12px; padding:9px 11px; margin:10px 0 0; font-size:14px; }
-.meta { color:var(--muted); font-size:13px; margin-top:8px; }
-.cardActions { display:flex; flex-wrap:wrap; gap:8px; margin-top:13px; }
-.supplements { margin-top:12px; border-top:1px dashed var(--line); padding-top:11px; }
-.supplement { background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px; margin-top:8px; }
-.supplement .top { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:13px; }
-.supplement p { margin:7px 0 0; white-space:pre-wrap; }
-.empty { background:rgba(255,253,248,.75); border:1px dashed var(--line); border-radius:18px; padding:20px; color:var(--muted); }
-.modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:18px; z-index:50; }
+.roleBtn.active {
+  border-color:var(--roleAccent);
+  box-shadow:0 0 0 4px rgba(255,255,255,.8), 0 0 0 7px color-mix(in srgb, var(--roleAccent) 28%, transparent), var(--shadow);
+}
+.rolePanel {
+  background:var(--roleBg);
+  border:2px solid color-mix(in srgb, var(--roleAccent) 46%, #fff);
+  border-radius:24px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.rolePanelTop {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.rolePanel h2 { margin:0; font-size:clamp(24px,4.5vw,34px); }
+button, textarea { font:inherit; }
+.btn {
+  border:none;
+  border-radius:13px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:800;
+  background:var(--roleAccent);
+  color:#fff;
+}
+.btn.secondary { background:#fff; color:var(--text); border:1px solid var(--line); }
+.btn.ghost { background:#fff; color:var(--roleAccent); border:1px solid color-mix(in srgb, var(--roleAccent) 48%, #fff); }
+.btn.danger { background:var(--danger); color:#fff; }
+.list { display:flex; flex-direction:column; gap:10px; }
+.item {
+  background:rgba(255,255,255,.86);
+  border:1px solid rgba(120,100,70,.18);
+  border-left:8px solid var(--roleAccent);
+  border-radius:18px;
+  padding:14px 14px 13px;
+}
+.item h3 { margin:0; font-size:19px; line-height:1.35; }
+.item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
+.item.added { border-left-style:dashed; background:#fff; }
+.itemActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:11px; }
+.empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
+.modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
 .modalBackdrop.show { display:flex; }
-.modal { width:min(720px,100%); max-height:88vh; overflow:auto; background:var(--panel); border-radius:24px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:20px; }
-.modal h2 { margin:0 0 12px; }
-.formGrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.field { display:flex; flex-direction:column; gap:5px; }
-.field.full { grid-column:1 / -1; }
-label { font-weight:800; color:#4b4438; font-size:14px; }
-input, textarea, select { border:1px solid var(--line); border-radius:13px; padding:10px; background:#fff; color:var(--text); }
-textarea { min-height:110px; resize:vertical; }
-.modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:14px; flex-wrap:wrap; }
-.footerNote { color:var(--muted); font-size:13px; margin-top:16px; }
-@media (max-width:1050px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
-@media (max-width:760px) { header { padding:12px 10px 6px; } main { padding:8px 10px 24px; } .hero { border-radius:20px; padding:20px; } .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; } .roleBtn { min-height:104px; padding:12px 10px; } .cards { grid-template-columns:1fr; } .toolbar { align-items:stretch; } .actions, .summary { width:100%; } .filter { width:100%; } .formGrid { grid-template-columns:1fr; } }
-@media (max-width:420px) { .roleGrid { grid-template-columns:1fr; } }
+.modal { width:min(680px,100%); max-height:88vh; overflow:auto; background:#fffdf8; border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:18px; }
+.modal h2 { margin:0 0 10px; }
+label { display:block; font-weight:900; margin-bottom:6px; }
+textarea { width:100%; min-height:150px; resize:vertical; border:1px solid var(--line); border-radius:14px; padding:11px; background:#fff; color:var(--text); }
+.modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; flex-wrap:wrap; }
+@media (max-width:920px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:620px) {
+  header { padding:12px 10px 6px; }
+  main { padding:8px 10px 26px; }
+  .hero { padding:18px 14px; border-radius:18px; }
+  .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .roleBtn { min-height:64px; font-size:18px; padding:14px 8px; }
+  .rolePanel { padding:12px; border-radius:20px; }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap hero">
-    <h1>豐東管樂成發交接資料庫</h1>
-    <p>依照每位幹部／角色分開管理。每個人可以在自己的區塊新增工作項目、補充歷屆經驗，也可以修改或刪除自己新增的內容。</p>
-    <div class="notice"><span>原始資料：豐東管樂成發概念表</span><span>目前版本：本機測試版</span><span>新增內容會存在這台瀏覽器</span></div>
+    <h1>豐東管樂交接資料庫</h1>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div id="roleGrid" class="roleGrid"></div>
-    <div class="toolbar">
-      <div class="summary" id="summary"></div>
-      <div class="actions">
-        <select id="stageFilter" class="filter" aria-label="階段篩選"></select>
-        <button class="btn" id="addTaskBtn">＋新增這個角色的工作項目</button>
-        <button class="btn secondary" id="exportBtn">匯出備份</button>
-        <button class="btn secondary" id="importBtn">匯入備份</button>
-        <button class="btn secondary" id="resetBtn">清除本機新增資料</button>
+    <section id="rolePanel" class="rolePanel">
+      <div class="rolePanelTop">
+        <h2 id="currentRoleTitle"></h2>
+        <button class="btn" id="addItemBtn">＋新增內容</button>
       </div>
-    </div>
-    <div id="content"></div>
-    <p class="footerNote">說明：這一版是讓你先看畫面與流程的原型。正式上線後可改接 Firebase，讓不同手機、不同電腦新增的內容全部同步。</p>
+      <div id="content" class="list"></div>
+    </section>
   </div>
 </main>
 
 <div class="modalBackdrop" id="modalBackdrop">
   <div class="modal">
-    <h2 id="modalTitle">新增</h2>
-    <form id="modalForm" class="formGrid"></form>
+    <h2 id="modalTitle">新增內容</h2>
+    <form id="modalForm">
+      <label for="contentInput">補充內容</label>
+      <textarea id="contentInput" name="content" required placeholder="把這一屆發生的事情、提醒、要補上的內容寫在這裡"></textarea>
+      <div class="modalActions">
+        <button type="button" class="btn secondary" onclick="closeModal()">取消</button>
+        <button type="submit" class="btn">儲存</button>
+      </div>
+    </form>
   </div>
 </div>
-<input type="file" id="fileInput" accept="application/json" style="display:none">
+
 <script>
 const BASE_RECORDS = [
   {
@@ -780,210 +824,160 @@ const BASE_RECORDS = [
     "kind": "base"
   }
 ];
+
 const ROLES = [
-  {
-    "id": "團務老師",
-    "name": "團務老師",
-    "subtitle": "學生、場地、節目內容、後台與演出流程"
-  },
-  {
-    "id": "會長",
-    "name": "會長",
-    "subtitle": "總控、貴賓接待、對外邀請、現場協調"
-  },
-  {
-    "id": "總務",
-    "name": "總務",
-    "subtitle": "餐飲、禮品、採購、清潔與物資"
-  },
-  {
-    "id": "文書",
-    "name": "文書",
-    "subtitle": "票務、劃位、邀請函、節目單與 QR Code"
-  },
-  {
-    "id": "攝影",
-    "name": "攝影",
-    "subtitle": "活動紀錄、拍照引導、花籃留存與影像協調"
-  },
-  {
-    "id": "全體幹部",
-    "name": "全體幹部",
-    "subtitle": "共同事項、各組請購、需要大家一起支援的內容"
-  }
+  { id:'團務老師', name:'團務老師' },
+  { id:'會長', name:'會長' },
+  { id:'總務', name:'總務' },
+  { id:'文書', name:'文書' },
+  { id:'攝影', name:'攝影' },
+  { id:'全體幹部', name:'全體幹部' }
 ];
+
 const roleColors = {
-  '團務老師':'#557f6a', '會長':'#8c6a45', '總務':'#7a789a', '文書':'#5f83a6', '攝影':'#a06755', '全體幹部':'#6e6e6e'
+  '團務老師': { bg:'#DDEBF7', accent:'#5B9BD5' },
+  '會長': { bg:'#FFF2CC', accent:'#BF9000' },
+  '總務': { bg:'#E2F0D9', accent:'#70AD47' },
+  '文書': { bg:'#EADCF8', accent:'#8E63C7' },
+  '攝影': { bg:'#FCE4D6', accent:'#ED7D31' },
+  '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
 };
-const STORE_KEY = 'fengtung_handover_v1';
-let state = loadState();
+
+const STORE_KEY = 'fengtung_handover_simple_v2';
+const OLD_STORE_KEY = 'fengtung_handover_v1';
 let currentRole = '團務老師';
-let stageFilter = '全部';
+let state = loadState();
+let editing = null;
 
 function loadState() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { tasks:[], supplements:[] }; }
-  catch(e) { return { tasks:[], supplements:[] }; }
+  try {
+    const v2 = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (v2 && Array.isArray(v2.entries)) return v2;
+  } catch(e) {}
+  try {
+    const old = JSON.parse(localStorage.getItem(OLD_STORE_KEY) || 'null');
+    if (old) {
+      const entries = [];
+      (old.tasks || []).forEach(t => entries.push({
+        id: t.id || uid('item'), type:'item', role: t.ownerRole || t.main || '團務老師', content: [t.item, t.description].filter(Boolean).join('
+'), createdAt: new Date().toISOString()
+      }));
+      (old.supplements || []).forEach(s => entries.push({
+        id: s.id || uid('reply'), type:'reply', role: s.role || '團務老師', parentId: s.recordId, content: s.content || '', createdAt: s.createdAt || new Date().toISOString()
+      }));
+      return { entries };
+    }
+  } catch(e) {}
+  return { entries: [] };
 }
 function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 function uid(prefix='id') { return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7); }
-function normRole(role) { return role === '全體' ? '全體幹部' : role; }
+function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
+function setRoleVars(role) {
+  const c = roleStyle(role);
+  document.documentElement.style.setProperty('--roleBg', c.bg);
+  document.documentElement.style.setProperty('--roleAccent', c.accent);
+}
 function expandsToRole(value, role) {
   if(!value) return false;
-  if(value === role) return true;
-  if(value === '全體' || value === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
+  const v = value === '全體' || value === '幹部／全體幹部' ? '全體幹部' : value;
+  if(v === role) return true;
+  if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
 }
 function visibleForRole(record, role) {
-  const isMain = expandsToRole(record.main, role);
-  const isCollab = (record.collabs||[]).some(c=>expandsToRole(c, role));
-  return isMain || isCollab || (record.ownerRole === role);
+  return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role));
 }
-function relation(record, role) {
-  if(record.ownerRole === role && record.kind === 'custom') return '新增項目';
-  if(expandsToRole(record.main, role)) return '主要負責';
-  if((record.collabs||[]).some(c=>expandsToRole(c, role))) return '協作事項';
-  return '相關事項';
-}
-function allRecords() { return [...BASE_RECORDS, ...state.tasks]; }
-function stagesForRole(role) {
-  const set = new Set(['全部']);
-  allRecords().filter(r=>visibleForRole(r, role)).forEach(r=>set.add(r.stage||'未分類'));
-  return [...set];
-}
-function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function baseRecordsForRole(role) { return BASE_RECORDS.filter(r => visibleForRole(r, role)); }
+function customItemsForRole(role) { return state.entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
+function repliesFor(parentId) { return state.entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
+function textForBase(r) { return (r.description || '').trim(); }
 
 function renderRoles() {
-  document.documentElement.style.setProperty('--role', roleColors[currentRole] || '#6b8f71');
   document.getElementById('roleGrid').innerHTML = ROLES.map(r => {
-    const count = allRecords().filter(x=>visibleForRole(x, r.id)).length;
-    return `<button class="roleBtn ${currentRole===r.id?'active':''}" onclick="selectRole('${r.id}')">
-      <div class="roleName"><span class="dot" style="background:${roleColors[r.id]}"></span>${esc(r.name)} <span class="pill"><strong>${count}</strong> 項</span></div>
-      <div class="roleSub">${esc(r.subtitle)}</div>
-    </button>`;
+    const c = roleStyle(r.id);
+    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" onclick="selectRole('${r.id}')">${esc(r.name)}</button>`;
   }).join('');
 }
-function selectRole(role) { currentRole = role; stageFilter='全部'; render(); }
-function renderStageFilter() {
-  const stages = stagesForRole(currentRole);
-  const el = document.getElementById('stageFilter');
-  el.innerHTML = stages.map(s=>`<option value="${esc(s)}" ${s===stageFilter?'selected':''}>${esc(s)}</option>`).join('');
+function selectRole(role) { currentRole = role; render(); }
+
+function renderBaseCard(r) {
+  const replies = repliesFor(r.id);
+  return `
+    <article class="item">
+      <h3>${esc(r.item)}</h3>
+      ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
+      <div class="itemActions"><button class="btn ghost" onclick="openReply('${r.id}')">＋補充內容</button></div>
+    </article>
+    ${replies.map(renderEntryCard).join('')}`;
 }
-function groupBy(arr, fn) { return arr.reduce((acc,x)=>{ const k=fn(x); (acc[k] ||= []).push(x); return acc; },{}); }
-function supplementsFor(recordId) { return state.supplements.filter(s=>s.recordId===recordId); }
-function renderSummary(records) {
-  const main = records.filter(r=>relation(r,currentRole)==='主要負責').length;
-  const collab = records.filter(r=>relation(r,currentRole)==='協作事項').length;
-  const custom = records.filter(r=>r.kind==='custom').length;
-  const supp = state.supplements.filter(s=>s.role===currentRole || records.some(r=>r.id===s.recordId)).length;
-  document.getElementById('summary').innerHTML = `
-    <span class="pill">目前區塊：<strong>${esc(currentRole)}</strong></span>
-    <span class="pill">主要負責 <strong>${main}</strong></span>
-    <span class="pill">協作事項 <strong>${collab}</strong></span>
-    <span class="pill">新增項目 <strong>${custom}</strong></span>
-    <span class="pill">補充紀錄 <strong>${supp}</strong></span>`;
-}
-function renderCard(r) {
-  const rel = relation(r,currentRole);
-  const supps = supplementsFor(r.id);
-  const canEditTask = r.kind === 'custom';
-  return `<article class="card">
-    <div class="cardHeader">
-      <div>
-        <h3>${esc(r.item)}</h3>
-        <div class="badges">
-          <span class="badge ${rel==='主要負責'?'main':rel==='協作事項'?'collab':''}">${esc(rel)}</span>
-          <span class="badge">${esc(r.stage||'未分類')}</span>
-          <span class="badge">${esc(r.timeOrder||'未設定時間')}</span>
-        </div>
-      </div>
-    </div>
-    <p class="desc">${esc(r.description)}</p>
-    ${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}
-    <div class="meta">主責：${esc(r.main || r.ownerRole || currentRole)}${(r.collabs&&r.collabs.length) ? '　｜　協同：' + esc(r.collabs.join('、')) : ''}</div>
-    <div class="cardActions">
-      <button class="btn ghost" onclick="openSupplement('${r.id}')">＋新增補充紀錄</button>
-      ${canEditTask ? `<button class="btn secondary" onclick="openTask('${r.id}')">修改項目</button><button class="btn danger" onclick="deleteTask('${r.id}')">刪除項目</button>` : ''}
-    </div>
-    <div class="supplements">
-      <strong>歷屆補充紀錄</strong>
-      ${supps.length ? supps.map(s=>`<div class="supplement"><div class="top"><span>${esc(s.year||'未填年度')}／${esc(s.type||'補充')}</span><span><button class="btn secondary" onclick="openSupplement('${r.id}','${s.id}')">修改</button> <button class="btn danger" onclick="deleteSupplement('${s.id}')">刪除</button></span></div><p>${esc(s.content)}</p></div>`).join('') : '<div class="empty" style="margin-top:8px;padding:12px;">目前還沒有補充。可以把今年實際發生的問題、提醒、做法寫在這裡。</div>'}
+function renderEntryCard(e) {
+  return `<article class="item added">
+    <p>${esc(e.content)}</p>
+    <div class="itemActions">
+      <button class="btn secondary" onclick="openEdit('${e.id}')">修改</button>
+      <button class="btn danger" onclick="deleteEntry('${e.id}')">刪除</button>
     </div>
   </article>`;
 }
 function renderContent() {
-  let records = allRecords().filter(r=>visibleForRole(r,currentRole));
-  if(stageFilter !== '全部') records = records.filter(r=>(r.stage||'未分類')===stageFilter);
-  renderSummary(records);
-  const grouped = groupBy(records, r=>relation(r,currentRole));
-  const order = ['主要負責','協作事項','新增項目','相關事項'];
-  const html = order.filter(k=>grouped[k]?.length).map(k=>`<h2 class="sectionTitle">${k}</h2><div class="cards">${grouped[k].map(renderCard).join('')}</div>`).join('');
-  document.getElementById('content').innerHTML = html || '<div class="empty">這個篩選條件目前沒有資料。</div>';
+  const bases = baseRecordsForRole(currentRole);
+  const customs = customItemsForRole(currentRole);
+  const html = [
+    ...bases.map(renderBaseCard),
+    ...customs.map(renderEntryCard)
+  ].join('');
+  document.getElementById('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
 }
-function render() { renderRoles(); renderStageFilter(); renderContent(); }
+function render() {
+  setRoleVars(currentRole);
+  renderRoles();
+  document.getElementById('currentRoleTitle').textContent = currentRole;
+  renderContent();
+}
 
-document.getElementById('stageFilter').addEventListener('change', e=>{ stageFilter=e.target.value; renderContent(); });
-document.getElementById('addTaskBtn').addEventListener('click', ()=>openTask());
-document.getElementById('resetBtn').addEventListener('click', ()=>{ if(confirm('確定要清除這台瀏覽器新增的項目與補充紀錄？原始資料不會刪除。')) { state={tasks:[],supplements:[]}; saveState(); render(); } });
-document.getElementById('exportBtn').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='豐東成發交接資料備份.json'; a.click(); URL.revokeObjectURL(a.href);
-});
-document.getElementById('importBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
-document.getElementById('fileInput').addEventListener('change', e=>{
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=()=>{ try { const data=JSON.parse(reader.result); if(!data.tasks||!data.supplements) throw new Error('格式不符'); state=data; saveState(); render(); alert('匯入完成'); } catch(err) { alert('匯入失敗：不是正確的備份檔'); } };
-  reader.readAsText(file);
-});
-
-function closeModal() { document.getElementById('modalBackdrop').classList.remove('show'); document.getElementById('modalForm').innerHTML=''; }
-document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
-function formButtons() { return `<div class="modalActions field full"><button type="button" class="btn secondary" onclick="closeModal()">取消</button><button type="submit" class="btn">儲存</button></div>`; }
-function openTask(id=null) {
-  const existing = id ? state.tasks.find(t=>t.id===id) : null;
-  document.getElementById('modalTitle').textContent = existing ? '修改工作項目' : '新增工作項目';
-  const form=document.getElementById('modalForm');
-  form.innerHTML = `
-    <div class="field"><label>角色區塊</label><select name="ownerRole">${ROLES.map(r=>`<option value="${esc(r.id)}" ${(existing?.ownerRole||currentRole)===r.id?'selected':''}>${esc(r.name)}</option>`).join('')}</select></div>
-    <div class="field"><label>階段</label><input name="stage" value="${esc(existing?.stage||'')}" placeholder="例如：前期-餐飲禮品"></div>
-    <div class="field"><label>時間順序</label><input name="timeOrder" value="${esc(existing?.timeOrder||'')}" placeholder="例如：前期／活動前／演出後"></div>
-    <div class="field"><label>主要負責</label><input name="main" value="${esc(existing?.main||existing?.ownerRole||currentRole)}"></div>
-    <div class="field full"><label>工作項目</label><input name="item" required value="${esc(existing?.item||'')}" placeholder="請輸入工作項目"></div>
-    <div class="field full"><label>要做的事情</label><textarea name="description" required placeholder="把這件事要怎麼做寫清楚">${esc(existing?.description||'')}</textarea></div>
-    <div class="field full"><label>補充備註</label><textarea name="note" placeholder="注意事項、今年狀況、下一屆提醒">${esc(existing?.note||'')}</textarea></div>
-    ${formButtons()}`;
-  form.onsubmit = e => {
-    e.preventDefault(); const fd=new FormData(form);
-    const task = { id: existing?.id || uid('task'), kind:'custom', sourceSheet:'網頁新增', year:'網頁新增', ownerRole:fd.get('ownerRole'), stage:fd.get('stage'), timeOrder:fd.get('timeOrder'), main:fd.get('main'), collabs:[], item:fd.get('item'), description:fd.get('description'), note:fd.get('note') };
-    if(existing) state.tasks = state.tasks.map(t=>t.id===existing.id?task:t); else state.tasks.push(task);
-    currentRole = task.ownerRole; saveState(); closeModal(); render();
-  };
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('show');
+  document.getElementById('contentInput').value = '';
+  editing = null;
+}
+function showModal(title, value='') {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('contentInput').value = value;
   document.getElementById('modalBackdrop').classList.add('show');
+  setTimeout(()=>document.getElementById('contentInput').focus(), 60);
 }
-function deleteTask(id) {
-  if(!confirm('確定刪除這個新增項目？相關補充紀錄也會刪除。')) return;
-  state.tasks = state.tasks.filter(t=>t.id!==id); state.supplements = state.supplements.filter(s=>s.recordId!==id); saveState(); render();
+document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
+document.getElementById('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增內容'); });
+function openReply(parentId) { editing = { mode:'reply', parentId }; showModal('補充內容'); }
+function openEdit(id) {
+  const entry = state.entries.find(e => e.id === id);
+  if(!entry) return;
+  editing = { mode:'edit', id };
+  showModal('修改內容', entry.content || '');
 }
-function openSupplement(recordId, supplementId=null) {
-  const record = allRecords().find(r=>r.id===recordId);
-  const existing = supplementId ? state.supplements.find(s=>s.id===supplementId) : null;
-  document.getElementById('modalTitle').textContent = existing ? '修改補充紀錄' : '新增補充紀錄';
-  const form=document.getElementById('modalForm');
-  form.innerHTML = `
-    <div class="field full"><label>補充在哪個工作項目下面</label><input value="${esc(record?.item||'')}" disabled></div>
-    <div class="field"><label>年度／屆數</label><input name="year" value="${esc(existing?.year||'')}" placeholder="例如：第 27 屆／2026"></div>
-    <div class="field"><label>類型</label><select name="type"><option ${existing?.type==='注意事項'?'selected':''}>注意事項</option><option ${existing?.type==='實際狀況'?'selected':''}>實際狀況</option><option ${existing?.type==='建議做法'?'selected':''}>建議做法</option><option ${existing?.type==='待確認'?'selected':''}>待確認</option></select></div>
-    <div class="field full"><label>補充內容</label><textarea name="content" required placeholder="把今年發生的事情、提醒、建議寫在這裡">${esc(existing?.content||'')}</textarea></div>
-    ${formButtons()}`;
-  form.onsubmit = e => {
-    e.preventDefault(); const fd=new FormData(form);
-    const supp = { id: existing?.id || uid('supp'), recordId, role: currentRole, year:fd.get('year'), type:fd.get('type'), content:fd.get('content'), createdAt: existing?.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString() };
-    if(existing) state.supplements = state.supplements.map(s=>s.id===existing.id?supp:s); else state.supplements.push(supp);
-    saveState(); closeModal(); renderContent();
-  };
-  document.getElementById('modalBackdrop').classList.add('show');
+function deleteEntry(id) {
+  if(!confirm('確定刪除這一筆內容？')) return;
+  state.entries = state.entries.filter(e => e.id !== id);
+  saveState();
+  renderContent();
 }
-function deleteSupplement(id) { if(confirm('確定刪除這一則補充紀錄？')) { state.supplements = state.supplements.filter(s=>s.id!==id); saveState(); renderContent(); } }
+document.getElementById('modalForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const content = document.getElementById('contentInput').value.trim();
+  if(!content) return;
+  if(editing?.mode === 'edit') {
+    state.entries = state.entries.map(x => x.id === editing.id ? { ...x, content, updatedAt:new Date().toISOString() } : x);
+  } else if(editing?.mode === 'reply') {
+    state.entries.push({ id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString() });
+  } else {
+    state.entries.push({ id:uid('item'), type:'item', role:currentRole, content, createdAt:new Date().toISOString() });
+  }
+  saveState();
+  closeModal();
+  renderContent();
+});
 
 render();
 </script>
