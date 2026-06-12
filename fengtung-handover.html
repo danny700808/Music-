@@ -44,6 +44,8 @@ button, textarea, input { font:inherit; }
 .btn.small { padding:3px 8px; border-radius:999px; font-size:13px; line-height:1.5; margin-left:6px; vertical-align:baseline; }
 .list { display:flex; flex-direction:column; gap:10px; }
 .item { background:rgba(255,255,255,.88); border:1px solid rgba(120,100,70,.18); border-left:8px solid var(--roleAccent); border-radius:18px; padding:14px 14px 13px; }
+.itemHead { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.itemHead h3 { flex:1; min-width:0; }
 .item h3 { margin:0; font-size:19px; line-height:1.35; }
 .item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
 .item.added { border-left-style:dashed; background:#fff; }
@@ -51,10 +53,15 @@ button, textarea, input { font:inherit; }
 .childList { margin-top:10px; display:flex; flex-direction:column; gap:7px; }
 .childLine { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
 .childText { white-space:pre-wrap; }
-.attachments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
-.attachment { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
-.attachment a { color:var(--roleAccent); font-weight:800; text-decoration:none; }
-.attachment img { display:block; max-width:220px; max-height:160px; border-radius:10px; margin-top:6px; border:1px solid var(--line); object-fit:cover; }
+.relatedBox { flex:0 0 auto; position:relative; }
+.relatedBox summary { list-style:none; user-select:none; cursor:pointer; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--roleAccent); font-weight:900; font-size:16px; padding:7px 12px; line-height:1.25; box-shadow:0 4px 12px rgba(41,32,18,.06); white-space:nowrap; }
+.relatedBox summary::-webkit-details-marker { display:none; }
+.relatedBox[open] summary { background:var(--roleAccent); color:#fff; border-color:var(--roleAccent); }
+.relatedPanel { position:absolute; right:0; top:calc(100% + 8px); z-index:20; width:min(320px,82vw); background:#fffdf8; border:1px solid var(--line); border-radius:16px; box-shadow:0 16px 40px rgba(42,34,20,.18); padding:10px; display:flex; flex-direction:column; gap:8px; }
+.relatedPanelTitle { font-weight:900; color:var(--text); border-bottom:1px solid var(--line); padding:0 2px 6px; margin-bottom:2px; }
+.relatedFile { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:12px; padding:8px 9px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.relatedFile a { color:var(--roleAccent); font-weight:800; text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.relatedFileActions { flex:0 0 auto; white-space:nowrap; }
 .empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
 .status { color:var(--muted); font-size:14px; margin:0 0 10px; }
 .modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
@@ -877,42 +884,55 @@ function childLines(parentId) {
   `).join('')}</div>`;
 }
 
-function attachmentLines(parentId) {
+function relatedMaterials(parentId) {
   const files = filesFor(parentId);
   if(!files.length) return '';
-  return `<div class="attachments">${files.map(f => `
-    <div class="attachment">
-      <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener">📎 ${esc(f.fileName || '附件')}</a>
-      ${f.contentType && f.contentType.startsWith('image/') ? `<img src="${esc(f.fileUrl)}" alt="${esc(f.fileName || '圖片')}">` : ''}
-      ${isMine(f) ? ` <button class="btn danger small" data-file-delete="${f.id}">刪除</button>` : ''}
+  return `<details class="relatedBox">
+    <summary>📎 相關資料 ${files.length}</summary>
+    <div class="relatedPanel">
+      <div class="relatedPanelTitle">相關資料</div>
+      ${files.map(f => `
+        <div class="relatedFile">
+          <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener" title="${esc(f.fileName || '資料')}">${fileIcon(f)} ${esc(f.fileName || '資料')}</a>
+          <span class="relatedFileActions">${isMine(f) ? `<button class="btn danger small" data-file-delete="${f.id}">刪除</button>` : ''}</span>
+        </div>
+      `).join('')}
     </div>
-  `).join('')}</div>`;
+  </details>`;
+}
+
+function fileIcon(f) {
+  const t = f.contentType || '';
+  const name = (f.fileName || '').toLowerCase();
+  if(t.startsWith('image/')) return '🖼️';
+  if(t === 'application/pdf' || name.endsWith('.pdf')) return '📄';
+  if(name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
+  if(name.endsWith('.xls') || name.endsWith('.xlsx')) return '📊';
+  return '📎';
 }
 
 function actionButtons(parentId) {
   return `<div class="itemActions">
     <button class="btn ghost" data-reply="${esc(parentId)}">＋補充內容</button>
-    <button class="btn ghost" data-upload="${esc(parentId)}">＋上傳檔案</button>
+    <button class="btn ghost" data-upload="${esc(parentId)}">＋上傳資料</button>
   </div>`;
 }
 
 function renderBaseCard(r) {
   return `<article class="item">
-    <h3>${esc(r.item)}</h3>
+    <div class="itemHead"><h3>${esc(r.item)}</h3>${relatedMaterials(r.id)}</div>
     ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
     ${childLines(r.id)}
-    ${attachmentLines(r.id)}
     ${actionButtons(r.id)}
   </article>`;
 }
 
 function renderCustomItemCard(e) {
   return `<article class="item added">
-    <h3>${esc(e.title || '新增項目')}</h3>
+    <div class="itemHead"><h3>${esc(e.title || '新增項目')}</h3>${relatedMaterials(e.id)}</div>
     ${e.content ? `<p>${esc(e.content)}</p>` : ''}
     ${isMine(e) ? `<div><button class="btn secondary small" data-edit="${e.id}">修改</button><button class="btn danger small" data-delete="${e.id}">刪除</button></div>` : ''}
     ${childLines(e.id)}
-    ${attachmentLines(e.id)}
     ${actionButtons(e.id)}
   </article>`;
 }
@@ -1027,11 +1047,11 @@ async function handleFilePicked(e) {
 async function deleteFileEntry(id) {
   const f = entries.find(e => e.id === id);
   if(!f || !isMine(f)) return;
-  if(!confirm('確定刪除這個附件？')) return;
+  if(!confirm('確定刪除這筆相關資料？')) return;
   try {
     if(f.storagePath) await deleteObject(ref(storage, f.storagePath)).catch(() => {});
     await deleteDoc(doc(db, 'fengtungHandoverEntries', id));
-  } catch(err) { alert('刪除附件失敗：' + (err.message || err)); }
+  } catch(err) { alert('刪除相關資料失敗：' + (err.message || err)); }
 }
 
 $('roleGrid').addEventListener('click', e => {
