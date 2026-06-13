@@ -6,24 +6,11 @@
 <title>豐東管樂交接資料庫</title>
 <style>
 :root {
-  --bg:#f7f4ed;
-  --panel:#fffdf8;
-  --text:#2d2922;
-  --muted:#7a7166;
-  --line:#e4d9c8;
-  --roleBg:#DDEBF7;
-  --roleAccent:#5B9BD5;
-  --danger:#b94a48;
-  --shadow:0 12px 28px rgba(48,39,24,.10);
+  --bg:#f7f4ed; --panel:#fffdf8; --text:#2d2922; --muted:#7a7166; --line:#e4d9c8;
+  --roleBg:#DDEBF7; --roleAccent:#5B9BD5; --danger:#b94a48; --shadow:0 12px 28px rgba(48,39,24,.10);
 }
 * { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
-  background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%);
-  color:var(--text);
-  line-height:1.7;
-}
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif; background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%); color:var(--text); line-height:1.7; }
 .wrap { max-width:1080px; margin:0 auto; }
 header { padding:22px 14px 8px; }
 .hero { background:#fff; border:1px solid var(--line); border-radius:22px; padding:22px 20px; box-shadow:var(--shadow); }
@@ -37,7 +24,7 @@ button, textarea, input, select { font:inherit; }
 .btn.small { padding:3px 8px; border-radius:999px; font-size:12px; line-height:1.45; margin-left:6px; vertical-align:baseline; }
 .status { display:none !important; }
 
-/* 成果展進度表 */
+/* schedule */
 .scheduleShell { margin:16px 0 18px; }
 .scheduleDetails { background:#fffdf8; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); overflow:hidden; }
 .scheduleDetails > summary { list-style:none; cursor:pointer; user-select:none; padding:18px 20px; font-size:clamp(22px,4vw,32px); font-weight:950; display:flex; justify-content:space-between; align-items:center; gap:12px; }
@@ -45,21 +32,21 @@ button, textarea, input, select { font:inherit; }
 .scheduleDetails > summary::after { content:"點開查看"; font-size:14px; color:var(--muted); font-weight:800; }
 .scheduleDetails[open] > summary::after { content:"收合"; }
 .scheduleBody { border-top:1px solid var(--line); padding:14px; }
-.scheduleTop { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
-.scheduleHint { color:var(--muted); font-size:13px; font-weight:700; }
-.a4Scroll { overflow-x:auto; padding-bottom:8px; }
-.a4Sheet { width:980px; max-width:980px; margin:0 auto; background:#fff; border:2px solid #222; padding:0; }
+.scheduleTitleBar { display:flex; justify-content:center; align-items:baseline; gap:8px; margin:3px 0 8px; flex-wrap:wrap; }
+.scheduleTitleText { font-size:22px; font-weight:950; letter-spacing:.04em; text-align:center; }
+.a4Scroll { overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch; }
+.a4Sheet { width:1040px; max-width:1040px; margin:0 auto; background:#fff; border:2px solid #222; padding:0; }
 .scheduleTable { width:100%; border-collapse:collapse; table-layout:fixed; font-size:13px; line-height:1.35; }
 .scheduleTable th, .scheduleTable td { border:1px solid #222; padding:5px 6px; vertical-align:top; word-break:break-word; white-space:pre-wrap; }
 .scheduleTable th { text-align:center; background:#f6f2e8; font-weight:900; }
-.scheduleTable .timeCol { width:72px; text-align:center; }
-.scheduleTable .taskCol { width:390px; }
-.scheduleTable .personCol { width:115px; }
+.scheduleTable .timeCol { width:70px; text-align:center; }
+.scheduleTable .taskCol { width:355px; }
+.scheduleTable .personCol { width:110px; }
 .scheduleTable .noteCol { width:220px; }
-.scheduleActions { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
+.scheduleTable .opsCol { width:165px; }
+.scheduleActions { display:flex; gap:4px; flex-wrap:wrap; }
 .scheduleActions button { font-size:11px; padding:2px 6px; border-radius:999px; }
 
-/* 角色區塊 */
 .roleGrid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin:16px 0 18px; }
 .roleBtn { appearance:none; border:2px solid transparent; border-radius:18px; padding:18px 10px; min-height:76px; cursor:pointer; font-weight:900; font-size:20px; color:#2d2922; box-shadow:0 7px 18px rgba(41,32,18,.07); transition:.16s; }
 .roleBtn:hover { transform:translateY(-2px); }
@@ -80,14 +67,14 @@ button, textarea, input, select { font:inherit; }
 .eventTitleWrap { flex:1 1 auto; min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; gap:6px 9px; }
 .eventTitle { font-size:22px; line-height:1.35; font-weight:900; letter-spacing:.01em; overflow:visible; white-space:normal; word-break:break-word; }
 .textEditLink { appearance:none; border:0; background:transparent; color:var(--roleAccent); font-size:13px; font-weight:800; line-height:1.2; padding:0 2px; cursor:pointer; text-decoration:none; }
-.eventLines { margin:8px 0 0; display:flex; flex-direction:column; gap:6px; }
-.eventLine { display:flex; align-items:flex-start; gap:8px; font-size:16px; line-height:1.7; font-weight:600; white-space:pre-wrap; word-break:break-word; }
-.eventLine .dot { color:#111; font-size:18px; line-height:1.55; flex:0 0 auto; }
-.eventLine .lineText { flex:1 1 auto; }
-.ownerMeta { display:flex; gap:7px; flex-wrap:wrap; margin:9px 0 0; }
+.childList { margin:12px 0 0; padding-left:0; display:flex; flex-direction:column; gap:8px; }
+.childLine { background:rgba(255,255,255,.55); border:1px solid rgba(120,100,70,.14); border-radius:14px; padding:8px 10px; display:flex; align-items:flex-start; gap:7px; flex-wrap:wrap; overflow:visible; word-break:break-word; }
+.childDot { font-weight:900; color:#111; line-height:1.55; font-size:17px; }
+.childText { white-space:pre-wrap; word-break:break-word; font-size:17px; line-height:1.55; font-weight:600; flex:1 1 220px; min-width:0; }
+.ownerMeta { display:flex; gap:7px; flex-wrap:wrap; margin:13px 0 0; }
 .ownerPill { font-size:13px; line-height:1.25; font-weight:800; padding:4px 8px; border:1px solid rgba(120,100,70,.20); border-radius:999px; background:rgba(255,255,255,.86); color:#4f463c; white-space:normal; }
 .ownerPill span { color:var(--roleAccent); }
-.itemActions { display:flex; gap:7px; flex-wrap:wrap; margin-top:9px; }
+.itemActions { display:flex; gap:7px; flex-wrap:wrap; margin-top:7px; }
 .itemActions .btn.ghost { font-size:13px; line-height:1.2; padding:6px 9px; border-radius:10px; white-space:normal; }
 .relatedBox { flex:0 0 auto; position:relative; }
 .relatedBox summary { list-style:none; user-select:none; cursor:pointer; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--roleAccent); font-weight:900; font-size:14px; padding:6px 10px; line-height:1.25; box-shadow:0 4px 12px rgba(41,32,18,.06); white-space:normal; }
@@ -99,8 +86,6 @@ button, textarea, input, select { font:inherit; }
 .relatedFile button.openFile { appearance:none; border:0; background:transparent; color:var(--roleAccent); font-weight:800; text-decoration:none; text-align:left; padding:0; cursor:pointer; overflow:visible; text-overflow:clip; white-space:normal; word-break:break-word; }
 .relatedFileActions { flex:0 0 auto; white-space:nowrap; }
 .empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
-
-/* modal */
 .modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
 .modalBackdrop.show { display:flex; }
 .modal { width:min(680px,100%); max-height:88vh; overflow:auto; background:#fffdf8; border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:18px; }
@@ -112,1601 +97,149 @@ textarea { min-height:150px; resize:vertical; }
 .field { margin-bottom:12px; }
 .field.hidden { display:none; }
 .modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; flex-wrap:wrap; }
-.previewModal { width:min(920px,96vw); max-height:90vh; display:flex; flex-direction:column; gap:10px; }
-.previewTop { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-.previewTitle { font-size:18px; font-weight:900; word-break:break-word; }
-.previewClose { border:none; background:#fff; color:#333; border:1px solid var(--line); border-radius:999px; width:38px; height:38px; font-size:22px; cursor:pointer; }
+.previewModal { width:min(920px,100%); }
+.previewTop { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:10px; }
+.previewTop h2 { font-size:18px; word-break:break-word; }
 .previewBody { max-height:75vh; overflow:auto; display:flex; align-items:center; justify-content:center; background:#f7f4ed; border-radius:14px; padding:10px; }
-.previewBody img { max-width:100%; max-height:72vh; object-fit:contain; border-radius:8px; }
+.previewBody img { max-width:100%; height:auto; border-radius:10px; }
 @media (max-width:920px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media (max-width:620px) {
-  header { padding:12px 10px 6px; }
-  main { padding:8px 10px 26px; }
-  .hero { padding:18px 14px; border-radius:18px; }
-  .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
-  .roleBtn { min-height:64px; font-size:18px; padding:14px 8px; }
-  .rolePanel { padding:12px; border-radius:20px; }
-  .eventTitle { font-size:20px; }
-  .eventLine { font-size:16px; }
-  .ownerPill, .itemActions .btn.ghost { font-size:12px; }
-  .relatedBox { margin-top:2px; }
+  header { padding:12px 10px 6px; } main { padding:8px 10px 26px; } .hero { padding:18px 14px; border-radius:18px; }
+  .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; } .roleBtn { min-height:64px; font-size:18px; padding:14px 8px; } .rolePanel { padding:12px; border-radius:20px; }
+  .eventTitle { font-size:20px; } .childDot { font-size:16px; } .childText { font-size:16px; flex-basis:180px; } .ownerPill, .itemActions .btn.ghost { font-size:12px; }
   .scheduleDetails > summary { padding:14px 16px; }
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap hero"><h1>豐東管樂交接資料庫</h1></div>
-</header>
+<header><div class="wrap hero"><h1>豐東管樂交接資料庫</h1></div></header>
 <main>
   <div class="wrap">
     <section class="scheduleShell">
       <details class="scheduleDetails" id="scheduleDetails">
-        <summary>成果展進度表</summary>
+        <summary id="scheduleSummary">成果展進度表</summary>
         <div class="scheduleBody">
-          <div class="scheduleTop">
-            <div class="scheduleHint">點開後可修改時間、事項、主要負責人、協助負責人與備註。</div>
-            <button class="btn" id="addScheduleBtn">＋新增行程</button>
-          </div>
+          <div class="scheduleTitleBar"><span class="scheduleTitleText" id="scheduleTitleText">成果展進度表</span><button class="textEditLink" id="editScheduleTitleBtn" type="button">修改</button></div>
           <div class="a4Scroll"><div class="a4Sheet" id="scheduleContent"></div></div>
         </div>
       </details>
     </section>
-
     <div id="roleGrid" class="roleGrid"></div>
     <section id="rolePanel" class="rolePanel">
-      <div class="rolePanelTop">
-        <h2 id="currentRoleTitle"></h2>
-        <button class="btn" id="addItemBtn">＋新增一項</button>
-      </div>
+      <div class="rolePanelTop"><h2 id="currentRoleTitle"></h2><button class="btn" id="addItemBtn">＋新增一項</button></div>
       <p class="status" id="statusText">連線中…</p>
       <div id="content" class="list"></div>
     </section>
   </div>
 </main>
 
-<div class="modalBackdrop" id="modalBackdrop">
-  <div class="modal">
-    <h2 id="modalTitle">新增內容</h2>
-    <form id="modalForm">
-      <div class="field" id="titleField">
-        <label for="titleInput">大項</label>
-        <input type="text" id="titleInput" name="title" placeholder="例如：學生請假與臨時狀況">
-      </div>
-      <div class="field" id="contentField">
-        <label for="contentInput" id="contentLabel">小項</label>
-        <textarea id="contentInput" name="content" required placeholder="把這一項要記錄的細項內容寫在這裡"></textarea>
-      </div>
-      <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelModalBtn">取消</button>
-        <button type="submit" class="btn">儲存</button>
-      </div>
-    </form>
-  </div>
-</div>
+<div class="modalBackdrop" id="modalBackdrop"><div class="modal"><h2 id="modalTitle">新增內容</h2><form id="modalForm">
+  <div class="field" id="titleField"><label for="itemTitle">大項</label><input type="text" id="itemTitle" placeholder="例如：場地申請與票務申請"></div>
+  <div class="field"><label for="itemContent" id="contentLabel">小項／補充內容</label><textarea id="itemContent" required placeholder="請輸入內容"></textarea></div>
+  <div class="modalActions"><button type="button" class="btn secondary" id="cancelModalBtn">取消</button><button type="submit" class="btn">儲存</button></div>
+</form></div></div>
 
-<div class="modalBackdrop" id="assignBackdrop">
-  <div class="modal">
-    <h2>調整負責人</h2>
-    <form id="assignForm">
-      <div class="field">
-        <label for="mainRoleSelect">主要負責人</label>
-        <select id="mainRoleSelect"></select>
-      </div>
-      <div class="field">
-        <label for="backupRoleSelect">備援負責人</label>
-        <select id="backupRoleSelect"></select>
-      </div>
-      <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelAssignBtn">取消</button>
-        <button type="submit" class="btn">儲存</button>
-      </div>
-    </form>
-  </div>
-</div>
+<div class="modalBackdrop" id="assignBackdrop"><div class="modal"><h2>調整負責人</h2><form id="assignForm">
+  <div class="field"><label for="mainRoleSelect">主要負責人</label><select id="mainRoleSelect"></select></div>
+  <div class="field"><label for="backupRoleSelect">備援負責人</label><select id="backupRoleSelect"></select></div>
+  <div class="modalActions"><button type="button" class="btn secondary" id="cancelAssignBtn">取消</button><button type="submit" class="btn">儲存</button></div>
+</form></div></div>
 
-<div class="modalBackdrop" id="scheduleModalBackdrop">
-  <div class="modal">
-    <h2 id="scheduleModalTitle">新增行程</h2>
-    <form id="scheduleForm">
-      <div class="field">
-        <label for="scheduleTime">時間</label>
-        <input type="text" id="scheduleTime" placeholder="例如：09:00">
-      </div>
-      <div class="field">
-        <label for="scheduleTask">事項</label>
-        <textarea id="scheduleTask" required placeholder="這個時間要做的事情"></textarea>
-      </div>
-      <div class="field">
-        <label for="schedulePrimary">主要負責人</label>
-        <input type="text" id="schedulePrimary" placeholder="例如：會長、總務、全體幹部">
-      </div>
-      <div class="field">
-        <label for="scheduleBackup">協助負責人</label>
-        <input type="text" id="scheduleBackup" placeholder="例如：文書、家長志工">
-      </div>
-      <div class="field">
-        <label for="scheduleNote">備註</label>
-        <textarea id="scheduleNote" placeholder="補充備註"></textarea>
-      </div>
-      <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelScheduleBtn">取消</button>
-        <button type="submit" class="btn">儲存</button>
-      </div>
-    </form>
-  </div>
-</div>
+<div class="modalBackdrop" id="scheduleModalBackdrop"><div class="modal"><h2 id="scheduleModalTitle">修改列</h2><form id="scheduleForm">
+  <div class="field"><label for="scheduleTime">時間</label><input type="text" id="scheduleTime"></div>
+  <div class="field"><label for="scheduleTask">事項</label><textarea id="scheduleTask" required></textarea></div>
+  <div class="field"><label for="schedulePrimary">主要負責人</label><input type="text" id="schedulePrimary"></div>
+  <div class="field"><label for="scheduleBackup">協助負責人</label><input type="text" id="scheduleBackup"></div>
+  <div class="field"><label for="scheduleNote">備註</label><textarea id="scheduleNote"></textarea></div>
+  <div class="modalActions"><button type="button" class="btn secondary" id="cancelScheduleBtn">取消</button><button type="submit" class="btn">儲存</button></div>
+</form></div></div>
 
-<div class="modalBackdrop" id="previewBackdrop">
-  <div class="modal previewModal">
-    <div class="previewTop">
-      <div class="previewTitle" id="previewTitle">圖片預覽</div>
-      <button class="previewClose" id="closePreviewBtn" type="button">×</button>
-    </div>
-    <div class="previewBody" id="previewBody"></div>
-  </div>
-</div>
-
-<input id="fileInput" type="file" style="display:none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+<div class="modalBackdrop" id="previewBackdrop"><div class="modal previewModal"><div class="previewTop"><h2 id="previewTitle">圖片預覽</h2><button class="btn secondary" id="closePreviewBtn">× 關閉</button></div><div class="previewBody" id="previewBody"></div></div></div>
+<input type="file" id="fileInput" hidden accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",
-  authDomain: "youzi-c1b74.firebaseapp.com",
-  projectId: "youzi-c1b74",
-  storageBucket: "youzi-c1b74.firebasestorage.app",
-  messagingSenderId: "187002582910",
-  appId: "1:187002582910:web:f5c73a46e5a773a860a52f",
-  measurementId: "G-WLYK892EDW"
-};
-
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+const firebaseConfig = { apiKey:"AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs", authDomain:"youzi-c1b74.firebaseapp.com", projectId:"youzi-c1b74", storageBucket:"youzi-c1b74.firebasestorage.app", messagingSenderId:"187002582910", appId:"1:187002582910:web:f5c73a46e5a773a860a52f", measurementId:"G-WLYK892EDW" };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const entriesCol = collection(db, 'fengtungHandoverEntries');
-
-const BASE_RECORDS = [
-  {
-    "id": "前期分工表-2",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "團務老師",
-    "collabs": [],
-    "item": "場地申請與票務申請",
-    "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。",
-    "note": "可邀會長或有空幹部一起勘場。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-3",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "團務老師",
-    "collabs": [
-      "全體"
-    ],
-    "item": "休息區、化妝區、樂器放置區確認",
-    "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。",
-    "note": "此項以學生與演出後勤需求為主。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-4",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "會長",
-    "collabs": [
-      "團務老師"
-    ],
-    "item": "貴賓席、觀眾席視角與入口動線規劃",
-    "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。",
-    "note": "可與團務老師及幹部一起看場地；重點是接待與觀眾動線。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-5",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "團務老師",
-    "collabs": [
-      "文書"
-    ],
-    "item": "領票與票券控管",
-    "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。",
-    "note": "貴賓區票券先由老師預留。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-6",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "團務老師",
-    "collabs": [
-      "會長",
-      "文書"
-    ],
-    "item": "貴賓票預留",
-    "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。",
-    "note": "後續幹部配票時需先扣除這些票。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-7",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
-    "main": "文書",
-    "collabs": [
-      "全體"
-    ],
-    "item": "劃位表與票券分配表",
-    "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。",
-    "note": "以禮遇與畢業年級優先為原則，盡量讓家長坐在能看見孩子的位置。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-8",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
-    "main": "文書",
-    "collabs": [],
-    "item": "製作影片集",
-    "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。",
-    "note": "需提早收素材，避免最後趕工。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-9",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
-    "main": "團務老師",
-    "collabs": [],
-    "item": "節目單內容與製作規劃",
-    "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。",
-    "note": "可參照每年節目單格式；文書可協助排版與檔案整理。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-10",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
-    "main": "文書",
-    "collabs": [
-      "攝影"
-    ],
-    "item": "線上節目單與 QR Code",
-    "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。",
-    "note": "需確認連結穩定、手機可讀。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-11",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
-    "main": "團務老師",
-    "collabs": [
-      "全體"
-    ],
-    "item": "海報與邀請卡初稿",
-    "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。",
-    "note": "完成後可請幹部確認文字、活動資訊與修正需求。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-12",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
-    "main": "會長",
-    "collabs": [
-      "全體"
-    ],
-    "item": "海報張貼與宣傳安排",
-    "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。",
-    "note": "網路分享效果通常較好，可鼓勵 IG、FB、LINE 群組轉發。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-13",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
-    "main": "會長",
-    "collabs": [],
-    "item": "擬定貴賓名冊",
-    "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。",
-    "note": "確認是否需新增或刪除名單。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-14",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
-    "main": "會長",
-    "collabs": [],
-    "item": "歷屆會長與貴賓邀請",
-    "description": "進行簡訊、電話、邀請函寄送或親送安排。",
-    "note": "可詢問學校是否有需一併邀請或發放的對象。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-15",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
-    "main": "會長",
-    "collabs": [],
-    "item": "邀請函資料整理",
-    "description": "協助整理邀請函內容、收件資料、名單與列印資料。",
-    "note": "寄送由會長統一處理較清楚。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-16",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [
-      "全體"
-    ],
-    "item": "餐飲需求統計",
-    "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。",
-    "note": "下午活動需考量提早練習與幫忙人員用餐。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-17",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [
-      "全體"
-    ],
-    "item": "訂餐與發餐規劃",
-    "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。",
-    "note": "原本訂餐盒、便當、飯卷可合併成同一大項。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-18",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [
-      "全體"
-    ],
-    "item": "飲料與水準備",
-    "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。",
-    "note": "例如 100 人可準備 120 至 140 瓶，水與飲料各約一半。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-19",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [],
-    "item": "指揮花束與指揮禮",
-    "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。",
-    "note": "可考慮將感謝信與禮金一起包裝，但要避免遺失。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-20",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [],
-    "item": "三年級送別禮物",
-    "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。",
-    "note": "人數需向團務老師確認，因老師有正式名單。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-21",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
-    "main": "全體幹部",
-    "collabs": [],
-    "item": "各組物品請購",
-    "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。",
-    "note": "總務可能物品最多，但每位幹部都要提出需求。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-22",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
-    "main": "總務",
-    "collabs": [
-      "團務老師"
-    ],
-    "item": "發餐與回收安排",
-    "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。",
-    "note": "要考量場地是否方便用餐。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-23",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
-    "main": "會長",
-    "collabs": [],
-    "item": "幹部服裝規定",
-    "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。",
-    "note": "活動前再提醒一次。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-24",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
-    "main": "團務老師",
-    "collabs": [],
-    "item": "學生服裝規定",
-    "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。",
-    "note": "由老師對學生發布最清楚。",
-    "kind": "base"
-  },
-  {
-    "id": "前期分工表-25",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
-    "main": "攝影",
-    "collabs": [
-      "全體"
-    ],
-    "item": "羅馬旗座與旗桿確認",
-    "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。",
-    "note": "可暫由攝影協助追蹤，實際仍需全體幫忙。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-2",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
-    "main": "團務老師",
-    "collabs": [],
-    "item": "學生集合與抵達方式",
-    "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。",
-    "note": "學生端由團務老師統一宣布。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-3",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
-    "main": "團務老師",
-    "collabs": [],
-    "item": "樂器與彩排準備",
-    "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。",
-    "note": "需與指揮、文化中心現場限制配合。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-4",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
-    "main": "團務老師",
-    "collabs": [
-      "攝影"
-    ],
-    "item": "換裝與化妝時間",
-    "description": "規劃換團服、妝髮、化妝組時間與分批順序。",
-    "note": "建議抓上台前 2 至 3 小時完成主要妝髮。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-5",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
-    "main": "團務老師",
-    "collabs": [
-      "攝影",
-      "會長"
-    ],
-    "item": "大合照安排",
-    "description": "安排學生、年級、幹部、家長或師長合照順序與地點。",
-    "note": "可在舞台、TRUSS 架或文化中心適合位置拍攝。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-6",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
-    "main": "文書",
-    "collabs": [],
-    "item": "前台票務與簽到資料",
-    "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。",
-    "note": "前台人員要能快速查資料。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-7",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
-    "main": "文書",
-    "collabs": [],
-    "item": "前台動線與人員分配",
-    "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。",
-    "note": "若免費入場也要有人處理臨時來賓。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-8",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
-    "main": "會長",
-    "collabs": [],
-    "item": "貴賓接待與引導",
-    "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。",
-    "note": "貴賓票多半已在現場，需協助取票與帶位。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-9",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
-    "main": "文書",
-    "collabs": [],
-    "item": "節目單發放與 QR Code",
-    "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。",
-    "note": "線上節目單可包含影片與曲目資訊。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-10",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "演出中",
-    "main": "文書",
-    "collabs": [
-      "團務老師"
-    ],
-    "item": "留守前台與遲到入場",
-    "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。",
-    "note": "活動中心外面建議一定要有人留守。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-11",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "活動前",
-    "main": "總務",
-    "collabs": [
-      "全體"
-    ],
-    "item": "舞台布置與紅布條",
-    "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。",
-    "note": "需與團務老師一起看位置。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-12",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "活動前",
-    "main": "會長",
-    "collabs": [
-      "攝影"
-    ],
-    "item": "花籃與花圈位置確認",
-    "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。",
-    "note": "當天才知道實際有哪些花籃，因此移到當日分工。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-13",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "演出中",
-    "main": "團務老師",
-    "collabs": [
-      "會長"
-    ],
-    "item": "後台控管",
-    "description": "控管學生、樂器、上下台、獻花或演出流程。",
-    "note": "後台可安排熟悉學生與流程的家長協助。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-14",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "演出中",
-    "main": "團務老師",
-    "collabs": [
-      "文書",
-      "攝影"
-    ],
-    "item": "影片播放確認",
-    "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。",
-    "note": "先保留此項，等確認影片定位後再細化。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-15",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
-    "main": "攝影",
-    "collabs": [],
-    "item": "活動照片紀錄",
-    "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。",
-    "note": "不只側拍，必要時要主動 cue 大家看鏡頭。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-16",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
-    "main": "攝影",
-    "collabs": [],
-    "item": "主動引導拍照",
-    "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。",
-    "note": "避免只拍到側面或看不出誰有出席。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-17",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
-    "main": "攝影",
-    "collabs": [],
-    "item": "花籃拍照留存",
-    "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。",
-    "note": "需拍清楚送花單位與整體位置。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-18",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
-    "main": "攝影",
-    "collabs": [
-      "團務老師"
-    ],
-    "item": "錄影與錄音協調",
-    "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。",
-    "note": "可預留兩位幹部分前台與後台拍攝。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-19",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-餐飲清潔",
-    "timeOrder": "用餐前後",
-    "main": "總務",
-    "collabs": [
-      "團務老師"
-    ],
-    "item": "餐點發放與用餐秩序",
-    "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。",
-    "note": "需同步處理水、飲料與垃圾。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-20",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-餐飲清潔",
-    "timeOrder": "用餐前後",
-    "main": "總務",
-    "collabs": [
-      "會長",
-      "團務老師"
-    ],
-    "item": "垃圾與清潔",
-    "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。",
-    "note": "用餐後先整理一次，撤場再整理一次。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-21",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
-    "main": "會長",
-    "collabs": [
-      "總務",
-      "團務老師"
-    ],
-    "item": "撤場總控",
-    "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。",
-    "note": "目標是場地恢復原狀。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-22",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
-    "main": "團務老師",
-    "collabs": [
-      "會長",
-      "全體"
-    ],
-    "item": "學生與樂器撤離",
-    "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。",
-    "note": "需與學生動線分流。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-23",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
-    "main": "總務",
-    "collabs": [
-      "全體"
-    ],
-    "item": "剩餘物資與垃圾處理",
-    "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。",
-    "note": "避免遺漏在文化中心。",
-    "kind": "base"
-  },
-  {
-    "id": "當日分工表-24",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
-    "main": "攝影",
-    "collabs": [],
-    "item": "撤場前最後紀錄",
-    "description": "補拍花籃、場地復原、幹部合照或重要留存照片。",
-    "note": "提供後續感謝文與紀錄使用。",
-    "kind": "base"
-  }
-];
-
-const SCHEDULE_ROWS = [
-  {
-    "id": "schedule-base-1",
-    "time": "07:20",
-    "task": "幹部集合點名、搬羅馬旗座、場布用品箱等。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": "全體幹部及家長志工"
-  },
-  {
-    "id": "schedule-base-2",
-    "time": "08:10",
-    "task": "全體師生家長上遊覽車、出發。",
-    "primary": "全體幹部",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-3",
-    "time": "09:00",
-    "task": "抵達屯區藝文中心。",
-    "primary": "全體幹部",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-4",
-    "time": "09:00",
-    "task": "如果有空檔先拍照，廣場前、蘭亭集序。",
-    "primary": "攝影",
-    "backup": "聯睿、仁照",
-    "note": "全程幫忙拍照、攝影"
-  },
-  {
-    "id": "schedule-base-5",
-    "time": "09:00",
-    "task": "分配識別證給全體幹部及家長志工、親屬。",
-    "primary": "美玲",
-    "backup": "清祐",
-    "note": "演出來後統一繳交於美伶。"
-  },
-  {
-    "id": "schedule-base-6",
-    "time": "09:00",
-    "task": "分請各休息室配置之幹部家長，務必請先拍照休息室的擺設；結束要還原。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": "如桌椅、衣架等擺設都要留存。"
-  },
-  {
-    "id": "schedule-base-7",
-    "time": "09:00",
-    "task": "引導學生擺放好個人樂器和物品，盡快下樓協助舞台佈置。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-8",
-    "time": "",
-    "task": "舞台佈置：木箱櫃子、地墊拼貼。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": "特別是男生幹部家長協助。"
-  },
-  {
-    "id": "schedule-base-9",
-    "time": "",
-    "task": "舞台定位，小號長號打擊區需墊高。",
-    "primary": "全體幹部",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-10",
-    "time": "",
-    "task": "舞台裝飾：紅布條懸掛、節目架照片格及旁白詞支譜架貼海報、氣球裝飾。",
-    "primary": "文書組",
-    "backup": "支援人力",
-    "note": "美伶、其嘉、盈茹、雅鈴等支援。"
-  },
-  {
-    "id": "schedule-base-11",
-    "time": "10:00",
-    "task": "和館方前台開會，前台布置須知。",
-    "primary": "全體幹部",
-    "backup": "志工家長",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-12",
-    "time": "10:00",
-    "task": "熱管、彩排、試音。",
-    "primary": "團務老師",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-13",
-    "time": "",
-    "task": "大合照、彩排空檔時確認團員有無被拍到。",
-    "primary": "攝影",
-    "backup": "聯睿、仁照",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-14",
-    "time": "",
-    "task": "聯名團化妝用標示紙。",
-    "primary": "美伶",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-15",
-    "time": "",
-    "task": "前台布置：室外桌椅、簽到本、簽名筆、海報架、室內桌、家長後援會旗、表演單。",
-    "primary": "前後台",
-    "backup": "家長志工",
-    "note": "後台拍照留存。"
-  },
-  {
-    "id": "schedule-base-16",
-    "time": "",
-    "task": "裝飾佈置、場外花圈、花籃定位。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-17",
-    "time": "",
-    "task": "羅馬旗座、旗桿約 12 組擺放。",
-    "primary": "全體幹部",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-18",
-    "time": "",
-    "task": "拍照、攝影、錄音。",
-    "primary": "攝影",
-    "backup": "聯睿、仁照",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-19",
-    "time": "11:15",
-    "task": "炒飯，幹部及家長志工先提早用午餐。",
-    "primary": "總務組",
-    "backup": "佳雯、晴祈媽、姿宜",
-    "note": "確認餐點。"
-  },
-  {
-    "id": "schedule-base-20",
-    "time": "12:00",
-    "task": "全體師生用餐，分配餐點，收拾環境整潔。",
-    "primary": "全體人員",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-21",
-    "time": "13:30",
-    "task": "換團服、妝髮，各間分配家長巡檢團員妝髮及服裝。",
-    "primary": "化妝組",
-    "backup": "幹部家長",
-    "note": "彩妝可至二樓、中型化妝間。"
-  },
-  {
-    "id": "schedule-base-22",
-    "time": "13:30",
-    "task": "現場索票，引導來賓入座、貴賓接待與簽到。",
-    "primary": "前台組",
-    "backup": "美伶、其嘉、巧喬媽、小林、容碩爸",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-23",
-    "time": "",
-    "task": "花籃、花圈、花束代收。",
-    "primary": "姿宜",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-24",
-    "time": "",
-    "task": "發放節目單。",
-    "primary": "雅鈴",
-    "backup": "昱翔媽、映廷媽",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-25",
-    "time": "",
-    "task": "餐後地下室環境檢視，整理完全前台支援發單。",
-    "primary": "佳雯",
-    "backup": "晴祈媽、容碩嬸",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-26",
-    "time": "14:25",
-    "task": "演出時協助後台。",
-    "primary": "雅慧",
-    "backup": "巧芬、銘廷、佳雯、美伶",
-    "note": "遞想留後台的人員。"
-  },
-  {
-    "id": "schedule-base-27",
-    "time": "14:30",
-    "task": "前台幹部及家長入場，卷票根統一繳交。",
-    "primary": "其嘉",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-28",
-    "time": "",
-    "task": "拍照、攝影、錄音。",
-    "primary": "攝影",
-    "backup": "聯睿、仁照",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-29",
-    "time": "",
-    "task": "影片播放，回顧、曲目。",
-    "primary": "訓育組長",
-    "backup": "",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-30",
-    "time": "",
-    "task": "留守前台。",
-    "primary": "校方志工",
-    "backup": "小林",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-31",
-    "time": "",
-    "task": "遲到者入場時間點，中場休息引導。",
-    "primary": "中場休息負責人",
-    "backup": "容碩爸",
-    "note": "中場休息。"
-  },
-  {
-    "id": "schedule-base-32",
-    "time": "16:00",
-    "task": "最終曲結束後即休息室放樂器，立即下樓集合。",
-    "primary": "其嘉",
-    "backup": "",
-    "note": "拿感謝扣。"
-  },
-  {
-    "id": "schedule-base-33",
-    "time": "16:15",
-    "task": "開放 10 分鐘拍照。",
-    "primary": "攝影",
-    "backup": "聯睿、仁照",
-    "note": "九年級優先。"
-  },
-  {
-    "id": "schedule-base-34",
-    "time": "",
-    "task": "譜架、椅子歸位、整高木箱歸位、收拾地墊。",
-    "primary": "全體人員",
-    "backup": "",
-    "note": "清空後再回休息室整理東西。"
-  },
-  {
-    "id": "schedule-base-35",
-    "time": "",
-    "task": "各休息室配置之幹部家長確認休息室館方設備、巡檢歸還原，團員領結回收清點。",
-    "primary": "全體幹部",
-    "backup": "家長志工",
-    "note": "餐碗需擺好，拆除名牌休息室標示紙並檢查環境。"
-  },
-  {
-    "id": "schedule-base-36",
-    "time": "",
-    "task": "繳交識別證。",
-    "primary": "美伶",
-    "backup": "清祐",
-    "note": "全體幹部及家長志工、親屬。"
-  },
-  {
-    "id": "schedule-base-37",
-    "time": "17:00",
-    "task": "返回學校。",
-    "primary": "全體幹部",
-    "backup": "志工家長",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-38",
-    "time": "18:00",
-    "task": "樂器室恢復。",
-    "primary": "全體幹部",
-    "backup": "志工家長",
-    "note": ""
-  },
-  {
-    "id": "schedule-base-39",
-    "time": "19:00",
-    "task": "全體徒步出發千葉火鍋。",
-    "primary": "全體幹部",
-    "backup": "",
-    "note": ""
-  }
-];
-
-const ROLES = [
-  { id:'團務老師', name:'團務老師' },
-  { id:'會長', name:'會長' },
-  { id:'總務', name:'總務' },
-  { id:'文書', name:'文書' },
-  { id:'攝影', name:'攝影' },
-  { id:'全體幹部', name:'全體／新增' }
-];
-
-const roleColors = {
-  '團務老師': { bg:'#DDEBF7', accent:'#5B9BD5' },
-  '會長': { bg:'#FFF2CC', accent:'#BF9000' },
-  '總務': { bg:'#E2F0D9', accent:'#70AD47' },
-  '文書': { bg:'#EADCF8', accent:'#8E63C7' },
-  '攝影': { bg:'#FCE4D6', accent:'#ED7D31' },
-  '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
-};
-
-let currentRole = '團務老師';
-let entries = [];
-let currentUser = null;
-let editing = null;
-let uploadTarget = null;
-let assignTarget = null;
-let scheduleEditing = null;
-
+const auth = getAuth(app); const db = getFirestore(app); const storage = getStorage(app); const entriesCol = collection(db, 'fengtungHandoverEntries');
+const ROLES = ['團務老師','會長','總務','文書','攝影','全體／新增'];
+const ROLE_COLORS = { '團務老師':['#DDEBF7','#5B9BD5'], '會長':['#FFF2CC','#D6B656'], '總務':['#E2F0D9','#70AD47'], '文書':['#EADCF8','#9E7CC1'], '攝影':['#FCE4D6','#F4A582'], '全體／新增':['#E7E6E6','#8F8F8F'] };
+const BASE_ITEMS = [{"id": "前期分工表-2", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "團務老師", "collabs": [], "item": "場地申請與票務申請", "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。", "note": "可邀會長或有空幹部一起勘場。", "kind": "base"}, {"id": "前期分工表-3", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "團務老師", "collabs": ["全體"], "item": "休息區、化妝區、樂器放置區確認", "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。", "note": "此項以學生與演出後勤需求為主。", "kind": "base"}, {"id": "前期分工表-4", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "會長", "collabs": ["團務老師"], "item": "貴賓席、觀眾席視角與入口動線規劃", "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。", "note": "可與團務老師及幹部一起看場地；重點是接待與觀眾動線。", "kind": "base"}, {"id": "前期分工表-5", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "團務老師", "collabs": ["文書"], "item": "領票與票券控管", "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。", "note": "貴賓區票券先由老師預留。", "kind": "base"}, {"id": "前期分工表-6", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "團務老師", "collabs": ["會長", "文書"], "item": "貴賓票預留", "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。", "note": "後續幹部配票時需先扣除這些票。", "kind": "base"}, {"id": "前期分工表-7", "sourceSheet": "前期分工表", "stage": "前期-場地票務", "timeOrder": "最優先", "main": "文書", "collabs": ["全體"], "item": "劃位表與票券分配表", "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。", "note": "以禮遇與畢業年級優先為原則，盡量讓家長坐在能看見孩子的位置。", "kind": "base"}, {"id": "前期分工表-8", "sourceSheet": "前期分工表", "stage": "前期-文宣影像", "timeOrder": "前期", "main": "文書", "collabs": [], "item": "製作影片集", "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。", "note": "需提早收素材，避免最後趕工。", "kind": "base"}, {"id": "前期分工表-9", "sourceSheet": "前期分工表", "stage": "前期-文宣影像", "timeOrder": "前期", "main": "團務老師", "collabs": [], "item": "節目單內容與製作規劃", "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。", "note": "可參照每年節目單格式；文書可協助排版與檔案整理。", "kind": "base"}, {"id": "前期分工表-10", "sourceSheet": "前期分工表", "stage": "前期-文宣影像", "timeOrder": "前期", "main": "文書", "collabs": ["攝影"], "item": "線上節目單與 QR Code", "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。", "note": "需確認連結穩定、手機可讀。", "kind": "base"}, {"id": "前期分工表-11", "sourceSheet": "前期分工表", "stage": "前期-文宣影像", "timeOrder": "前期", "main": "團務老師", "collabs": ["全體"], "item": "海報與邀請卡初稿", "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。", "note": "完成後可請幹部確認文字、活動資訊與修正需求。", "kind": "base"}, {"id": "前期分工表-12", "sourceSheet": "前期分工表", "stage": "前期-文宣影像", "timeOrder": "前期", "main": "會長", "collabs": ["全體"], "item": "海報張貼與宣傳安排", "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。", "note": "網路分享效果通常較好，可鼓勵 IG、FB、LINE 群組轉發。", "kind": "base"}, {"id": "前期分工表-13", "sourceSheet": "前期分工表", "stage": "前期-邀請接待", "timeOrder": "前期", "main": "會長", "collabs": [], "item": "擬定貴賓名冊", "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。", "note": "確認是否需新增或刪除名單。", "kind": "base"}, {"id": "前期分工表-14", "sourceSheet": "前期分工表", "stage": "前期-邀請接待", "timeOrder": "前期", "main": "會長", "collabs": [], "item": "歷屆會長與貴賓邀請", "description": "進行簡訊、電話、邀請函寄送或親送安排。", "note": "可詢問學校是否有需一併邀請或發放的對象。", "kind": "base"}, {"id": "前期分工表-15", "sourceSheet": "前期分工表", "stage": "前期-邀請接待", "timeOrder": "前期", "main": "會長", "collabs": [], "item": "邀請函資料整理", "description": "協助整理邀請函內容、收件資料、名單與列印資料。", "note": "寄送由會長統一處理較清楚。", "kind": "base"}, {"id": "前期分工表-16", "sourceSheet": "前期分工表", "stage": "前期-餐飲禮品", "timeOrder": "前期", "main": "總務", "collabs": ["全體"], "item": "餐飲需求統計", "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。", "note": "下午活動需考量提早練習與幫忙人員用餐。", "kind": "base"}, {"id": "前期分工表-17", "sourceSheet": "前期分工表", "stage": "前期-餐飲禮品", "timeOrder": "前期", "main": "總務", "collabs": ["全體"], "item": "訂餐與發餐規劃", "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。", "note": "原本訂餐盒、便當、飯卷可合併成同一大項。", "kind": "base"}, {"id": "前期分工表-18", "sourceSheet": "前期分工表", "stage": "前期-餐飲禮品", "timeOrder": "前期", "main": "總務", "collabs": ["全體"], "item": "飲料與水準備", "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。", "note": "例如 100 人可準備 120 至 140 瓶，水與飲料各約一半。", "kind": "base"}, {"id": "前期分工表-19", "sourceSheet": "前期分工表", "stage": "前期-餐飲禮品", "timeOrder": "前期", "main": "總務", "collabs": [], "item": "指揮花束與指揮禮", "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。", "note": "可考慮將感謝信與禮金一起包裝，但要避免遺失。", "kind": "base"}, {"id": "前期分工表-20", "sourceSheet": "前期分工表", "stage": "前期-餐飲禮品", "timeOrder": "前期", "main": "總務", "collabs": [], "item": "三年級送別禮物", "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。", "note": "人數需向團務老師確認，因老師有正式名單。", "kind": "base"}, {"id": "前期分工表-21", "sourceSheet": "前期分工表", "stage": "前期-採購佈置", "timeOrder": "前期", "main": "全體幹部", "collabs": [], "item": "各組物品請購", "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。", "note": "總務可能物品最多，但每位幹部都要提出需求。", "kind": "base"}, {"id": "前期分工表-22", "sourceSheet": "前期分工表", "stage": "前期-採購佈置", "timeOrder": "前期", "main": "總務", "collabs": ["團務老師"], "item": "發餐與回收安排", "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。", "note": "要考量場地是否方便用餐。", "kind": "base"}, {"id": "前期分工表-23", "sourceSheet": "前期分工表", "stage": "前期-採購佈置", "timeOrder": "前期", "main": "會長", "collabs": [], "item": "幹部服裝規定", "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。", "note": "活動前再提醒一次。", "kind": "base"}, {"id": "前期分工表-24", "sourceSheet": "前期分工表", "stage": "前期-採購佈置", "timeOrder": "前期", "main": "團務老師", "collabs": [], "item": "學生服裝規定", "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。", "note": "由老師對學生發布最清楚。", "kind": "base"}, {"id": "前期分工表-25", "sourceSheet": "前期分工表", "stage": "前期-採購佈置", "timeOrder": "前期", "main": "攝影", "collabs": ["全體"], "item": "羅馬旗座與旗桿確認", "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。", "note": "可暫由攝影協助追蹤，實際仍需全體幫忙。", "kind": "base"}, {"id": "當日分工表-2", "sourceSheet": "當日分工表", "stage": "當日-學生與場地", "timeOrder": "活動前", "main": "團務老師", "collabs": [], "item": "學生集合與抵達方式", "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。", "note": "學生端由團務老師統一宣布。", "kind": "base"}, {"id": "當日分工表-3", "sourceSheet": "當日分工表", "stage": "當日-學生與場地", "timeOrder": "活動前", "main": "團務老師", "collabs": [], "item": "樂器與彩排準備", "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。", "note": "需與指揮、文化中心現場限制配合。", "kind": "base"}, {"id": "當日分工表-4", "sourceSheet": "當日分工表", "stage": "當日-學生與場地", "timeOrder": "活動前", "main": "團務老師", "collabs": ["攝影"], "item": "換裝與化妝時間", "description": "規劃換團服、妝髮、化妝組時間與分批順序。", "note": "建議抓上台前 2 至 3 小時完成主要妝髮。", "kind": "base"}, {"id": "當日分工表-5", "sourceSheet": "當日分工表", "stage": "當日-學生與場地", "timeOrder": "活動前", "main": "團務老師", "collabs": ["攝影", "會長"], "item": "大合照安排", "description": "安排學生、年級、幹部、家長或師長合照順序與地點。", "note": "可在舞台、TRUSS 架或文化中心適合位置拍攝。", "kind": "base"}, {"id": "當日分工表-6", "sourceSheet": "當日分工表", "stage": "當日-前台接待", "timeOrder": "開演前", "main": "文書", "collabs": [], "item": "前台票務與簽到資料", "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。", "note": "前台人員要能快速查資料。", "kind": "base"}, {"id": "當日分工表-7", "sourceSheet": "當日分工表", "stage": "當日-前台接待", "timeOrder": "開演前", "main": "文書", "collabs": [], "item": "前台動線與人員分配", "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。", "note": "若免費入場也要有人處理臨時來賓。", "kind": "base"}, {"id": "當日分工表-8", "sourceSheet": "當日分工表", "stage": "當日-前台接待", "timeOrder": "開演前", "main": "會長", "collabs": [], "item": "貴賓接待與引導", "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。", "note": "貴賓票多半已在現場，需協助取票與帶位。", "kind": "base"}, {"id": "當日分工表-9", "sourceSheet": "當日分工表", "stage": "當日-前台接待", "timeOrder": "開演前", "main": "文書", "collabs": [], "item": "節目單發放與 QR Code", "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。", "note": "線上節目單可包含影片與曲目資訊。", "kind": "base"}, {"id": "當日分工表-10", "sourceSheet": "當日分工表", "stage": "當日-前台接待", "timeOrder": "演出中", "main": "文書", "collabs": ["團務老師"], "item": "留守前台與遲到入場", "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。", "note": "活動中心外面建議一定要有人留守。", "kind": "base"}, {"id": "當日分工表-11", "sourceSheet": "當日分工表", "stage": "當日-舞台後台", "timeOrder": "活動前", "main": "總務", "collabs": ["全體"], "item": "舞台布置與紅布條", "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。", "note": "需與團務老師一起看位置。", "kind": "base"}, {"id": "當日分工表-12", "sourceSheet": "當日分工表", "stage": "當日-舞台後台", "timeOrder": "活動前", "main": "會長", "collabs": ["攝影"], "item": "花籃與花圈位置確認", "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。", "note": "當天才知道實際有哪些花籃，因此移到當日分工。", "kind": "base"}, {"id": "當日分工表-13", "sourceSheet": "當日分工表", "stage": "當日-舞台後台", "timeOrder": "演出中", "main": "團務老師", "collabs": ["會長"], "item": "後台控管", "description": "控管學生、樂器、上下台、獻花或演出流程。", "note": "後台可安排熟悉學生與流程的家長協助。", "kind": "base"}, {"id": "當日分工表-14", "sourceSheet": "當日分工表", "stage": "當日-舞台後台", "timeOrder": "演出中", "main": "團務老師", "collabs": ["文書", "攝影"], "item": "影片播放確認", "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。", "note": "先保留此項，等確認影片定位後再細化。", "kind": "base"}, {"id": "當日分工表-15", "sourceSheet": "當日分工表", "stage": "當日-攝影紀錄", "timeOrder": "活動全程", "main": "攝影", "collabs": [], "item": "活動照片紀錄", "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。", "note": "不只側拍，必要時要主動 cue 大家看鏡頭。", "kind": "base"}, {"id": "當日分工表-16", "sourceSheet": "當日分工表", "stage": "當日-攝影紀錄", "timeOrder": "活動全程", "main": "攝影", "collabs": [], "item": "主動引導拍照", "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。", "note": "避免只拍到側面或看不出誰有出席。", "kind": "base"}, {"id": "當日分工表-17", "sourceSheet": "當日分工表", "stage": "當日-攝影紀錄", "timeOrder": "活動全程", "main": "攝影", "collabs": [], "item": "花籃拍照留存", "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。", "note": "需拍清楚送花單位與整體位置。", "kind": "base"}, {"id": "當日分工表-18", "sourceSheet": "當日分工表", "stage": "當日-攝影紀錄", "timeOrder": "活動全程", "main": "攝影", "collabs": ["團務老師"], "item": "錄影與錄音協調", "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。", "note": "可預留兩位幹部分前台與後台拍攝。", "kind": "base"}, {"id": "當日分工表-19", "sourceSheet": "當日分工表", "stage": "當日-餐飲清潔", "timeOrder": "用餐前後", "main": "總務", "collabs": ["團務老師"], "item": "餐點發放與用餐秩序", "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。", "note": "需同步處理水、飲料與垃圾。", "kind": "base"}, {"id": "當日分工表-20", "sourceSheet": "當日分工表", "stage": "當日-餐飲清潔", "timeOrder": "用餐前後", "main": "總務", "collabs": ["會長", "團務老師"], "item": "垃圾與清潔", "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。", "note": "用餐後先整理一次，撤場再整理一次。", "kind": "base"}, {"id": "當日分工表-21", "sourceSheet": "當日分工表", "stage": "當日-撤場復原", "timeOrder": "演出後", "main": "會長", "collabs": ["總務", "團務老師"], "item": "撤場總控", "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。", "note": "目標是場地恢復原狀。", "kind": "base"}, {"id": "當日分工表-22", "sourceSheet": "當日分工表", "stage": "當日-撤場復原", "timeOrder": "演出後", "main": "團務老師", "collabs": ["會長", "全體"], "item": "學生與樂器撤離", "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。", "note": "需與學生動線分流。", "kind": "base"}, {"id": "當日分工表-23", "sourceSheet": "當日分工表", "stage": "當日-撤場復原", "timeOrder": "演出後", "main": "總務", "collabs": ["全體"], "item": "剩餘物資與垃圾處理", "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。", "note": "避免遺漏在文化中心。", "kind": "base"}, {"id": "當日分工表-24", "sourceSheet": "當日分工表", "stage": "當日-撤場復原", "timeOrder": "演出後", "main": "攝影", "collabs": [], "item": "撤場前最後紀錄", "description": "補拍花籃、場地復原、幹部合照或重要留存照片。", "note": "提供後續感謝文與紀錄使用。", "kind": "base"}];
+const BASE_SCHEDULE = [{"id": "schedule-base-1", "time": "07:20", "task": "幹部集合點名、搬羅馬旗座、場布用品箱。", "primary": "全體幹部", "backup": "家長志工", "note": "全體幹部及家長志工", "order": 1000}, {"id": "schedule-base-2", "time": "08:10", "task": "全體師生家長上遊覽車、出發。", "primary": "全體幹部", "backup": "家長志工", "note": "", "order": 2000}, {"id": "schedule-base-3", "time": "09:00", "task": "抵達屯區藝文中心。", "primary": "全體幹部", "backup": "家長志工", "note": "", "order": 3000}, {"id": "schedule-base-4", "time": "09:00", "task": "如果有空檔先拍照，廣場前、蘭亭集序。", "primary": "攝影", "backup": "聯喜、仁照", "note": "全程幫忙拍照、攝影。", "order": 4000}, {"id": "schedule-base-5", "time": "09:00", "task": "分配識別證，全體幹部及家長志工親屬。", "primary": "美妤", "backup": "清點", "note": "演演結束後統一繳交於美伶。", "order": 5000}, {"id": "schedule-base-6", "time": "09:00", "task": "引導各休息室配置之幹部家長，務必請先拍照休息室的擺設，結束要還原。", "primary": "全體幹部", "backup": "家長志工", "note": "如果椅、衣架等結束要還原。", "order": 6000}, {"id": "schedule-base-7", "time": "09:00", "task": "引導學生擺放好個人樂器和物品，盡快下樓協助舞台佈置。", "primary": "全體幹部", "backup": "家長志工", "note": "", "order": 7000}, {"id": "schedule-base-8", "time": "09:00", "task": "舞台布置：木箱椅子、地墊拼貼、舞台定位、小號長號打擊區需墊高。", "primary": "全體幹部", "backup": "家長志工", "note": "特別是男生幹部家長協助。", "order": 8000}, {"id": "schedule-base-9", "time": "09:00", "task": "舞台裝飾、紅布條懸掛、氣球裝飾、第七屆架圓格及旁白兩支譜架貼海報。", "primary": "文書組", "backup": "設計支援人力", "note": "美伶、其嘉、盈茹、雅鈴、映婕媽、容碩嬤。", "order": 9000}, {"id": "schedule-base-10", "time": "10:00", "task": "和館方前台開會，前台佈置須知。", "primary": "全體幹部", "backup": "志工家長", "note": "", "order": 10000}, {"id": "schedule-base-11", "time": "10:00", "task": "熱管、彩排、試音。", "primary": "團務老師", "backup": "全體幹部", "note": "", "order": 11000}, {"id": "schedule-base-12", "time": "10:00", "task": "大合照、彩排空檔拍照，確認團員有無被擋到。", "primary": "攝影", "backup": "聯喜、仁照", "note": "", "order": 12000}, {"id": "schedule-base-13", "time": "10:00", "task": "聯名閃化妝用標示紙。", "primary": "美伶", "backup": "", "note": "", "order": 13000}, {"id": "schedule-base-14", "time": "10:00", "task": "前台布置：室外2張桌、簽到本2本簽名筆、海報架、室內桌、家長後援會旗、表演單。", "primary": "前後台", "backup": "", "note": "皆拍照留存。", "order": 14000}, {"id": "schedule-base-15", "time": "10:00", "task": "裝飾布置、場外花圈、花籃定位、羅馬旗座與旗桿擺放、拍照攝影錄音。", "primary": "全體幹部", "backup": "家長志工", "note": "攝影：聯喜、仁照。", "order": 15000}, {"id": "schedule-base-16", "time": "11:15", "task": "炒飯送到，幹部及家長志工先提早用午餐。", "primary": "總務組", "backup": "佳雯、晴妤媽、姿宜", "note": "確認餐點。", "order": 16000}, {"id": "schedule-base-17", "time": "12:00", "task": "全體師生用餐，分配餐點、收拾環境整潔。", "primary": "全體人員", "backup": "", "note": "", "order": 17000}, {"id": "schedule-base-18", "time": "12:00", "task": "提醒用完餐陸續至中型化妝室進行髮妝。", "primary": "化妝組", "backup": "", "note": "按照分配化妝間。", "order": 18000}, {"id": "schedule-base-19", "time": "13:30", "task": "換團服、妝髮。", "primary": "化妝組", "backup": "幹部家長", "note": "", "order": 19000}, {"id": "schedule-base-20", "time": "13:30", "task": "各間分配家長，請巡檢團員的妝髮及服裝。", "primary": "家長志工", "backup": "", "note": "彩妝可至二樓中型化妝間。", "order": 20000}, {"id": "schedule-base-21", "time": "13:30", "task": "現場索票，引導來賓入座、貴賓接待、簽到。", "primary": "美伶", "backup": "其嘉、巧喬媽、小林、容碩爸", "note": "", "order": 21000}, {"id": "schedule-base-22", "time": "13:30", "task": "花籃、花圈、花束代收，發放節目單。", "primary": "姿宜", "backup": "雅鈴、昱翔媽、映姊媽", "note": "", "order": 22000}, {"id": "schedule-base-23", "time": "13:30", "task": "餐後地下室環境檢視，整理完全前台支援發單，後台留守聯繫。", "primary": "佳雯", "backup": "晴妤媽、容碩嬤", "note": "", "order": 23000}, {"id": "schedule-base-24", "time": "14:25", "task": "演出時協助後台。", "primary": "雅慧", "backup": "巧芬、銘廷、佳雯、美伶", "note": "選想留後台的獻禮。", "order": 24000}, {"id": "schedule-base-25", "time": "14:30", "task": "前台幹部及家長入場卷票根統一繳交，拍照、攝影、錄音，影片播放。", "primary": "攝影", "backup": "聯喜、仁照", "note": "", "order": 25000}, {"id": "schedule-base-26", "time": "14:30", "task": "留守前台。", "primary": "校方志工", "backup": "小林", "note": "", "order": 26000}, {"id": "schedule-base-27", "time": "15:00", "task": "遲到者入場時間點，中場休息。", "primary": "中場休息負責人", "backup": "容碩爸", "note": "全體幹部和家長志工回後台支援。", "order": 27000}, {"id": "schedule-base-28", "time": "16:00", "task": "最後曲結束後回休息室放樂器，立即下樓集合。", "primary": "其嘉", "backup": "", "note": "拿威魔扣。", "order": 28000}, {"id": "schedule-base-29", "time": "16:00", "task": "女生穿裙子如需要換著，可先換。", "primary": "全體團員", "backup": "", "note": "", "order": 29000}, {"id": "schedule-base-30", "time": "16:15", "task": "開放10分鐘拍照，九年級優先。", "primary": "攝影", "backup": "聯喜、仁照", "note": "", "order": 30000}, {"id": "schedule-base-31", "time": "16:30", "task": "譜架、椅子歸位，整高木箱歸位，收拾地墊並清潔黑膠地墊。", "primary": "全體人員", "backup": "", "note": "清空後再回休息室整理東西。", "order": 31000}, {"id": "schedule-base-32", "time": "16:30", "task": "請各休息室配置之幹部家長務必核對上午拍照休息室的館方設備，還原歸位；團員領結回收清點。", "primary": "全體幹部", "backup": "家長志工", "note": "將降各間休息室標示紙並複場支援。", "order": 32000}, {"id": "schedule-base-33", "time": "16:30", "task": "繳交識別證。", "primary": "美伶", "backup": "清點", "note": "", "order": 33000}, {"id": "schedule-base-34", "time": "17:00", "task": "返回學校。", "primary": "全體幹部", "backup": "志工家長", "note": "", "order": 34000}, {"id": "schedule-base-35", "time": "18:00", "task": "樂器室恢復。", "primary": "全體幹部", "backup": "志工家長", "note": "", "order": 35000}, {"id": "schedule-base-36", "time": "19:00", "task": "全體徒步出發千葉火鍋。", "primary": "全體幹部", "backup": "", "note": "", "order": 36000}];
+let entries = [], currentUser = null, currentRole = '團務老師', editing = null, assignTarget = null, uploadTarget = null, scheduleEditing = null;
 const $ = id => document.getElementById(id);
-function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function safePart(s) { return String(s || 'file').replace(/[\/#?%*:|"<>]/g, '_').slice(0,80); }
-function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
-function setRoleVars(role) {
-  const c = roleStyle(role);
-  document.documentElement.style.setProperty('--roleBg', c.bg);
-  document.documentElement.style.setProperty('--roleAccent', c.accent);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+const normRole = r => !r ? '尚未指定' : (r === '全體' || r === '全體幹部' ? '全體／新增' : r);
+function setRoleStyle(role) { const [bg,accent] = ROLE_COLORS[role] || ROLE_COLORS['團務老師']; document.documentElement.style.setProperty('--roleBg', bg); document.documentElement.style.setProperty('--roleAccent', accent); }
+function renderRoleGrid() { $('roleGrid').innerHTML = ROLES.map(r => { const [bg] = ROLE_COLORS[r]; return `<button class="roleBtn ${r===currentRole?'active':''}" data-role="${esc(r)}" style="background:${bg}">${esc(r)}</button>`; }).join(''); }
+function latestByParent(type) { const m = new Map(); entries.filter(e=>e.type===type && e.parentId).forEach(e=>m.set(e.parentId,e)); return m; }
+function buildItems() {
+  const edits = latestByParent('textEdit'); const assigns = new Map();
+  entries.filter(e=>['assign','assignment'].includes(e.type) && e.parentId).forEach(e=>assigns.set(e.parentId,e));
+  const deletedItems = new Set(entries.filter(e=>e.type==='deleteItem').map(e=>e.parentId));
+  let items = BASE_ITEMS.map(b => { const ed=edits.get(b.id); const as=assigns.get(b.id); return { id:b.id, baseId:b.id, type:'base', title:ed?.title ?? b.item, content:ed?.content ?? b.description, main:normRole(as?.mainRole ?? as?.primaryRole ?? b.main), backup:normRole(as?.backupRole ?? b.collabs?.[0] ?? '尚未指定') }; });
+  entries.filter(e=>e.type==='item').forEach(e => { if(deletedItems.has(e.id)) return; const ed=edits.get(e.id); const as=assigns.get(e.id); items.push({ id:e.id, type:'item', title:ed?.title ?? e.title, content:ed?.content ?? e.content, main:normRole(as?.mainRole ?? as?.primaryRole ?? e.mainRole ?? e.role ?? '尚未指定'), backup:normRole(as?.backupRole ?? e.backupRole ?? '尚未指定') }); });
+  return items;
 }
-function normalizeRole(role) {
-  if(!role) return '尚未指定';
-  if(role === '全體' || role === '幹部／全體幹部' || role === '全體／新增') return '全體幹部';
-  return role;
+function buildReplies(parentId) {
+  const editMap = latestByParent('replyEdit'); const deleted = new Set(entries.filter(e=>e.type==='deleteReply').map(e=>e.parentId));
+  return entries.filter(e=>e.type==='reply' && e.parentId===parentId && !deleted.has(e.id)).map(e=>({ id:e.id, content:editMap.get(e.id)?.content ?? e.content }));
 }
-function roleDisplayName(role) { return ROLES.find(r => r.id === role)?.name || role; }
-function expandsToRole(value, role) {
-  const v = normalizeRole(value);
-  if(v === '尚未指定') return role === '全體幹部';
-  if(v === role) return true;
-  if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
-  return false;
+function buildFiles(parentId) {
+  const deleted = new Set(entries.filter(e=>e.type==='fileDelete').map(e=>e.parentId));
+  return entries.filter(e=>e.type==='file' && e.parentId===parentId && !deleted.has(e.id));
 }
-function createdMs(e) {
-  const c = e.createdAt;
-  if(c?.toMillis) return c.toMillis();
-  if(typeof c === 'number') return c;
-  if(typeof c === 'string') return Date.parse(c) || 0;
-  return 0;
+function renderRelated(files) { if(!files.length) return ''; return `<details class="relatedBox"><summary>📎 相關資料 ${files.length}</summary><div class="relatedPanel"><div class="relatedPanelTitle">相關資料</div>${files.map(f=>`<div class="relatedFile"><button class="openFile" data-file-open="${esc(f.id)}">${esc(f.fileName||'未命名檔案')}</button><span class="relatedFileActions"><button class="btn small secondary" data-file-delete="${esc(f.id)}">刪除</button></span></div>`).join('')}</div></details>`; }
+function renderCard(item, mode) {
+  const replies = buildReplies(item.id); const files = buildFiles(item.id);
+  const childHtml = [`<div class="childLine"><span class="childDot">•</span><span class="childText">${esc(item.content||'')}</span><button class="textEditLink" data-edit-top="${esc(item.id)}">修改</button></div>`].concat(replies.map(r=>`<div class="childLine"><span class="childDot">•</span><span class="childText">${esc(r.content)}</span><button class="textEditLink" data-edit-reply="${esc(r.id)}">修改</button><button class="textEditLink" data-delete-reply="${esc(r.id)}">刪除</button></div>`)).join('');
+  return `<article class="item ${mode==='backup'?'collab':''} ${item.type==='item'?'added':''}"><div class="itemHead"><div class="eventTitleWrap"><span class="eventTitle">${esc(item.title)}</span><button class="textEditLink" data-edit-top="${esc(item.id)}">修改</button></div>${renderRelated(files)}</div><div class="childList">${childHtml}</div><div class="ownerMeta"><span class="ownerPill"><b>主要：</b><span>${esc(item.main)}</span></span><span class="ownerPill"><b>備援：</b><span>${esc(item.backup)}</span></span></div><div class="itemActions"><button class="btn ghost" data-reply="${esc(item.id)}">＋補充內容</button><button class="btn ghost" data-upload="${esc(item.id)}">＋上傳資料</button><button class="btn ghost" data-assign="${esc(item.id)}">調整負責人</button>${item.type==='item'?`<button class="btn ghost" data-delete-item="${esc(item.id)}">刪除大項</button>`:''}</div></article>`;
 }
-function latestOf(list) { return list.slice().sort((a,b)=>createdMs(a)-createdMs(b)).at(-1) || null; }
-function isMine(e) { return currentUser && e.ownerUid === currentUser.uid; }
+function renderContent() { setRoleStyle(currentRole); renderRoleGrid(); $('currentRoleTitle').textContent = currentRole; const items=buildItems(); const main=items.filter(i=>i.main===currentRole); const backup=items.filter(i=>i.backup===currentRole && i.main!==currentRole); $('content').innerHTML = `<section class="sectionBlock"><div class="sectionTitle">主要負責</div>${main.length?main.map(i=>renderCard(i,'main')).join(''):'<div class="empty">目前沒有主要負責項目。</div>'}</section><section class="sectionBlock"><div class="sectionTitle">備援負責</div><p class="sectionHint">原負責人不方便時，需要能接手的事情。</p>${backup.length?backup.map(i=>renderCard(i,'backup')).join(''):'<div class="empty">目前沒有備援負責項目。</div>'}</section>`; renderSchedule(); }
+function showModal(title) { $('modalTitle').textContent = title; const titleNeeded = ['newItem','editTop'].includes(editing?.mode); $('titleField').classList.toggle('hidden', !titleNeeded); $('contentLabel').textContent = editing?.mode==='newItem' ? '小項' : '補充內容'; $('itemTitle').value = editing?.title || ''; $('itemContent').value = editing?.content || ''; $('modalBackdrop').classList.add('show'); }
+function closeModal() { $('modalBackdrop').classList.remove('show'); editing=null; }
+function openEditTop(id) { const item = buildItems().find(i=>i.id===id); if(!item) return; editing={mode:'editTop', parentId:id, title:item.title, content:item.content}; showModal('修改事件'); }
+function openEditReply(id) { const e = entries.find(x=>x.id===id); if(!e) return; const ed=latestByParent('replyEdit').get(id); editing={mode:'editReply', parentId:id, content:ed?.content ?? e.content}; showModal('修改補充內容'); }
+async function saveModal(e) { e.preventDefault(); if(!currentUser) return alert('尚未連線'); const title=$('itemTitle').value.trim(); const content=$('itemContent').value.trim(); if(!content) return; try {
+  if(editing?.mode==='editTop') { if(!confirm('確定要修改這段文字嗎？')) return; await addDoc(entriesCol, {type:'textEdit', parentId:editing.parentId, title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp()}); }
+  else if(editing?.mode==='editReply') { if(!confirm('確定要修改這段文字嗎？')) return; await addDoc(entriesCol, {type:'replyEdit', parentId:editing.parentId, content, ownerUid:currentUser.uid, createdAt:serverTimestamp()}); }
+  else if(editing?.mode==='reply') await addDoc(entriesCol, {type:'reply', parentId:editing.parentId, role:currentRole, content, ownerUid:currentUser.uid, createdAt:serverTimestamp()});
+  else if(editing?.mode==='newItem') await addDoc(entriesCol, {type:'item', role:currentRole, mainRole:currentRole, backupRole:'尚未指定', title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp()});
+  closeModal(); } catch(err) { alert('儲存失敗：'+(err.message||err)); } }
+async function addEventDoc(data) { if(!currentUser) return alert('尚未連線'); await addDoc(entriesCol, {...data, ownerUid:currentUser.uid, createdAt:serverTimestamp()}); }
+function openAssign(id) { const item=buildItems().find(i=>i.id===id); if(!item) return; assignTarget=id; $('mainRoleSelect').innerHTML = ['尚未指定',...ROLES].map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join(''); $('backupRoleSelect').innerHTML = ['尚未指定',...ROLES].map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join(''); $('mainRoleSelect').value=item.main; $('backupRoleSelect').value=item.backup; $('assignBackdrop').classList.add('show'); }
+function closeAssign() { $('assignBackdrop').classList.remove('show'); assignTarget=null; }
+async function saveAssign(e) { e.preventDefault(); await addEventDoc({type:'assign', parentId:assignTarget, mainRole:$('mainRoleSelect').value, backupRole:$('backupRoleSelect').value}); closeAssign(); }
+function openUpload(id) { uploadTarget=id; $('fileInput').value=''; $('fileInput').click(); }
+async function handleFilePicked(e) { const file=e.target.files?.[0]; if(!file || !uploadTarget || !currentUser) return; if(file.size > 20*1024*1024) return alert('單一檔案限制 20MB 以下。'); const path = `fengtung-handover/${currentRole}/${uploadTarget}/${Date.now()}-${file.name}`; try { const storageRef=ref(storage,path); await uploadBytes(storageRef,file); const fileUrl=await getDownloadURL(storageRef); await addDoc(entriesCol, {type:'file', parentId:uploadTarget, role:currentRole, fileName:file.name, fileUrl, storagePath:path, contentType:file.type||'', size:file.size, ownerUid:currentUser.uid, createdAt:serverTimestamp()}); } catch(err) { alert('上傳失敗：'+(err.message||err)); } }
+function openFile(id) { const f=entries.find(e=>e.id===id); if(!f) return; if((f.contentType||'').startsWith('image/')) { $('previewTitle').textContent=f.fileName||'圖片預覽'; $('previewBody').innerHTML=`<img src="${esc(f.fileUrl)}" alt="${esc(f.fileName||'圖片')}">`; $('previewBackdrop').classList.add('show'); history.pushState({preview:true},''); } else window.open(f.fileUrl,'_blank'); }
+function closePreview() { $('previewBackdrop').classList.remove('show'); $('previewBody').innerHTML=''; }
 
-function textEdits(parentId) { return entries.filter(e => e.type === 'textEdit' && e.parentId === parentId); }
-function replyEdits(parentId) { return entries.filter(e => e.type === 'replyEdit' && e.parentId === parentId); }
-function assignments(parentId) { return entries.filter(e => e.type === 'assignment' && e.parentId === parentId); }
-function repliesFor(parentId) { return entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
-function filesFor(parentId) { return entries.filter(e => e.type === 'file' && e.parentId === parentId); }
-function baseById(id) { return BASE_RECORDS.find(r => r.id === id); }
-function entryById(id) { return entries.find(e => e.id === id); }
-function customItems() { return entries.filter(e => e.type === 'item' && !e.parentId); }
+function buildScheduleRows() { const edits=latestByParent('scheduleEdit'); const deletes=new Set(entries.filter(e=>e.type==='scheduleDelete').map(e=>e.parentId)); let rows=BASE_SCHEDULE.filter(r=>!deletes.has(r.id)).map(r=>{ const ed=edits.get(r.id); return {...r, ...(ed?{time:ed.time,task:ed.task,primary:ed.primary,backup:ed.backup,note:ed.note}:{})}; }); entries.filter(e=>e.type==='scheduleRow' && !deletes.has(e.id)).forEach(e=>{ const ed=edits.get(e.id); rows.push({id:e.id, order:e.order||Date.now(), time:ed?.time??e.time??'', task:ed?.task??e.task??'', primary:ed?.primary??e.primary??'', backup:ed?.backup??e.backup??'', note:ed?.note??e.note??''}); }); return rows.sort((a,b)=>(a.order||0)-(b.order||0)); }
+function getScheduleTitle() { const ts=entries.filter(e=>e.type==='scheduleTitle'); return ts.length ? (ts[ts.length-1].title || '成果展進度表') : '成果展進度表'; }
+function renderSchedule() { const title=getScheduleTitle(); $('scheduleSummary').firstChild.nodeValue = title; $('scheduleTitleText').textContent = title; const rows=buildScheduleRows(); const html=`<table class="scheduleTable"><thead><tr><th class="timeCol">時間</th><th class="taskCol">事項</th><th class="personCol">主要負責人</th><th class="personCol">協助負責人</th><th class="noteCol">備註</th><th class="opsCol">操作</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td class="timeCol">${esc(r.time)}</td><td class="taskCol">${esc(r.task)}</td><td class="personCol">${esc(r.primary)}</td><td class="personCol">${esc(r.backup)}</td><td class="noteCol">${esc(r.note)}</td><td class="opsCol"><div class="scheduleActions"><button class="btn small ghost" data-schedule-edit="${esc(r.id)}">修改</button><button class="btn small ghost" data-schedule-insert-above="${esc(r.id)}">上方新增</button><button class="btn small ghost" data-schedule-insert-below="${esc(r.id)}">下方新增</button><button class="btn small danger" data-schedule-delete="${esc(r.id)}">刪除</button></div></td></tr>`).join('')}</tbody></table>`; $('scheduleContent').innerHTML=html; }
+function openScheduleModal(mode,id) { const rows=buildScheduleRows(); let row=rows.find(r=>r.id===id); scheduleEditing={mode,id}; $('scheduleModalTitle').textContent = mode==='edit'?'修改進度表列':'新增進度表列'; $('scheduleTime').value = mode==='edit'?(row?.time||''):''; $('scheduleTask').value = mode==='edit'?(row?.task||''):''; $('schedulePrimary').value = mode==='edit'?(row?.primary||''):''; $('scheduleBackup').value = mode==='edit'?(row?.backup||''):''; $('scheduleNote').value = mode==='edit'?(row?.note||''):''; $('scheduleModalBackdrop').classList.add('show'); }
+function closeScheduleModal() { $('scheduleModalBackdrop').classList.remove('show'); scheduleEditing=null; }
+function orderForInsert(id, below) { const rows=buildScheduleRows(); const i=rows.findIndex(r=>r.id===id); if(i<0) return Date.now(); if(below) { const curr=rows[i].order||0, next=rows[i+1]?.order; return next ? (curr+next)/2 : curr+1000; } else { const curr=rows[i].order||0, prev=rows[i-1]?.order; return prev ? (prev+curr)/2 : curr-1000; } }
+async function saveSchedule(e) { e.preventDefault(); const data={time:$('scheduleTime').value.trim(), task:$('scheduleTask').value.trim(), primary:$('schedulePrimary').value.trim(), backup:$('scheduleBackup').value.trim(), note:$('scheduleNote').value.trim()}; if(!data.task) return; try { if(scheduleEditing.mode==='edit') await addEventDoc({type:'scheduleEdit', parentId:scheduleEditing.id, ...data}); else await addEventDoc({type:'scheduleRow', order:orderForInsert(scheduleEditing.id, scheduleEditing.mode==='below'), ...data}); closeScheduleModal(); } catch(err) { alert('儲存失敗：'+(err.message||err)); } }
+async function editScheduleTitle() { const old=getScheduleTitle(); const title=prompt('請輸入進度表名稱', old); if(title===null) return; const t=title.trim(); if(!t) return; await addEventDoc({type:'scheduleTitle', title:t}); }
 
-function latestTextEdit(id) { return latestOf(textEdits(id)); }
-function latestReplyEdit(id) { return latestOf(replyEdits(id)); }
-function latestAssignment(id) { return latestOf(assignments(id)); }
-function defaultBackup(record) {
-  const first = (record.collabs || []).map(normalizeRole).find(r => r && r !== normalizeRole(record.main));
-  return first || '尚未指定';
-}
-function effectiveMain(record) {
-  const a = latestAssignment(record.id);
-  if(a?.primaryRole) return normalizeRole(a.primaryRole);
-  return normalizeRole(record.main || record.role || '尚未指定');
-}
-function effectiveBackup(record) {
-  const a = latestAssignment(record.id);
-  if(a?.backupRole) return normalizeRole(a.backupRole);
-  if(record.kind === 'base') return defaultBackup(record);
-  return normalizeRole(record.backupRole || '尚未指定');
-}
-function displayRecord(record) {
-  const edit = latestTextEdit(record.id);
-  return {
-    id: record.id,
-    title: edit?.title || record.item || record.title || '新增項目',
-    content: edit?.content ?? (record.description ?? record.content ?? ''),
-    main: effectiveMain(record),
-    backup: effectiveBackup(record)
-  };
-}
-function primaryForRole(record, role) { return expandsToRole(effectiveMain(record), role); }
-function backupForRole(record, role) { return !primaryForRole(record, role) && expandsToRole(effectiveBackup(record), role); }
-
-/* 成果展進度表 */
-function scheduleDeletes() { return new Set(entries.filter(e => e.type === 'scheduleDelete').map(e => e.parentId)); }
-function scheduleEdits(id) { return entries.filter(e => e.type === 'scheduleEdit' && e.parentId === id); }
-function scheduleDisplay(row) {
-  const e = latestOf(scheduleEdits(row.id));
-  return {
-    id: row.id,
-    time: e?.time ?? row.time ?? '',
-    task: e?.task ?? row.task ?? '',
-    primary: e?.primary ?? row.primary ?? '',
-    backup: e?.backup ?? row.backup ?? '',
-    note: e?.note ?? row.note ?? '',
-    order: row.order ?? 0
-  };
-}
-function allScheduleRows() {
-  const del = scheduleDeletes();
-  const bases = SCHEDULE_ROWS.filter(r => !del.has(r.id)).map((r,i) => scheduleDisplay({...r, order:i+1}));
-  const customs = entries.filter(e => e.type === 'scheduleRow' && !del.has(e.id)).map(e => scheduleDisplay({...e, order:e.order || createdMs(e) || 999999}));
-  return [...bases, ...customs].sort((a,b)=>(a.order||0)-(b.order||0));
-}
-function renderSchedule() {
-  const rows = allScheduleRows();
-  $('scheduleContent').innerHTML = `<table class="scheduleTable">
-    <thead><tr>
-      <th class="timeCol">時間</th>
-      <th class="taskCol">事項</th>
-      <th class="personCol">主要負責人</th>
-      <th class="personCol">協助負責人</th>
-      <th class="noteCol">備註</th>
-    </tr></thead>
-    <tbody>
-      ${rows.map(r => `<tr>
-        <td class="timeCol">${esc(r.time)}</td>
-        <td class="taskCol">${esc(r.task)}<div class="scheduleActions"><button class="btn secondary small" data-schedule-edit="${esc(r.id)}">修改</button><button class="btn danger small" data-schedule-delete="${esc(r.id)}">刪除</button></div></td>
-        <td>${esc(r.primary)}</td>
-        <td>${esc(r.backup)}</td>
-        <td>${esc(r.note)}</td>
-      </tr>`).join('')}
-    </tbody>
-  </table>`;
-}
-function openScheduleModal(id=null) {
-  if(!currentUser) { alert('Firebase 連線尚未完成，請稍後再試。'); return; }
-  scheduleEditing = id ? { mode:'edit', id } : { mode:'new' };
-  let d = { time:'', task:'', primary:'', backup:'', note:'' };
-  if(id) d = allScheduleRows().find(r => r.id === id) || d;
-  $('scheduleModalTitle').textContent = id ? '修改行程' : '新增行程';
-  $('scheduleTime').value = d.time || '';
-  $('scheduleTask').value = d.task || '';
-  $('schedulePrimary').value = d.primary || '';
-  $('scheduleBackup').value = d.backup || '';
-  $('scheduleNote').value = d.note || '';
-  $('scheduleModalBackdrop').classList.add('show');
-  setTimeout(()=>$('scheduleTask').focus(), 50);
-}
-function closeScheduleModal() {
-  $('scheduleModalBackdrop').classList.remove('show');
-  scheduleEditing = null;
-}
-async function saveSchedule(e) {
-  e.preventDefault();
-  if(!currentUser) return;
-  const data = {
-    time: $('scheduleTime').value.trim(),
-    task: $('scheduleTask').value.trim(),
-    primary: $('schedulePrimary').value.trim(),
-    backup: $('scheduleBackup').value.trim(),
-    note: $('scheduleNote').value.trim()
-  };
-  if(!data.task) return;
-  try {
-    if(scheduleEditing?.mode === 'edit') {
-      if(!confirm('確定要修改這一列行程嗎？')) return;
-      await addDoc(entriesCol, { type:'scheduleEdit', parentId:scheduleEditing.id, ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else {
-      await addDoc(entriesCol, { type:'scheduleRow', ...data, order:Date.now(), ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    }
-    closeScheduleModal();
-  } catch(err) { alert('儲存行程失敗：' + (err.message || err)); }
-}
-async function deleteScheduleRow(id) {
-  if(!currentUser) { alert('Firebase 連線尚未完成，請稍後再試。'); return; }
-  if(!confirm('確定要刪除這一列行程嗎？')) return;
-  try {
-    await addDoc(entriesCol, { type:'scheduleDelete', parentId:id, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-  } catch(err) { alert('刪除行程失敗：' + (err.message || err)); }
-}
-
-/* 交接資料庫 */
-function renderRoles() {
-  $('roleGrid').innerHTML = ROLES.map(r => {
-    const c = roleStyle(r.id);
-    return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" data-role="${esc(r.id)}">${esc(r.name)}</button>`;
-  }).join('');
-}
-function eventLine(text, editAttr='', deleteHtml='') {
-  if(!text) return '';
-  return `<div class="eventLine"><span class="dot">•</span><span class="lineText">${esc(text)}</span>${editAttr ? ` <button class="textEditLink" ${editAttr}>修改</button>` : ''}${deleteHtml}</div>`;
-}
-function childLines(parentId) {
-  const replies = repliesFor(parentId);
-  return replies.map(e => {
-    const edit = latestReplyEdit(e.id);
-    const content = edit?.content ?? e.content ?? '';
-    const del = isMine(e) ? ` <button class="btn danger small" data-delete="${esc(e.id)}">刪除</button>` : '';
-    return eventLine(content, `data-edit-reply="${esc(e.id)}"`, del);
-  }).join('');
-}
-function isImageFile(f) {
-  return (f.contentType || '').startsWith('image/') || /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(f.fileName || '');
-}
-function fileIcon(f) {
-  const t = f.contentType || '';
-  const name = (f.fileName || '').toLowerCase();
-  if(isImageFile(f)) return '🖼️';
-  if(t === 'application/pdf' || name.endsWith('.pdf')) return '📄';
-  if(name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
-  if(name.endsWith('.xls') || name.endsWith('.xlsx')) return '📊';
-  return '📎';
-}
-function relatedMaterials(parentId) {
-  const files = filesFor(parentId);
-  if(!files.length) return '';
-  return `<details class="relatedBox">
-    <summary>📎 相關資料 ${files.length}</summary>
-    <div class="relatedPanel">
-      <div class="relatedPanelTitle">相關資料</div>
-      ${files.map(f => `<div class="relatedFile">
-        <button class="openFile" data-file-open="${esc(f.id)}" title="${esc(f.fileName || '資料')}">${fileIcon(f)} ${esc(f.fileName || '資料')}</button>
-        <span class="relatedFileActions">${isMine(f) ? `<button class="btn danger small" data-file-delete="${esc(f.id)}">刪除</button>` : ''}</span>
-      </div>`).join('')}
-    </div>
-  </details>`;
-}
-function ownerMeta(d) {
-  return `<div class="ownerMeta"><span class="ownerPill">主要：<span>${esc(roleDisplayName(d.main))}</span></span><span class="ownerPill">備援：<span>${esc(roleDisplayName(d.backup))}</span></span></div>`;
-}
-function actionButtons(parentId) {
-  return `<div class="itemActions">
-    <button class="btn ghost" data-reply="${esc(parentId)}">＋補充內容</button>
-    <button class="btn ghost" data-upload="${esc(parentId)}">＋上傳資料</button>
-    <button class="btn ghost" data-assign="${esc(parentId)}">調整負責人</button>
-  </div>`;
-}
-function renderCard(record, mode='main', deletable=false) {
-  const d = displayRecord(record);
-  return `<article class="item ${mode === 'backup' ? 'collab' : ''} ${record.type === 'item' ? 'added' : ''}">
-    <div class="itemHead">
-      <div class="eventTitleWrap"><span class="eventTitle">${esc(d.title)}</span><button class="textEditLink" data-edit-top="${esc(record.id)}">修改</button></div>
-      ${relatedMaterials(record.id)}
-    </div>
-    <div class="eventLines">
-      ${eventLine(d.content, `data-edit-top="${esc(record.id)}"`)}
-      ${childLines(record.id)}
-    </div>
-    ${ownerMeta(d)}
-    ${deletable ? `<div style="margin-top:5px"><button class="btn danger small" data-delete="${esc(record.id)}">刪除</button></div>` : ''}
-    ${actionButtons(record.id)}
-  </article>`;
-}
-function sectionHtml(title, hint, cards) {
-  if(!cards.length) return '';
-  return `<div class="sectionBlock"><div><div class="sectionTitle">${esc(title)}</div>${hint ? `<div class="sectionHint">${esc(hint)}</div>` : ''}</div>${cards.join('')}</div>`;
-}
-function renderContent() {
-  const primaryBases = BASE_RECORDS.filter(r => primaryForRole(r, currentRole)).map(r => renderCard(r, 'main'));
-  const primaryItems = customItems().filter(e => primaryForRole(e, currentRole)).map(e => renderCard(e, 'main', isMine(e)));
-  const backupBases = BASE_RECORDS.filter(r => backupForRole(r, currentRole)).map(r => renderCard(r, 'backup'));
-  const backupItems = customItems().filter(e => backupForRole(e, currentRole)).map(e => renderCard(e, 'backup', isMine(e)));
-  $('content').innerHTML = [
-    sectionHtml('主要負責', '', [...primaryBases, ...primaryItems]),
-    sectionHtml('備援負責', '原負責人不方便時，需要能接手的事情。', [...backupBases, ...backupItems])
-  ].join('') || '<div class="empty">目前還沒有內容。</div>';
-}
-function render() {
-  setRoleVars(currentRole);
-  renderRoles();
-  $('currentRoleTitle').textContent = roleDisplayName(currentRole);
-  renderSchedule();
-  renderContent();
-}
-
-/* 一般內容 modal */
-function closeModal() {
-  $('modalBackdrop').classList.remove('show');
-  $('titleInput').value = '';
-  $('contentInput').value = '';
-  editing = null;
-}
-function configureModal() {
-  const needsTitle = editing?.mode === 'newItem' || editing?.mode === 'editTop';
-  $('titleField').classList.toggle('hidden', !needsTitle);
-  $('titleInput').required = needsTitle;
-  $('contentLabel').textContent = editing?.mode === 'newItem' ? '小項' : (editing?.mode === 'editTop' ? '內容' : '補充內容');
-  $('contentInput').placeholder = editing?.mode === 'newItem' ? '把這一項要記錄的細項內容寫在這裡' : '把要補充或修改的內容寫在這裡';
-}
-function showModal(title, contentValue='', titleValue='') {
-  $('modalTitle').textContent = title;
-  $('contentInput').value = contentValue || '';
-  $('titleInput').value = titleValue || '';
-  configureModal();
-  $('modalBackdrop').classList.add('show');
-  setTimeout(() => (editing?.mode === 'newItem' || editing?.mode === 'editTop' ? $('titleInput') : $('contentInput')).focus(), 60);
-}
-async function saveModal(e) {
-  e.preventDefault();
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const content = $('contentInput').value.trim();
-  const title = $('titleInput').value.trim();
-  if(!content) return;
-  try {
-    if(editing?.mode === 'editTop') {
-      if(!title) return;
-      if(!confirm('確定要修改這段文字嗎？')) return;
-      await addDoc(entriesCol, { type:'textEdit', parentId:editing.parentId, title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else if(editing?.mode === 'editReply') {
-      if(!confirm('確定要修改這段文字嗎？')) return;
-      await addDoc(entriesCol, { type:'replyEdit', parentId:editing.parentId, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else if(editing?.mode === 'reply') {
-      await addDoc(entriesCol, { type:'reply', role:currentRole, parentId:editing.parentId, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else if(editing?.mode === 'newItem') {
-      if(!title) return;
-      await addDoc(entriesCol, { type:'item', role:currentRole, title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    }
-    closeModal();
-  } catch(err) {
-    console.error(err);
-    alert('儲存失敗：' + (err.message || err));
-  }
-}
-function openEditTop(parentId) {
-  const base = baseById(parentId);
-  const item = entryById(parentId);
-  const rec = base || item;
-  if(!rec) return;
-  const d = displayRecord(rec);
-  editing = { mode:'editTop', parentId };
-  showModal('修改事件', d.content || '', d.title || '');
-}
-function openEditReply(parentId) {
-  const reply = entryById(parentId);
-  if(!reply) return;
-  const edit = latestReplyEdit(parentId);
-  editing = { mode:'editReply', parentId };
-  showModal('修改補充內容', edit?.content ?? reply.content ?? '');
-}
-async function deleteEntry(id) {
-  const entry = entryById(id);
-  if(!entry || !isMine(entry)) return;
-  if(!confirm('確定刪除這一筆內容？')) return;
-  try { await deleteDoc(doc(db, 'fengtungHandoverEntries', id)); }
-  catch(err) { alert('刪除失敗：' + (err.message || err)); }
-}
-
-/* 檔案上傳與預覽 */
-function openUpload(parentId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  uploadTarget = parentId;
-  $('fileInput').value = '';
-  $('fileInput').click();
-}
-async function handleFilePicked(e) {
-  const file = e.target.files && e.target.files[0];
-  if(!file || !uploadTarget || !currentUser) return;
-  if(file.size > 20 * 1024 * 1024) { alert('檔案不能超過 20MB。'); return; }
-  $('statusText').textContent = '檔案上傳中…';
-  const path = `fengtung-handover/${safePart(currentRole)}/${safePart(uploadTarget)}/${Date.now()}-${safePart(file.name)}`;
-  try {
-    const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, file, { contentType:file.type || 'application/octet-stream' });
-    const fileUrl = await getDownloadURL(storageRef);
-    await addDoc(entriesCol, { type:'file', role:currentRole, parentId:uploadTarget, fileName:file.name, fileUrl, storagePath:path, contentType:file.type || '', size:file.size, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-  } catch(err) {
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-    alert('上傳失敗：' + (err.message || err));
-  }
-}
-async function deleteFileEntry(id) {
-  const f = entryById(id);
-  if(!f || !isMine(f)) return;
-  if(!confirm('確定刪除這筆相關資料？')) return;
-  try {
-    if(f.storagePath) await deleteObject(ref(storage, f.storagePath)).catch(() => {});
-    await deleteDoc(doc(db, 'fengtungHandoverEntries', id));
-  } catch(err) { alert('刪除相關資料失敗：' + (err.message || err)); }
-}
-function openFile(id) {
-  const f = entryById(id);
-  if(!f) return;
-  if(isImageFile(f)) {
-    $('previewTitle').textContent = f.fileName || '圖片預覽';
-    $('previewBody').innerHTML = `<img src="${esc(f.fileUrl)}" alt="${esc(f.fileName || '圖片')}"/>`;
-    $('previewBackdrop').classList.add('show');
-  } else {
-    window.open(f.fileUrl, '_blank', 'noopener');
-  }
-}
-function closePreview() {
-  $('previewBackdrop').classList.remove('show');
-  $('previewBody').innerHTML = '';
-}
-
-/* 負責人 */
-function openAssign(parentId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  assignTarget = parentId;
-  const rec = baseById(parentId) || entryById(parentId);
-  if(!rec) return;
-  $('mainRoleSelect').value = effectiveMain(rec);
-  $('backupRoleSelect').value = effectiveBackup(rec);
-  $('assignBackdrop').classList.add('show');
-}
-function closeAssign() {
-  $('assignBackdrop').classList.remove('show');
-  assignTarget = null;
-}
-async function saveAssign(e) {
-  e.preventDefault();
-  if(!currentUser || !assignTarget) return;
-  try {
-    await addDoc(entriesCol, { type:'assignment', parentId:assignTarget, primaryRole:$('mainRoleSelect').value, backupRole:$('backupRoleSelect').value, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    closeAssign();
-  } catch(err) { alert('調整負責人失敗：' + (err.message || err)); }
-}
-
-/* events */
-$('roleGrid').addEventListener('click', e => {
-  const btn = e.target.closest('[data-role]');
-  if(!btn) return;
-  currentRole = btn.dataset.role;
-  render();
-});
-$('content').addEventListener('click', e => {
-  const reply = e.target.closest('[data-reply]');
-  const editTop = e.target.closest('[data-edit-top]');
-  const editReply = e.target.closest('[data-edit-reply]');
-  const del = e.target.closest('[data-delete]');
-  const upload = e.target.closest('[data-upload]');
-  const fileDel = e.target.closest('[data-file-delete]');
-  const fileOpen = e.target.closest('[data-file-open]');
-  const assign = e.target.closest('[data-assign]');
-  if(reply) { editing = { mode:'reply', parentId:reply.dataset.reply }; showModal('補充內容'); return; }
-  if(editTop) { openEditTop(editTop.dataset.editTop); return; }
-  if(editReply) { openEditReply(editReply.dataset.editReply); return; }
-  if(del) { deleteEntry(del.dataset.delete); return; }
-  if(upload) { openUpload(upload.dataset.upload); return; }
-  if(fileDel) { deleteFileEntry(fileDel.dataset.fileDelete); return; }
-  if(fileOpen) { openFile(fileOpen.dataset.fileOpen); return; }
-  if(assign) { openAssign(assign.dataset.assign); return; }
-});
-$('scheduleContent').addEventListener('click', e => {
-  const edit = e.target.closest('[data-schedule-edit]');
-  const del = e.target.closest('[data-schedule-delete]');
-  if(edit) { openScheduleModal(edit.dataset.scheduleEdit); return; }
-  if(del) { deleteScheduleRow(del.dataset.scheduleDelete); return; }
-});
-$('addScheduleBtn').addEventListener('click', () => openScheduleModal());
-$('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
-$('cancelModalBtn').addEventListener('click', closeModal);
-$('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
-$('modalForm').addEventListener('submit', saveModal);
-$('fileInput').addEventListener('change', handleFilePicked);
-$('cancelAssignBtn').addEventListener('click', closeAssign);
-$('assignBackdrop').addEventListener('click', e => { if(e.target.id === 'assignBackdrop') closeAssign(); });
-$('assignForm').addEventListener('submit', saveAssign);
-$('cancelScheduleBtn').addEventListener('click', closeScheduleModal);
-$('scheduleModalBackdrop').addEventListener('click', e => { if(e.target.id === 'scheduleModalBackdrop') closeScheduleModal(); });
-$('scheduleForm').addEventListener('submit', saveSchedule);
-$('closePreviewBtn').addEventListener('click', closePreview);
-$('previewBackdrop').addEventListener('click', e => { if(e.target.id === 'previewBackdrop') closePreview(); });
-document.addEventListener('keydown', e => { if(e.key === 'Escape') { closePreview(); closeModal(); closeAssign(); closeScheduleModal(); } });
-
-const roleOptions = ROLES.map(r => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('') + `<option value="尚未指定">尚未指定</option>`;
-$('mainRoleSelect').innerHTML = roleOptions;
-$('backupRoleSelect').innerHTML = roleOptions;
-
-render();
-
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if(user) {
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-    render();
-  }
-});
-signInAnonymously(auth).catch(err => {
-  console.error(err);
-  $('statusText').textContent = 'Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。';
-});
-onSnapshot(query(entriesCol, orderBy('createdAt', 'asc')), snap => {
-  entries = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  render();
-}, err => {
-  console.error(err);
-  $('statusText').textContent = 'Firestore 讀取失敗，請確認規則已發布。';
-});
+$('roleGrid').addEventListener('click', e=>{ const btn=e.target.closest('[data-role]'); if(!btn) return; currentRole=btn.dataset.role; renderContent(); });
+$('content').addEventListener('click', async e=>{ const t=e.target; const reply=t.closest('[data-reply]'), editTop=t.closest('[data-edit-top]'), editReply=t.closest('[data-edit-reply]'), delReply=t.closest('[data-delete-reply]'), delItem=t.closest('[data-delete-item]'), upload=t.closest('[data-upload]'), fileDel=t.closest('[data-file-delete]'), fileOpen=t.closest('[data-file-open]'), assign=t.closest('[data-assign]'); if(reply) { editing={mode:'reply',parentId:reply.dataset.reply}; showModal('補充內容'); } else if(editTop) openEditTop(editTop.dataset.editTop); else if(editReply) openEditReply(editReply.dataset.editReply); else if(delReply && confirm('確定要刪除這一筆補充內容嗎？')) await addEventDoc({type:'deleteReply', parentId:delReply.dataset.deleteReply}); else if(delItem && confirm('確定要刪除這個大項嗎？')) await addEventDoc({type:'deleteItem', parentId:delItem.dataset.deleteItem}); else if(upload) openUpload(upload.dataset.upload); else if(fileDel && confirm('確定要刪除這個資料連結嗎？')) await addEventDoc({type:'fileDelete', parentId:fileDel.dataset.fileDelete}); else if(fileOpen) openFile(fileOpen.dataset.fileOpen); else if(assign) openAssign(assign.dataset.assign); });
+$('scheduleContent').addEventListener('click', async e=>{ const t=e.target; const ed=t.closest('[data-schedule-edit]'), above=t.closest('[data-schedule-insert-above]'), below=t.closest('[data-schedule-insert-below]'), del=t.closest('[data-schedule-delete]'); if(ed) openScheduleModal('edit',ed.dataset.scheduleEdit); else if(above) openScheduleModal('above',above.dataset.scheduleInsertAbove); else if(below) openScheduleModal('below',below.dataset.scheduleInsertBelow); else if(del && confirm('確定要刪除這一列嗎？')) await addEventDoc({type:'scheduleDelete', parentId:del.dataset.scheduleDelete}); });
+$('editScheduleTitleBtn').addEventListener('click', editScheduleTitle);
+$('addItemBtn').addEventListener('click',()=>{ editing={mode:'newItem'}; showModal('新增一項'); });
+$('cancelModalBtn').addEventListener('click', closeModal); $('modalBackdrop').addEventListener('click',e=>{ if(e.target.id==='modalBackdrop') closeModal(); }); $('modalForm').addEventListener('submit',saveModal);
+$('cancelAssignBtn').addEventListener('click', closeAssign); $('assignBackdrop').addEventListener('click',e=>{ if(e.target.id==='assignBackdrop') closeAssign(); }); $('assignForm').addEventListener('submit',saveAssign);
+$('cancelScheduleBtn').addEventListener('click', closeScheduleModal); $('scheduleModalBackdrop').addEventListener('click',e=>{ if(e.target.id==='scheduleModalBackdrop') closeScheduleModal(); }); $('scheduleForm').addEventListener('submit',saveSchedule);
+$('fileInput').addEventListener('change', handleFilePicked); $('closePreviewBtn').addEventListener('click', closePreview); $('previewBackdrop').addEventListener('click', e=>{ if(e.target.id==='previewBackdrop') closePreview(); }); window.addEventListener('popstate',()=>closePreview()); document.addEventListener('keydown',e=>{ if(e.key==='Escape') { closePreview(); closeModal(); closeAssign(); closeScheduleModal(); } });
+renderContent();
+onAuthStateChanged(auth, user=>{ currentUser=user; if(user) renderContent(); });
+signInAnonymously(auth).catch(err=>{ console.error(err); alert('Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。'); });
+onSnapshot(query(entriesCol, orderBy('createdAt','asc')), snap=>{ entries=snap.docs.map(d=>({id:d.id,...d.data()})); renderContent(); }, err=>{ console.error(err); alert('Firestore 讀取失敗，請確認規則已發布。'); });
 </script>
 </body>
 </html>
