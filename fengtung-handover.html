@@ -52,9 +52,12 @@ button, textarea, input { font:inherit; }
 .childLine { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
 .childText { white-space:pre-wrap; }
 .attachments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.attachmentBox { margin-top:10px; }
+.attachmentBox summary { display:inline-block; cursor:pointer; color:var(--roleAccent); font-weight:900; border:1px solid var(--line); border-radius:999px; padding:5px 11px; background:#fff; list-style:none; }
+.attachmentBox summary::-webkit-details-marker { display:none; }
 .attachment { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
 .attachment a { color:var(--roleAccent); font-weight:800; text-decoration:none; }
-.attachment img { display:block; max-width:220px; max-height:160px; border-radius:10px; margin-top:6px; border:1px solid var(--line); object-fit:cover; }
+.attachment img { display:none; max-width:220px; max-height:160px; border-radius:10px; margin-top:6px; border:1px solid var(--line); object-fit:cover; }
 .empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
 .status { color:var(--muted); font-size:14px; margin:0 0 10px; }
 .modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
@@ -71,9 +74,9 @@ textarea { min-height:150px; resize:vertical; }
 
 /* 成果展進度表：A4 預覽、手機可左右滑動，避免右側空白框跑版 */
 .progressSection { background:#fffdf8; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); margin:14px 0 18px; overflow:hidden; }
-.progressTop { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 22px; border-bottom:1px solid var(--line); }
-.progressTop h2 { margin:0; font-size:clamp(26px,5vw,38px); letter-spacing:.03em; }
-.progressToggle { background:transparent; border:none; color:#6a5f52; font-weight:900; font-size:18px; cursor:pointer; padding:8px 4px; }
+.progressTop { display:flex; align-items:center; justify-content:center; gap:12px; padding:18px 22px; border-bottom:1px solid var(--line); background:#b52b1f; color:#fff; position:relative; text-align:center; }
+.progressTop h2 { margin:0; font-size:clamp(24px,4.6vw,36px); letter-spacing:.03em; color:#fff; flex:1; }
+.progressToggle { position:absolute; right:18px; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.45); border-radius:999px; color:#fff; font-weight:900; font-size:16px; cursor:pointer; padding:6px 12px; }
 .progressBody { padding:16px; }
 .progressBody.collapsed { display:none; }
 .progressTabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0 0 14px; }
@@ -109,7 +112,8 @@ textarea { min-height:150px; resize:vertical; }
 .roleTag { font-size:13px; padding:5px 9px; }
 .itemHead h3 .btn.small { font-size:13px; padding:2px 7px; }
 @media (max-width:620px) {
-  .progressTop { padding:14px 16px; }
+  .progressTop { padding:14px 72px 14px 16px; }
+  .progressToggle { right:12px; font-size:14px; padding:5px 10px; }
   .progressBody { padding:12px 10px; }
   .progressScroll { padding:7px; }
   .progressPaper { width:920px; padding:14px; }
@@ -141,10 +145,10 @@ textarea { min-height:150px; resize:vertical; }
 
     <section class="progressSection" id="progressSection">
       <div class="progressTop">
-        <h2>成果展進度表</h2>
-        <button type="button" class="progressToggle" id="progressToggleBtn">收合</button>
+        <h2>初賽／決賽／成果展進度表</h2>
+        <button type="button" class="progressToggle" id="progressToggleBtn">展開</button>
       </div>
-      <div class="progressBody" id="progressBody">
+      <div class="progressBody collapsed" id="progressBody">
         <div class="progressTabs" id="progressTabs"></div>
         <div class="progressTitleRow">
           <h3 id="progressTitleText">成果展進度表</h3>
@@ -1055,19 +1059,18 @@ function childLines(parentId) {
 function attachmentLines(parentId) {
   const files = filesFor(parentId);
   if(!files.length) return '';
-  return `<div class="attachments">${files.map(f => `
+  return `<details class="attachmentBox"><summary>📎 相關資料 ${files.length}</summary><div class="attachments">${files.map(f => `
     <div class="attachment">
-      <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener">📎 ${esc(f.fileName || '附件')}</a>
-      ${f.contentType && f.contentType.startsWith('image/') ? `<img src="${esc(f.fileUrl)}" alt="${esc(f.fileName || '圖片')}">` : ''}
+      <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener">${esc(f.fileName || '相關資料')}</a>
       ${isMine(f) ? ` <button type="button" class="btn danger small" data-file-delete="${f.id}">刪除</button>` : ''}
     </div>
-  `).join('')}</div>`;
+  `).join('')}</div></details>`;
 }
 
 function actionButtons(parentId) {
   return `<div class="itemActions">
     <button type="button" class="btn ghost" data-reply="${esc(parentId)}">＋補充內容</button>
-    <button type="button" class="btn ghost" data-upload="${esc(parentId)}">＋上傳檔案</button>
+    <button type="button" class="btn ghost" data-upload="${esc(parentId)}">＋上傳資料</button>
   </div>`;
 }
 
