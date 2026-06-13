@@ -76,11 +76,6 @@ textarea { min-height:150px; resize:vertical; }
 .progressToggle { background:transparent; border:none; color:#6a5f52; font-weight:900; font-size:18px; cursor:pointer; padding:8px 4px; }
 .progressBody { padding:16px; }
 .progressBody.collapsed { display:none; }
-.progressTabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0 0 14px; }
-.progressTab { border:1px solid #b43a32; background:#c94a3f; color:#fff; border-radius:14px; padding:10px 8px; font-weight:900; cursor:pointer; box-shadow:0 4px 10px rgba(150,40,30,.14); }
-.progressTab.active { background:#9f2f2a; color:#fff; border-color:#7f231f; box-shadow:0 0 0 3px rgba(255,255,255,.85), 0 5px 14px rgba(120,35,30,.18); }
-.progressRoleCell { font-weight:900; }
-.progressRoleCell .progressMiniBtn { background:rgba(255,255,255,.86); }
 .progressTitleRow { display:flex; align-items:center; justify-content:center; gap:14px; margin:4px 0 16px; flex-wrap:wrap; }
 .progressTitleRow h3 { margin:0; font-size:clamp(25px,5vw,40px); line-height:1.2; font-weight:950; letter-spacing:.04em; }
 .progressAddBtn { margin:0 0 12px; }
@@ -1104,8 +1099,7 @@ function render() {
   setRoleVars(currentRole);
   renderRoles();
   $('currentRoleTitle').textContent = roleDisplayName(currentRole);
-  renderProgress();
-  renderContent();
+  render();
 }
 
 function closeModal() {
@@ -1354,9 +1348,9 @@ async function saveProgressModal(e) {
   try {
     if(progressModalState?.mode === 'new') {
       const scheduleId = currentProgressKey + '-progress-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
-      await addDoc(entriesCol, { type:'progressRow', scheduleId, order:progressModalState.order ?? Date.now(), ...data });
+      await addDoc(entriesCol, { type:'progressRow', scheduleId, order:progressModalState.order ?? Date.now(), ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
     } else if(progressModalState?.mode === 'edit') {
-      await addDoc(entriesCol, { type:'progressEdit', scheduleId:progressModalState.rowId, ...data });
+      await addDoc(entriesCol, { type:'progressEdit', scheduleId:progressModalState.rowId, ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
     }
     closeProgressModal();
   } catch(err) { alert('儲存行程失敗：' + (err.message || err)); }
@@ -1461,7 +1455,7 @@ $('progressTabs').addEventListener('click', e => {
   const tab = e.target.closest('[data-progress-tab]');
   if(!tab) return;
   currentProgressKey = tab.dataset.progressTab;
-  renderProgress();
+  render();
 });
 $('progressTable').addEventListener('click', e => {
   const cell = e.target.closest('[data-progress-cell]');
@@ -1500,13 +1494,14 @@ $('modalForm').addEventListener('submit', saveModal);
 $('fileInput').addEventListener('change', handleFilePicked);
 
 render();
+setTimeout(render, 500);
+setTimeout(render, 1500);
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
   if(user) {
     $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-    renderProgress();
-    renderContent();
+    render();
   }
 });
 
@@ -1517,8 +1512,7 @@ signInAnonymously(auth).catch(err => {
 
 onSnapshot(query(entriesCol, orderBy('createdAt', 'asc')), snap => {
   entries = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  renderProgress();
-  renderContent();
+  render();
 }, err => {
   console.error(err);
   $('statusText').textContent = 'Firestore 讀取失敗，請確認規則已發布。';
