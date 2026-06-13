@@ -5,135 +5,127 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>豐東管樂交接資料庫</title>
 <style>
-:root {
+:root{
   --bg:#f7f4ed;
   --panel:#fffdf8;
   --text:#2d2922;
   --muted:#7a7166;
   --line:#e4d9c8;
-  --roleBg:#DDEBF7;
-  --roleAccent:#5B9BD5;
+  --role-bg:#DDEBF7;
+  --role-accent:#5B9BD5;
   --danger:#b94a48;
   --shadow:0 12px 28px rgba(48,39,24,.10);
 }
-* { box-sizing:border-box; }
-body {
+*{box-sizing:border-box;}
+body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
   background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%);
   color:var(--text);
-  line-height:1.7;
+  line-height:1.65;
 }
-.wrap { max-width:1080px; margin:0 auto; }
-header { padding:22px 14px 8px; }
-.hero { background:#fff; border:1px solid var(--line); border-radius:22px; padding:22px 20px; box-shadow:var(--shadow); }
-.hero h1 { margin:0; font-size:clamp(26px,5vw,40px); letter-spacing:.05em; text-align:center; }
-main { padding:10px 14px 34px; }
-.roleGrid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin:16px 0 18px; }
-.roleBtn { appearance:none; border:2px solid transparent; border-radius:18px; padding:18px 10px; min-height:76px; cursor:pointer; font-weight:900; font-size:20px; color:#2d2922; box-shadow:0 7px 18px rgba(41,32,18,.07); transition:.16s; }
-.roleBtn:hover { transform:translateY(-2px); }
-.roleBtn.active { border-color:var(--roleAccent); box-shadow:0 0 0 4px rgba(255,255,255,.8), var(--shadow); }
-.rolePanel { background:var(--roleBg); border:2px solid rgba(0,0,0,.08); border-radius:24px; padding:16px; box-shadow:var(--shadow); }
-.rolePanelTop { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
-.rolePanel h2 { margin:0; font-size:clamp(24px,4.5vw,34px); }
-button, textarea, input { font:inherit; }
-.btn { border:none; border-radius:13px; padding:10px 14px; cursor:pointer; font-weight:800; background:var(--roleAccent); color:#fff; }
-.btn.secondary { background:#fff; color:var(--text); border:1px solid var(--line); }
-.btn.ghost { background:#fff; color:var(--roleAccent); border:1px solid var(--line); }
-.btn.danger { background:var(--danger); color:#fff; }
-.btn.small { padding:3px 8px; border-radius:999px; font-size:13px; line-height:1.5; margin-left:6px; vertical-align:baseline; }
-.list { display:flex; flex-direction:column; gap:10px; }
-.item { background:rgba(255,255,255,.88); border:1px solid rgba(120,100,70,.18); border-left:8px solid var(--roleAccent); border-radius:18px; padding:14px 14px 13px; }
-.item h3 { margin:0; font-size:19px; line-height:1.35; }
-.item p { margin:6px 0 0; white-space:pre-wrap; color:#3f392f; }
-.item.added { border-left-style:dashed; background:#fff; }
-.itemActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:11px; }
-.childList { margin-top:10px; display:flex; flex-direction:column; gap:7px; }
-.childLine { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
-.childText { white-space:pre-wrap; }
-.attachments { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
-.attachmentBox { margin-top:10px; }
-.attachmentBox summary { display:inline-block; cursor:pointer; color:var(--roleAccent); font-weight:900; border:1px solid var(--line); border-radius:999px; padding:5px 11px; background:#fff; list-style:none; }
-.attachmentBox summary::-webkit-details-marker { display:none; }
-.attachment { background:#fff; border:1px solid rgba(120,100,70,.16); border-radius:13px; padding:8px 10px; }
-.attachment a { color:var(--roleAccent); font-weight:800; text-decoration:none; }
-.attachment img { display:none; max-width:220px; max-height:160px; border-radius:10px; margin-top:6px; border:1px solid var(--line); object-fit:cover; }
-.empty { background:#fff; border:1px dashed var(--line); border-radius:18px; padding:18px; color:var(--muted); }
-.status { color:var(--muted); font-size:14px; margin:0 0 10px; }
-.modalBackdrop { position:fixed; inset:0; background:rgba(30,24,15,.48); display:none; align-items:center; justify-content:center; padding:16px; z-index:50; }
-.modalBackdrop.show { display:flex; }
-.modal { width:min(680px,100%); max-height:88vh; overflow:auto; background:#fffdf8; border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.28); padding:18px; }
-.modal h2 { margin:0 0 10px; }
-label { display:block; font-weight:900; margin-bottom:6px; }
-input[type="text"], textarea, select { width:100%; border:1px solid var(--line); border-radius:14px; padding:11px; background:#fff; color:var(--text); }
-input[type="text"], select { min-height:46px; }
-textarea { min-height:150px; resize:vertical; }
-.field { margin-bottom:12px; }
-.field.hidden { display:none; }
-.modalActions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; flex-wrap:wrap; }
-
-/* 成果展進度表：A4 預覽、手機可左右滑動，避免右側空白框跑版 */
-.progressSection { background:#fffdf8; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); margin:14px 0 18px; overflow:hidden; }
-.progressTop { display:flex; align-items:center; justify-content:center; gap:12px; padding:18px 22px; border-bottom:1px solid var(--line); background:#b52b1f; color:#fff; position:relative; text-align:center; }
-.progressTop h2 { margin:0; font-size:clamp(24px,4.6vw,36px); letter-spacing:.03em; color:#fff; flex:1; }
-.progressToggle { position:absolute; right:18px; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.45); border-radius:999px; color:#fff; font-weight:900; font-size:16px; cursor:pointer; padding:6px 12px; }
-.progressBody { padding:16px; }
-.progressBody.collapsed { display:none; }
-.progressTabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0 0 14px; }
-.progressTab { border:none; border-radius:12px; padding:12px 10px; background:#b52b1f; color:#fff; font-weight:950; cursor:pointer; letter-spacing:.02em; }
-.progressTab.active { background:#8f1d15; box-shadow:inset 0 0 0 2px rgba(255,255,255,.45); }
-.progressTab:hover { filter:brightness(.96); }
-.progressTitleRow { display:flex; align-items:center; justify-content:center; gap:14px; margin:4px 0 16px; flex-wrap:wrap; }
-.progressTitleRow h3 { margin:0; font-size:clamp(25px,5vw,40px); line-height:1.2; font-weight:950; letter-spacing:.04em; }
-.progressAddBtn { margin:0 0 12px; }
-.progressScroll { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; border:1px solid #e7dfd2; background:#fff; padding:10px; }
-.progressPaper { width:980px; max-width:none; margin:0 auto; background:#fff; padding:18px 18px 22px; }
-.progressTable { width:100%; border-collapse:collapse; table-layout:fixed; background:#fff; color:#111; font-size:13px; line-height:1.45; }
-.progressTable th, .progressTable td { border:1.4px solid #222; vertical-align:top; padding:8px 7px; word-break:break-word; overflow-wrap:anywhere; }
-.progressTable th { background:#f3efe4; text-align:center; font-weight:900; }
-.progressTable .timeCol { width:82px; text-align:center; }
-.progressTable .itemCol { width:43%; }
-.progressTable .ownerCol { width:150px; }
-.progressTable .helperCol { width:150px; }
-.progressTable .noteCol { width:210px; }
-.progressCellText { white-space:pre-wrap; }
-.progressActions { display:flex; flex-direction:column; align-items:center; gap:4px; margin-top:5px; }
-.progressInlineEdit { display:inline-block; margin-left:5px; }
-.progressMiniBtn { border:1px solid #d9cfc0; background:#fffdf8; color:#2d2922; border-radius:999px; padding:2px 7px; font-size:10px; line-height:1.4; font-weight:900; cursor:pointer; vertical-align:baseline; white-space:nowrap; }
-.progressMiniBtn.danger { background:#b94a48; border-color:#b94a48; color:#fff; }
-.progressMiniBtn:hover { filter:brightness(.96); }
-.progressHint { color:#7a7166; font-size:13px; margin:8px 2px 0; }
-.eventLineList { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
-.eventLine { display:flex; align-items:flex-start; gap:6px; color:#3f392f; }
-.eventLine .bullet { flex:0 0 auto; font-weight:950; color:#111; }
-.eventLine .lineText { white-space:pre-wrap; flex:1; min-width:0; }
-.itemMeta { margin-top:12px; }
-.itemActions .btn.ghost { font-size:13px; padding:7px 10px; border-radius:12px; }
-.roleTag { font-size:13px; padding:5px 9px; }
-.itemHead h3 .btn.small { font-size:13px; padding:2px 7px; }
-@media (max-width:620px) {
-  .progressTop { padding:14px 72px 14px 16px; }
-  .progressToggle { right:12px; font-size:14px; padding:5px 10px; }
-  .progressBody { padding:12px 10px; }
-  .progressScroll { padding:7px; }
-  .progressPaper { width:920px; padding:14px; }
-  .progressTable { font-size:12px; }
-  .progressTable th, .progressTable td { padding:6px 5px; }
-  .progressTable .timeCol { width:76px; }
-  .progressTable .ownerCol { width:130px; }
-  .progressTable .helperCol { width:130px; }
-  .progressTable .noteCol { width:185px; }
+.wrap{max-width:1080px;margin:0 auto;}
+header{padding:22px 14px 8px;}
+.hero{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px 18px;
+  box-shadow:var(--shadow);
 }
-
-@media (max-width:920px) { .roleGrid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
-@media (max-width:620px) {
-  header { padding:12px 10px 6px; }
-  main { padding:8px 10px 26px; }
-  .hero { padding:18px 14px; border-radius:18px; }
-  .roleGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
-  .roleBtn { min-height:64px; font-size:18px; padding:14px 8px; }
-  .rolePanel { padding:12px; border-radius:20px; }
+.hero h1{margin:0;text-align:center;font-size:clamp(26px,5vw,40px);letter-spacing:.04em;}
+main{padding:10px 14px 34px;}
+.roleGrid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:12px;
+  margin:16px 0 18px;
 }
+.roleBtn{
+  appearance:none;
+  border:2px solid transparent;
+  border-radius:18px;
+  padding:18px 10px;
+  min-height:76px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:20px;
+  color:#2d2922;
+  box-shadow:0 7px 18px rgba(41,32,18,.07);
+  transition:.16s;
+}
+.roleBtn:hover{transform:translateY(-2px);}
+.roleBtn.active{
+  border-color:var(--role-accent);
+  box-shadow:0 0 0 4px rgba(255,255,255,.82),0 0 0 7px rgba(91,155,213,.22),var(--shadow);
+}
+.rolePanel{
+  background:var(--role-bg);
+  border:2px solid var(--role-accent);
+  border-radius:24px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.rolePanelTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.rolePanel h2{margin:0;font-size:clamp(24px,4.5vw,34px);}
+button,textarea{font:inherit;}
+.btn{
+  border:none;
+  border-radius:999px;
+  padding:10px 16px;
+  font-weight:800;
+  cursor:pointer;
+  background:var(--role-accent);
+  color:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.btn.secondary{background:#fff;color:#3f382f;border:1px solid var(--line);box-shadow:none;}
+.btn.ghost{background:#fff;color:#3f382f;border:1px solid var(--line);box-shadow:none;padding:8px 12px;font-size:15px;}
+.btn.danger{background:var(--danger);}
+.list{display:grid;gap:10px;}
+.item{
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.9);
+  border-left:8px solid var(--role-accent);
+  border-radius:18px;
+  padding:14px 14px 12px;
+}
+.item.added{
+  margin-left:22px;
+  background:rgba(255,255,255,.72);
+  border-left-style:dashed;
+}
+.item h3{margin:0 0 6px;font-size:20px;line-height:1.4;}
+.item p{margin:0;white-space:pre-wrap;font-size:17px;}
+.itemActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.empty{background:#fff;border-radius:16px;padding:18px;text-align:center;color:var(--muted);}
+.modalBackdrop{
+  position:fixed;inset:0;background:rgba(27,22,15,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:20;
+}
+.modalBackdrop.show{display:flex;}
+.modal{
+  width:min(640px,100%);
+  background:#fffdf8;
+  border-radius:24px;
+  padding:20px;
+  box-shadow:0 20px 48px rgba(0,0,0,.28);
+}
+.modal h2{margin:0 0 12px;font-size:24px;}
+label{display:block;font-weight:800;margin-bottom:8px;}
+textarea{
+  width:100%;min-height:170px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--text);outline:none;
+}
+textarea:focus{border-color:var(--role-accent);box-shadow:0 0 0 4px rgba(91,155,213,.14);}
+.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
+@media(max-width:850px){.roleGrid{grid-template-columns:repeat(3,minmax(0,1fr));}.roleBtn{font-size:18px;min-height:68px;}}
+@media(max-width:560px){header{padding-top:14px}.hero{padding:16px 12px}.roleGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.roleBtn{font-size:17px;min-height:62px}.rolePanel{padding:12px;border-radius:20px}.item{padding:12px;border-radius:16px}.item.added{margin-left:12px}.modal{padding:16px}.btn{padding:9px 13px}}
 </style>
 </head>
 <body>
@@ -142,34 +134,12 @@ textarea { min-height:150px; resize:vertical; }
 </header>
 <main>
   <div class="wrap">
-
-    <section class="progressSection" id="progressSection">
-      <div class="progressTop">
-        <h2>初賽／決賽／成果展進度表</h2>
-        <button type="button" class="progressToggle" id="progressToggleBtn">展開</button>
-      </div>
-      <div class="progressBody collapsed" id="progressBody">
-        <div class="progressTabs" id="progressTabs"></div>
-        <div class="progressTitleRow">
-          <h3 id="progressTitleText">成果展進度表</h3>
-          <button type="button" class="btn secondary" id="editProgressTitleBtn">修改</button>
-        </div>
-        <div class="progressScroll">
-          <div class="progressPaper">
-            <table class="progressTable" id="progressTable"></table>
-          </div>
-        </div>
-        <div class="progressHint">手機可左右滑動表格；每一列都可以修改、上方新增、下方新增或刪除。</div>
-      </div>
-    </section>
-
     <div id="roleGrid" class="roleGrid"></div>
     <section id="rolePanel" class="rolePanel">
       <div class="rolePanelTop">
         <h2 id="currentRoleTitle"></h2>
-        <button class="btn" id="addItemBtn">＋新增一項</button>
+        <button class="btn" id="addItemBtn">＋新增一筆</button>
       </div>
-      <p class="status" id="statusText">連線中…</p>
       <div id="content" class="list"></div>
     </section>
   </div>
@@ -179,773 +149,404 @@ textarea { min-height:150px; resize:vertical; }
   <div class="modal">
     <h2 id="modalTitle">新增內容</h2>
     <form id="modalForm">
-      <div class="field" id="titleField">
-        <label for="titleInput">大項</label>
-        <input type="text" id="titleInput" name="title" placeholder="例如：學生請假與臨時狀況">
-      </div>
-      <div class="field" id="contentField">
-        <label for="contentInput" id="contentLabel">小項</label>
-        <textarea id="contentInput" name="content" required placeholder="把這一項要記錄的細項內容寫在這裡"></textarea>
-      </div>
+      <label for="contentInput">補充內容</label>
+      <textarea id="contentInput" name="content" required placeholder="把要補充的事情寫在這裡"></textarea>
       <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelModalBtn">取消</button>
+        <button type="button" class="btn secondary" id="cancelBtn">取消</button>
         <button type="submit" class="btn">儲存</button>
       </div>
     </form>
   </div>
 </div>
 
-
-<div class="modalBackdrop" id="progressModalBackdrop">
-  <div class="modal">
-    <h2 id="progressModalTitle">修改行程</h2>
-    <form id="progressModalForm">
-      <div class="field"><label>時間</label><div class="timeSelectRow"><select id="progressHourSelect"></select><span>:</span><select id="progressMinuteSelect"></select></div></div>
-      <div class="field"><label for="progressItemInput">事項</label><textarea id="progressItemInput" required placeholder="要做的事情"></textarea></div>
-      <div class="field"><label for="progressPrimarySelect">主要負責人</label><select id="progressPrimarySelect"></select><input type="text" id="progressPrimaryOther" placeholder="請輸入其他負責人" style="display:none;margin-top:8px"></div>
-      <div class="field"><label for="progressHelperSelect">協助負責人</label><select id="progressHelperSelect"></select><input type="text" id="progressHelperOther" placeholder="請輸入其他協助負責人" style="display:none;margin-top:8px"></div>
-      <div class="field"><label for="progressNoteInput">備註</label><textarea id="progressNoteInput" placeholder="備註內容"></textarea></div>
-      <div class="modalActions">
-        <button type="button" class="btn secondary" id="cancelProgressModalBtn">取消</button>
-        <button type="submit" class="btn">儲存</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<input id="fileInput" type="file" style="display:none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",
-  authDomain: "youzi-c1b74.firebaseapp.com",
-  projectId: "youzi-c1b74",
-  storageBucket: "youzi-c1b74.firebasestorage.app",
-  messagingSenderId: "187002582910",
-  appId: "1:187002582910:web:f5c73a46e5a773a860a52f",
-  measurementId: "G-WLYK892EDW"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const entriesCol = collection(db, 'fengtungHandoverEntries');
-
-const PROGRESS_BASE = [
-  {id:'p001', order:1, time:'07:20', item:'幹部集合點名、搬羅馬旗座、場布用品箱。', primary:'全體幹部', helper:'家長志工', note:'全體幹部及家長志工'},
-  {id:'p002', order:2, time:'08:10', item:'全體師生家長上遊覽車、出發。', primary:'全體幹部', helper:'家長志工', note:''},
-  {id:'p003', order:3, time:'09:00', item:'抵達屯區藝文中心。', primary:'全體幹部', helper:'家長志工', note:''},
-  {id:'p004', order:4, time:'09:00', item:'如果有空檔先拍照，廣場前、蘭亭集序。', primary:'攝影', helper:'聯喜、仁照', note:'全程幫忙拍照、攝影。'},
-  {id:'p005', order:5, time:'09:00', item:'分配、識別證（全體幹部及家長志工親屬）。', primary:'美玲', helper:'清點', note:'演奏結束後統一繳交於美伶。'},
-  {id:'p006', order:6, time:'09:00', item:'引導各休息室配置之幹部家長，先拍照休息室擺設，結束要還原。', primary:'全體幹部', helper:'家長志工', note:'椅子、衣架等結束要還原。'},
-  {id:'p007', order:7, time:'09:00', item:'引導學生擺放好個人樂器和物品，盡快下樓協助舞台佈置。', primary:'全體幹部', helper:'家長志工', note:''},
-  {id:'p008', order:8, time:'09:00', item:'舞台布置：木箱椅子、地墊拼貼、舞台定位，小號、長號、打擊區需墊高。', primary:'全體幹部', helper:'家長志工', note:'男生幹部家長協助。'},
-  {id:'p009', order:9, time:'09:00', item:'舞台裝飾、紅布條懸掛、氣球裝飾、譜架貼海報。', primary:'文書組', helper:'設計支援人力', note:'美伶、其嘉、盈茹、雅鈴等。'},
-  {id:'p010', order:10, time:'10:00', item:'和館方前台開會，確認前台布置須知。', primary:'全體幹部', helper:'志工家長', note:''},
-  {id:'p011', order:11, time:'10:00', item:'熱管、彩排、試音。', primary:'團務老師', helper:'全體幹部', note:''},
-  {id:'p012', order:12, time:'10:00', item:'大合照、彩排空檔時確認團員有無被擋到。', primary:'攝影', helper:'聯喜、仁照', note:''},
-  {id:'p013', order:13, time:'10:00', item:'聯名間化妝間標示紙。', primary:'美伶', helper:'', note:''},
-  {id:'p014', order:14, time:'10:00', item:'前台布置：室外2張桌、簽到本2+簽名筆、海報架、室內桌、家長後援會旗、表演單。', primary:'前台人員', helper:'', note:'前後台皆拍照留存。'},
-  {id:'p015', order:15, time:'10:00', item:'裝飾布置、場外花圈、花籃定位。', primary:'全體幹部', helper:'家長志工', note:''},
-  {id:'p016', order:16, time:'10:00', item:'羅馬旗座、旗桿約12組擺放。', primary:'全體幹部', helper:'家長志工', note:''},
-  {id:'p017', order:17, time:'10:00', item:'拍照、攝影、錄音。', primary:'攝影', helper:'聯喜、仁照', note:''},
-  {id:'p018', order:18, time:'11:15', item:'伙飯，幹部及家長志工先提早用午餐。', primary:'總務組', helper:'佳雯、晴妤媽、姿宜', note:'確認餐點。'},
-  {id:'p019', order:19, time:'12:00', item:'全體師生用餐（地下室），分配餐點、收拾環境整潔。', primary:'全體人員', helper:'', note:''},
-  {id:'p020', order:20, time:'13:30', item:'換團服、妝髮。各間分配家長，請巡檢團員的妝髮及服裝。', primary:'化妝組', helper:'幹部家長', note:'彩妝可至二樓中型化妝間。'},
-  {id:'p021', order:21, time:'13:30', item:'現場索票、引導來賓入座、貴賓接待（簽到）。', primary:'前台人員', helper:'', note:'美伶、其嘉、巧綺媽、小林、容碩爸。'},
-  {id:'p022', order:22, time:'14:25', item:'演出時協助後台。', primary:'雅慧、巧芬、銘廷、佳雯、美伶', helper:'', note:'遞想留後台的喊聲。'},
-  {id:'p023', order:23, time:'14:30', item:'前台的幹部及家長入場卷票根統一繳交。', primary:'其嘉', helper:'', note:''},
-  {id:'p024', order:24, time:'16:00', item:'最終曲結束後休息室放樂器，立馬下樓集合。', primary:'全體人員', helper:'', note:''},
-  {id:'p025', order:25, time:'16:15', item:'開放10分鐘拍照，九年級優先。', primary:'攝影', helper:'聯喜、仁照', note:''},
-  {id:'p026', order:26, time:'16:25', item:'譜架、椅子歸位、整高木箱歸位、收拾地墊。', primary:'全體人員', helper:'', note:'清空後，再回休息室整理東西。'},
-  {id:'p027', order:27, time:'17:00', item:'返回學校。', primary:'全體幹部', helper:'志工家長', note:''},
-  {id:'p028', order:28, time:'18:00', item:'樂器室恢復。', primary:'全體幹部', helper:'志工家長', note:''},
-  {id:'p029', order:29, time:'19:00', item:'全體徒步出發千葉火鍋。', primary:'全體幹部', helper:'', note:''}
-];
-let progressModalState = null;
-let currentProgressKey = 'show';
-const PROGRESS_TYPES = [
-  {key:'prelim', defaultTitle:'初賽進度表'},
-  {key:'final', defaultTitle:'決賽進度表'},
-  {key:'show', defaultTitle:'成果展進度表'}
-];
-
-
+<script>
 const BASE_RECORDS = [
   {
     "id": "前期分工表-2",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [],
     "item": "場地申請與票務申請",
-    "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。",
-    "note": "可邀會長或有空幹部一起勘場。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "向文化中心申請／預訂表演場地，確認場地使用規定、票券申請方式與可使用空間。"
   },
   {
     "id": "前期分工表-3",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "全體"
     ],
     "item": "休息區、化妝區、樂器放置區確認",
-    "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。",
-    "note": "此項以學生與演出後勤需求為主。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "勘場時確認學生休息區、化妝區、樂器放置區與後台可使用空間。"
   },
   {
     "id": "前期分工表-4",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "會長",
     "collabs": [
       "團務老師"
     ],
     "item": "貴賓席、觀眾席視角與入口動線規劃",
-    "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。",
-    "note": "可與團務老師及幹部一起看場地；重點是接待與觀眾動線。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "勘場時確認貴賓席位置、觀眾席視角、入口動線、簽到桌位置與現場引導方式。"
   },
   {
     "id": "前期分工表-5",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "文書"
     ],
     "item": "領票與票券控管",
-    "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。",
-    "note": "貴賓區票券先由老師預留。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "向文化中心領票，確認總票數、票號、保留票與可分配票。"
   },
   {
     "id": "前期分工表-6",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "團務老師",
     "collabs": [
       "會長",
       "文書"
     ],
     "item": "貴賓票預留",
-    "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。",
-    "note": "後續幹部配票時需先扣除這些票。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "固定將部分貴賓區票先保留，作為校方、貴賓與重要來賓使用。"
   },
   {
     "id": "前期分工表-7",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-場地票務",
-    "timeOrder": "最優先",
     "main": "文書",
     "collabs": [
       "全體"
     ],
     "item": "劃位表與票券分配表",
-    "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。",
-    "note": "以禮遇與畢業年級優先為原則，盡量讓家長坐在能看見孩子的位置。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "依年級、樂器位置與視線角度製作劃位表，並依序安排三年級幹部、三年級家長、二年級幹部、二年級家長、一年級幹部、一年級家長。"
   },
   {
     "id": "前期分工表-8",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
     "main": "文書",
     "collabs": [],
     "item": "製作影片集",
-    "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。",
-    "note": "需提早收素材，避免最後趕工。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "參照往年影片，整理照片、影片素材，製作回顧影片或影片集。"
   },
   {
     "id": "前期分工表-9",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [],
     "item": "節目單內容與製作規劃",
-    "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。",
-    "note": "可參照每年節目單格式；文書可協助排版與檔案整理。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "規劃節目單曲目、團隊介紹、演出流程、指揮與師長資訊，並統整紙本節目單與線上節目單需求。"
   },
   {
     "id": "前期分工表-10",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
     "main": "文書",
     "collabs": [
       "攝影"
     ],
     "item": "線上節目單與 QR Code",
-    "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。",
-    "note": "需確認連結穩定、手機可讀。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "評估免費空間、暫時性付費空間或請電腦公司協助，建立可用手機瀏覽的節目單頁面。"
   },
   {
     "id": "前期分工表-11",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [
       "全體"
     ],
     "item": "海報與邀請卡初稿",
-    "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。",
-    "note": "完成後可請幹部確認文字、活動資訊與修正需求。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "由老師彙整學校或學生設計資源，完成海報與邀請卡初稿。"
   },
   {
     "id": "前期分工表-12",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-文宣影像",
-    "timeOrder": "前期",
     "main": "會長",
     "collabs": [
       "全體"
     ],
     "item": "海報張貼與宣傳安排",
-    "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。",
-    "note": "網路分享效果通常較好，可鼓勵 IG、FB、LINE 群組轉發。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排紙本海報張貼點，並請家長、學生、幹部協助社群分享。"
   },
   {
     "id": "前期分工表-13",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "擬定貴賓名冊",
-    "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。",
-    "note": "確認是否需新增或刪除名單。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "沿用歷年資料，整理官員、學校、指定貴賓、歷屆會長等邀請名單。"
   },
   {
     "id": "前期分工表-14",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "歷屆會長與貴賓邀請",
-    "description": "進行簡訊、電話、邀請函寄送或親送安排。",
-    "note": "可詢問學校是否有需一併邀請或發放的對象。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "進行簡訊、電話、邀請函寄送或親送安排。"
   },
   {
     "id": "前期分工表-15",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-邀請接待",
-    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "邀請函資料整理",
-    "description": "協助整理邀請函內容、收件資料、名單與列印資料。",
-    "note": "寄送由會長統一處理較清楚。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "協助整理邀請函內容、收件資料、名單與列印資料。"
   },
   {
     "id": "前期分工表-16",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "餐飲需求統計",
-    "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。",
-    "note": "下午活動需考量提早練習與幫忙人員用餐。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "依活動時間確認學生、幹部、幫忙家長、老師是否需午餐、晚餐、點心或飲料。"
   },
   {
     "id": "前期分工表-17",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "訂餐與發餐規劃",
-    "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。",
-    "note": "原本訂餐盒、便當、飯卷可合併成同一大項。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "統一處理便當、飯卷、餐盒等餐點訂購，安排送達時間與發放方式。"
   },
   {
     "id": "前期分工表-18",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "飲料與水準備",
-    "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。",
-    "note": "例如 100 人可準備 120 至 140 瓶，水與飲料各約一半。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "準備水與飲料，數量建議比實際人數多 20% 至 40%。"
   },
   {
     "id": "前期分工表-19",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [],
     "item": "指揮花束與指揮禮",
-    "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。",
-    "note": "可考慮將感謝信與禮金一起包裝，但要避免遺失。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "準備謝謝指揮老師的花束，並確認指揮禮金／感謝信的包裝與交付方式。"
   },
   {
     "id": "前期分工表-20",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-餐飲禮品",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [],
     "item": "三年級送別禮物",
-    "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。",
-    "note": "人數需向團務老師確認，因老師有正式名單。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "規劃三年級送別禮物，預算暫以每人約 200 元為參考。"
   },
   {
     "id": "前期分工表-21",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
     "main": "全體幹部",
     "collabs": [],
     "item": "各組物品請購",
-    "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。",
-    "note": "總務可能物品最多，但每位幹部都要提出需求。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "各幹部先盤點自己負責項目需要的物品，例如膠帶、垃圾袋、桌巾、桌花、指示牌等。"
   },
   {
     "id": "前期分工表-22",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
     "main": "總務",
     "collabs": [
       "團務老師"
     ],
     "item": "發餐與回收安排",
-    "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。",
-    "note": "要考量場地是否方便用餐。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "規劃餐點發放位置、用餐後垃圾集中、回收與清潔人力。"
   },
   {
     "id": "前期分工表-23",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
     "main": "會長",
     "collabs": [],
     "item": "幹部服裝規定",
-    "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。",
-    "note": "活動前再提醒一次。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "決定幹部與支援人員當天穿著，例如紅 T、深色長褲。"
   },
   {
     "id": "前期分工表-24",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
     "main": "團務老師",
     "collabs": [],
     "item": "學生服裝規定",
-    "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。",
-    "note": "由老師對學生發布最清楚。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "通知學生穿著與需攜帶服裝，例如紅 T、全套比賽服。"
   },
   {
     "id": "前期分工表-25",
-    "sourceSheet": "前期分工表",
-    "stage": "前期-採購佈置",
-    "timeOrder": "前期",
     "main": "攝影",
     "collabs": [
       "全體"
     ],
     "item": "羅馬旗座與旗桿確認",
-    "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。",
-    "note": "可暫由攝影協助追蹤，實際仍需全體幫忙。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "向團務老師確認羅馬旗座、旗桿位置與數量，活動當天協助擺放。"
   },
   {
     "id": "當日分工表-2",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [],
     "item": "學生集合與抵達方式",
-    "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。",
-    "note": "學生端由團務老師統一宣布。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "宣布學生集合時間、搬樂器方式、抵達文化中心方式；確認走路、遊覽車或雨天備案。"
   },
   {
     "id": "當日分工表-3",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [],
     "item": "樂器與彩排準備",
-    "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。",
-    "note": "需與指揮、文化中心現場限制配合。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排熱管、彩排、舞台位置、指揮位置、打擊區是否墊高等。"
   },
   {
     "id": "當日分工表-4",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [
       "攝影"
     ],
     "item": "換裝與化妝時間",
-    "description": "規劃換團服、妝髮、化妝組時間與分批順序。",
-    "note": "建議抓上台前 2 至 3 小時完成主要妝髮。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "規劃換團服、妝髮、化妝組時間與分批順序。"
   },
   {
     "id": "當日分工表-5",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-學生與場地",
-    "timeOrder": "活動前",
     "main": "團務老師",
     "collabs": [
       "攝影",
       "會長"
     ],
     "item": "大合照安排",
-    "description": "安排學生、年級、幹部、家長或師長合照順序與地點。",
-    "note": "可在舞台、TRUSS 架或文化中心適合位置拍攝。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排學生、年級、幹部、家長或師長合照順序與地點。"
   },
   {
     "id": "當日分工表-6",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "前台票務與簽到資料",
-    "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。",
-    "note": "前台人員要能快速查資料。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "準備簽到表、票券、劃位表、貴賓名單、臨時索票資料。"
   },
   {
     "id": "當日分工表-7",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "前台動線與人員分配",
-    "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。",
-    "note": "若免費入場也要有人處理臨時來賓。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "確認入口、簽到、發票、補票、貴賓接待、節目單發放與現場留守人員。"
   },
   {
     "id": "當日分工表-8",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
     "main": "會長",
     "collabs": [],
     "item": "貴賓接待與引導",
-    "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。",
-    "note": "貴賓票多半已在現場，需協助取票與帶位。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排熟悉貴賓的人在入口辨識來賓，並由家長或幹部引導入座。"
   },
   {
     "id": "當日分工表-9",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "開演前",
     "main": "文書",
     "collabs": [],
     "item": "節目單發放與 QR Code",
-    "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。",
-    "note": "線上節目單可包含影片與曲目資訊。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排紙本節目單發放，現場放置大型 QR Code 供觀眾手機掃描。"
   },
   {
     "id": "當日分工表-10",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-前台接待",
-    "timeOrder": "演出中",
     "main": "文書",
     "collabs": [
       "團務老師"
     ],
     "item": "留守前台與遲到入場",
-    "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。",
-    "note": "活動中心外面建議一定要有人留守。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排一人留在門口，處理臨時事件、遲到者、找票、補票或換曲時入場。"
   },
   {
     "id": "當日分工表-11",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "活動前",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "舞台布置與紅布條",
-    "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。",
-    "note": "需與團務老師一起看位置。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "確認舞台前方紅布條、氣球、TRUSS 布幕、大型背板等是否影響拍照與動線。"
   },
   {
     "id": "當日分工表-12",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "活動前",
     "main": "會長",
     "collabs": [
       "攝影"
     ],
     "item": "花籃與花圈位置確認",
-    "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。",
-    "note": "當天才知道實際有哪些花籃，因此移到當日分工。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "依當天實際送達花籃、花圈安排擺放位置，重要貴賓的花不要放在太邊邊。"
   },
   {
     "id": "當日分工表-13",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "演出中",
     "main": "團務老師",
     "collabs": [
       "會長"
     ],
     "item": "後台控管",
-    "description": "控管學生、樂器、上下台、獻花或演出流程。",
-    "note": "後台可安排熟悉學生與流程的家長協助。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "控管學生、樂器、上下台、獻花或演出流程。"
   },
   {
     "id": "當日分工表-14",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-舞台後台",
-    "timeOrder": "演出中",
     "main": "團務老師",
     "collabs": [
       "文書",
       "攝影"
     ],
     "item": "影片播放確認",
-    "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。",
-    "note": "先保留此項，等確認影片定位後再細化。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "確認回顧影片、曲目影片或其他播放內容與播放時間點。"
   },
   {
     "id": "當日分工表-15",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "活動照片紀錄",
-    "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。",
-    "note": "不只側拍，必要時要主動 cue 大家看鏡頭。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "拍攝前台、後台、學生、家長、貴賓、花籃、舞台、合照與演出花絮。"
   },
   {
     "id": "當日分工表-16",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "主動引導拍照",
-    "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。",
-    "note": "避免只拍到側面或看不出誰有出席。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "提醒來賓、家長、學生靠近或看鏡頭，讓照片清楚可用。"
   },
   {
     "id": "當日分工表-17",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [],
     "item": "花籃拍照留存",
-    "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。",
-    "note": "需拍清楚送花單位與整體位置。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "活動當天花籃、花圈定位完成後，拍下花籃與送花單位，提供會長後續致謝使用。"
   },
   {
     "id": "當日分工表-18",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-攝影紀錄",
-    "timeOrder": "活動全程",
     "main": "攝影",
     "collabs": [
       "團務老師"
     ],
     "item": "錄影與錄音協調",
-    "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。",
-    "note": "可預留兩位幹部分前台與後台拍攝。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "確認學校是否已有專業攝影錄影，幹部負責補足現場紀錄。"
   },
   {
     "id": "當日分工表-19",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-餐飲清潔",
-    "timeOrder": "用餐前後",
     "main": "總務",
     "collabs": [
       "團務老師"
     ],
     "item": "餐點發放與用餐秩序",
-    "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。",
-    "note": "需同步處理水、飲料與垃圾。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "安排學生、幹部、幫忙家長、老師領餐順序與用餐地點。"
   },
   {
     "id": "當日分工表-20",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-餐飲清潔",
-    "timeOrder": "用餐前後",
     "main": "總務",
     "collabs": [
       "會長",
       "團務老師"
     ],
     "item": "垃圾與清潔",
-    "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。",
-    "note": "用餐後先整理一次，撤場再整理一次。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "準備垃圾袋、回收袋與收垃圾人力，避免文化中心場地留下垃圾。"
   },
   {
     "id": "當日分工表-21",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
     "main": "會長",
     "collabs": [
       "總務",
       "團務老師"
     ],
     "item": "撤場總控",
-    "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。",
-    "note": "目標是場地恢復原狀。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "統一控管撤場順序，確認學生樂器撤離、幹部物品收回、桌椅與海報歸位。"
   },
   {
     "id": "當日分工表-22",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
     "main": "團務老師",
     "collabs": [
       "會長",
       "全體"
     ],
     "item": "學生與樂器撤離",
-    "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。",
-    "note": "需與學生動線分流。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "確認學生放學、樂器搬運、大型樂器與學校物品回收。"
   },
   {
     "id": "當日分工表-23",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
     "main": "總務",
     "collabs": [
       "全體"
     ],
     "item": "剩餘物資與垃圾處理",
-    "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。",
-    "note": "避免遺漏在文化中心。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "清點剩餘餐飲、垃圾袋、清潔用品與可回收物。"
   },
   {
     "id": "當日分工表-24",
-    "sourceSheet": "當日分工表",
-    "stage": "當日-撤場復原",
-    "timeOrder": "演出後",
     "main": "攝影",
     "collabs": [],
     "item": "撤場前最後紀錄",
-    "description": "補拍花籃、場地復原、幹部合照或重要留存照片。",
-    "note": "提供後續感謝文與紀錄使用。",
-    "year": "原始資料",
-    "kind": "base"
+    "description": "補拍花籃、場地復原、幹部合照或重要留存照片。"
   }
 ];
 
@@ -955,7 +556,7 @@ const ROLES = [
   { id:'總務', name:'總務' },
   { id:'文書', name:'文書' },
   { id:'攝影', name:'攝影' },
-  { id:'全體幹部', name:'全體／新增' }
+  { id:'全體幹部', name:'全體幹部' }
 ];
 
 const roleColors = {
@@ -967,570 +568,195 @@ const roleColors = {
   '全體幹部': { bg:'#E7E6E6', accent:'#7F7F7F' }
 };
 
+const STORE_KEY = 'fengtung_handover_simple_v3';
+const OLD_KEYS = ['fengtung_handover_simple_v2','fengtung_handover_v1'];
 let currentRole = '團務老師';
-let entries = [];
-let currentUser = null;
+let state = loadState();
 let editing = null;
-let uploadTarget = null;
 
-const $ = id => document.getElementById(id);
-function esc(s='') { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function roleStyle(role) { return roleColors[role] || roleColors['團務老師']; }
-const RESPONSIBLE_OPTIONS = ['團務老師','會長','總務','文書','攝影','全體幹部','其他'];
-function normalizeResponsible(value='') {
-  const v = String(value || '').trim();
-  if(!v) return '';
-  if(v.includes('團務')) return '團務老師';
-  if(v.includes('會長')) return '會長';
-  if(v.includes('總務')) return '總務';
-  if(v.includes('文書')) return '文書';
-  if(v.includes('攝影')) return '攝影';
-  if(v.includes('全體') || v === '全體') return '全體幹部';
-  return '其他';
+function uid(prefix='id'){
+  return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7);
 }
-function progressRoleBg(value='') {
-  const key = normalizeResponsible(value);
-  return key && key !== '其他' ? roleColors[key]?.bg : '';
+function esc(s=''){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function responsibleSelectHTML(id, value='') {
-  const key = normalizeResponsible(value);
-  return `<select id="${id}">${RESPONSIBLE_OPTIONS.map(o => `<option value="${esc(o)}" ${o===key?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+function normalizeRole(value){
+  if(!value) return '';
+  if(value === '全體' || value === '幹部／全體幹部') return '全體幹部';
+  return value;
 }
-function setupResponsibleSelect(selectId, otherId, value='') {
-  const sel = $(selectId), other = $(otherId);
-  if(!sel || !other) return;
-  sel.innerHTML = RESPONSIBLE_OPTIONS.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
-  const key = normalizeResponsible(value);
-  sel.value = key || '其他';
-  other.value = key === '其他' ? String(value || '').trim() : '';
-  const sync = () => { other.style.display = sel.value === '其他' ? 'block' : 'none'; if(sel.value === '其他') other.focus(); };
-  sel.onchange = sync;
-  sync();
-}
-function readResponsible(selectId, otherId) {
-  const sel = $(selectId), other = $(otherId);
-  if(!sel) return '';
-  if(sel.value === '其他') {
-    const v = (other?.value || '').trim();
-    if(!v) throw new Error('選擇「其他」時，請輸入負責人名稱。');
-    return v;
-  }
-  return sel.value;
-}
-function setRoleVars(role) {
+function roleStyle(role){ return roleColors[role] || roleColors['團務老師']; }
+function setRoleVars(role){
   const c = roleStyle(role);
-  document.documentElement.style.setProperty('--roleBg', c.bg);
-  document.documentElement.style.setProperty('--roleAccent', c.accent);
+  document.documentElement.style.setProperty('--role-bg', c.bg);
+  document.documentElement.style.setProperty('--role-accent', c.accent);
 }
-function expandsToRole(value, role) {
-  if(!value) return false;
-  const v = value === '全體' || value === '幹部／全體幹部' ? '全體幹部' : value;
+function expandsToRole(value, role){
+  const v = normalizeRole(value);
   if(v === role) return true;
   if(v === '全體幹部') return role === '全體幹部' || ['團務老師','會長','總務','文書','攝影'].includes(role);
   return false;
 }
-function visibleForRole(record, role) { return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role)); }
-function baseRecordsForRole(role) { return BASE_RECORDS.filter(r => visibleForRole(r, role)); }
-function customItemsForRole(role) { return entries.filter(e => e.type === 'item' && e.role === role && !e.parentId); }
-function repliesFor(parentId) { return entries.filter(e => e.type === 'reply' && e.parentId === parentId); }
-function filesFor(parentId) { return entries.filter(e => e.type === 'file' && e.parentId === parentId); }
-function baseContentEdits(parentId) { return entries.filter(e => e.type === 'baseContentEdit' && e.parentId === parentId); }
-function baseContentOverride(parentId) { const a = baseContentEdits(parentId); return a.length ? a[a.length - 1] : null; }
-function isMine(e) { return currentUser && e.ownerUid === currentUser.uid; }
-function textForBase(r) { return (r.description || '').trim(); }
-function roleDisplayName(role) { return ROLES.find(r => r.id === role)?.name || role; }
-function safePart(s) { return String(s || 'file').replace(/[\/#?%*:|"<>]/g, '_').slice(0,80); }
+function visibleForRole(record, role){
+  return expandsToRole(record.main, role) || (record.collabs || []).some(c => expandsToRole(c, role));
+}
+function baseRecordsForRole(role){
+  return BASE_RECORDS.filter(r => visibleForRole(r, role));
+}
+function customItemsForRole(role){
+  return state.entries.filter(e => e.type === 'item' && e.role === role && !e.parentId);
+}
+function repliesFor(parentId){
+  return state.entries.filter(e => e.type === 'reply' && e.parentId === parentId);
+}
+function migrateOldState(old){
+  const entries = [];
+  if(old && Array.isArray(old.entries)){
+    old.entries.forEach(e => {
+      if(e && e.content){
+        entries.push({
+          id: e.id || uid(e.type || 'item'),
+          type: e.type === 'reply' ? 'reply' : 'item',
+          role: normalizeRole(e.role) || '團務老師',
+          parentId: e.parentId || null,
+          content: String(e.content),
+          createdAt: e.createdAt || new Date().toISOString()
+        });
+      }
+    });
+    return entries;
+  }
+  if(old && Array.isArray(old.tasks)){
+    old.tasks.forEach(t => {
+      const content = [t.item, t.description].filter(Boolean).join('\n');
+      if(content){
+        entries.push({id:t.id || uid('item'), type:'item', role:normalizeRole(t.ownerRole || t.main) || '團務老師', parentId:null, content, createdAt:new Date().toISOString()});
+      }
+    });
+  }
+  if(old && Array.isArray(old.supplements)){
+    old.supplements.forEach(s => {
+      if(s.content){
+        entries.push({id:s.id || uid('reply'), type:'reply', role:normalizeRole(s.role) || '團務老師', parentId:s.recordId || s.parentId || null, content:String(s.content), createdAt:s.createdAt || new Date().toISOString()});
+      }
+    });
+  }
+  return entries;
+}
+function loadState(){
+  try{
+    const now = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if(now && Array.isArray(now.entries)) return now;
+  }catch(e){}
+  for(const key of OLD_KEYS){
+    try{
+      const old = JSON.parse(localStorage.getItem(key) || 'null');
+      const entries = migrateOldState(old);
+      if(entries.length){
+        const next = { entries };
+        localStorage.setItem(STORE_KEY, JSON.stringify(next));
+        return next;
+      }
+    }catch(e){}
+  }
+  return { entries: [] };
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 
-function renderRoles() {
-  $('roleGrid').innerHTML = ROLES.map(r => {
+function renderRoles(){
+  document.getElementById('roleGrid').innerHTML = ROLES.map(r => {
     const c = roleStyle(r.id);
     return `<button class="roleBtn ${currentRole===r.id?'active':''}" style="background:${c.bg}" data-role="${esc(r.id)}">${esc(r.name)}</button>`;
   }).join('');
+  document.querySelectorAll('.roleBtn').forEach(btn => {
+    btn.addEventListener('click', () => selectRole(btn.dataset.role));
+  });
 }
-
-function childLines(parentId) {
-  const replies = repliesFor(parentId);
-  if(!replies.length) return '';
-  return `<div class="childList">${replies.map(e => `
-    <div class="childLine"><span class="childText">${esc(e.content)}</span>${isMine(e) ? ` <button type="button" class="btn secondary small" data-edit="${e.id}">修改</button><button type="button" class="btn danger small" data-delete="${e.id}">刪除</button>` : ''}</div>
-  `).join('')}</div>`;
+function selectRole(role){ currentRole = role; render(); }
+function renderBaseCard(r){
+  const replies = repliesFor(r.id);
+  return `
+    <article class="item">
+      <h3>${esc(r.item)}</h3>
+      ${r.description ? `<p>${esc(r.description)}</p>` : ''}
+      <div class="itemActions"><button class="btn ghost" data-reply="${esc(r.id)}">＋補充內容</button></div>
+    </article>
+    ${replies.map(renderEntryCard).join('')}`;
 }
-
-function attachmentLines(parentId) {
-  const files = filesFor(parentId);
-  if(!files.length) return '';
-  return `<details class="attachmentBox"><summary>📎 相關資料 ${files.length}</summary><div class="attachments">${files.map(f => `
-    <div class="attachment">
-      <a href="${esc(f.fileUrl)}" target="_blank" rel="noopener">${esc(f.fileName || '相關資料')}</a>
-      ${isMine(f) ? ` <button type="button" class="btn danger small" data-file-delete="${f.id}">刪除</button>` : ''}
-    </div>
-  `).join('')}</div></details>`;
-}
-
-function actionButtons(parentId) {
-  return `<div class="itemActions">
-    <button type="button" class="btn ghost" data-reply="${esc(parentId)}">＋補充內容</button>
-    <button type="button" class="btn ghost" data-upload="${esc(parentId)}">＋上傳資料</button>
-  </div>`;
-}
-
-function renderBaseCard(r) {
-  return `<article class="item">
-    <h3>${esc(r.item)}</h3>
-    ${textForBase(r) ? `<p>${esc(textForBase(r))}</p>` : ''}
-    ${childLines(r.id)}
-    ${attachmentLines(r.id)}
-    ${actionButtons(r.id)}
-  </article>`;
-}
-
-function renderCustomItemCard(e) {
+function renderEntryCard(e){
   return `<article class="item added">
-    <h3>${esc(e.title || '新增項目')}</h3>
-    ${e.content ? `<p>${esc(e.content)}</p>` : ''}
-    ${isMine(e) ? `<div><button type="button" class="btn secondary small" data-edit="${e.id}">修改</button><button type="button" class="btn danger small" data-delete="${e.id}">刪除</button></div>` : ''}
-    ${childLines(e.id)}
-    ${attachmentLines(e.id)}
-    ${actionButtons(e.id)}
+    <p>${esc(e.content)}</p>
+    <div class="itemActions">
+      <button class="btn secondary" data-edit="${esc(e.id)}">修改</button>
+      <button class="btn danger" data-delete="${esc(e.id)}">刪除</button>
+    </div>
   </article>`;
 }
-
-function renderContent() {
+function renderContent(){
   const bases = baseRecordsForRole(currentRole);
   const customs = customItemsForRole(currentRole);
-  const html = [...bases.map(renderBaseCard), ...customs.map(renderCustomItemCard)].join('');
-  $('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
+  const html = [...bases.map(renderBaseCard), ...customs.map(renderEntryCard)].join('');
+  document.getElementById('content').innerHTML = html || '<div class="empty">目前還沒有內容。</div>';
+  document.querySelectorAll('[data-reply]').forEach(btn => btn.addEventListener('click', () => openReply(btn.dataset.reply)));
+  document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => openEdit(btn.dataset.edit)));
+  document.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => deleteEntry(btn.dataset.delete)));
 }
-
-function render() {
-  try {
-    setRoleVars(currentRole);
-    renderRoles();
-    $('currentRoleTitle').textContent = roleDisplayName(currentRole);
-    renderProgress();
-    renderContent();
-  } catch (err) {
-    console.error('render failed', err);
-    const content = $('content');
-    if(content) content.innerHTML = '<div class="empty">畫面載入失敗，請重新整理；若仍失敗請回報。</div>';
-  }
+function render(){
+  setRoleVars(currentRole);
+  renderRoles();
+  document.getElementById('currentRoleTitle').textContent = currentRole;
+  renderContent();
 }
-
-function closeModal() {
-  $('modalBackdrop').classList.remove('show');
-  $('titleInput').value = '';
-  $('contentInput').value = '';
+function showModal(title, value=''){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('contentInput').value = value;
+  document.getElementById('modalBackdrop').classList.add('show');
+  setTimeout(() => document.getElementById('contentInput').focus(), 60);
+}
+function closeModal(){
+  document.getElementById('modalBackdrop').classList.remove('show');
+  document.getElementById('contentInput').value = '';
   editing = null;
 }
-
-function configureModal() {
-  const isNewItem = editing?.mode === 'newItem';
-  $('titleField').classList.toggle('hidden', !isNewItem);
-  $('titleInput').required = isNewItem;
-  $('contentLabel').textContent = isNewItem ? '小項' : '補充內容';
-  $('contentInput').placeholder = isNewItem ? '把這一項要記錄的細項內容寫在這裡' : '把要補充的內容寫在這裡';
+function openReply(parentId){ editing = { mode:'reply', parentId }; showModal('補充內容'); }
+function openEdit(id){
+  const entry = state.entries.find(e => e.id === id);
+  if(!entry) return;
+  editing = { mode:'edit', id };
+  showModal('修改內容', entry.content || '');
 }
-
-function showModal(title, contentValue='', titleValue='') {
-  $('modalTitle').textContent = title;
-  $('contentInput').value = contentValue || '';
-  $('titleInput').value = titleValue || '';
-  configureModal();
-  $('modalBackdrop').classList.add('show');
-  setTimeout(() => (editing?.mode === 'newItem' ? $('titleInput') : $('contentInput')).focus(), 60);
-}
-
-async function saveModal(e) {
-  e.preventDefault();
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const content = $('contentInput').value.trim();
-  const title = $('titleInput').value.trim();
-  if(!content) return;
-  try {
-    if(editing?.mode === 'edit') {
-      const data = { content, updatedAt: serverTimestamp() };
-      if(editing.editType === 'item') data.title = title || '新增項目';
-      await updateDoc(doc(db, 'fengtungHandoverEntries', editing.id), data);
-    } else if(editing?.mode === 'reply') {
-      await addDoc(entriesCol, { type:'reply', role:currentRole, parentId:editing.parentId, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else if(editing?.mode === 'newItem') {
-      if(!title) return;
-      await addDoc(entriesCol, { type:'item', role:currentRole, title, content, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    }
-    closeModal();
-  } catch(err) {
-    console.error(err);
-    alert('儲存失敗：' + (err.message || err));
-  }
-}
-
-function openEdit(id) {
-  const entry = entries.find(e => e.id === id);
-  if(!entry || !isMine(entry)) return;
-  editing = { mode:'edit', id, editType:entry.type };
-  showModal(entry.type === 'item' ? '修改項目' : '修改內容', entry.content || '', entry.title || '');
-}
-
-async function deleteEntry(id) {
-  const entry = entries.find(e => e.id === id);
-  if(!entry || !isMine(entry)) return;
+function deleteEntry(id){
   if(!confirm('確定刪除這一筆內容？')) return;
-  try { await deleteDoc(doc(db, 'fengtungHandoverEntries', id)); }
-  catch(err) { alert('刪除失敗：' + (err.message || err)); }
+  state.entries = state.entries.filter(e => e.id !== id);
+  saveState();
+  renderContent();
 }
 
-
-
-async function promptAssign(parentId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const base = BASE_RECORDS.find(r => r.id === parentId);
-  const item = entries.find(e => e.id === parentId);
-  const current = base ? assignmentForBase(base) : item ? assignmentForItem(item) : { primaryRole: currentRole, backupRole:'尚未指定' };
-  const primary = prompt('主要負責人', assignmentRoleName(current.primaryRole));
-  if(primary === null) return;
-  const backup = prompt('備援負責人', assignmentRoleName(current.backupRole));
-  if(backup === null) return;
-  if(!confirm('確定要調整負責人嗎？')) return;
-  try { await addDoc(entriesCol, { type:'assignment', parentId, primaryRole:normalizeRole(primary.trim()), backupRole:normalizeRole(backup.trim()), ownerUid:currentUser.uid, createdAt:serverTimestamp() }); }
-  catch(err) { alert('調整失敗：' + (err.message || err)); }
-}
-
-async function editBaseLine(parentId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const base = BASE_RECORDS.find(r => r.id === parentId);
-  const item = entries.find(e => e.id === parentId);
-  const current = baseContentOverride(parentId)?.content || base?.description || item?.content || '';
-  const next = prompt('修改事件內容', current);
-  if(next === null) return;
-  if(!confirm('確定要修改這段文字嗎？')) return;
-  try {
-    if(item && isMine(item)) {
-      await updateDoc(doc(db, 'fengtungHandoverEntries', parentId), { content: next.trim(), updatedAt: serverTimestamp() });
-    } else {
-      await addDoc(entriesCol, { type:'baseContentEdit', parentId, content:next.trim(), ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    }
-  } catch(err) { alert('修改失敗：' + (err.message || err)); }
-}
-
-function openUpload(parentId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  uploadTarget = parentId;
-  $('fileInput').value = '';
-  $('fileInput').click();
-}
-
-async function handleFilePicked(e) {
-  const file = e.target.files && e.target.files[0];
-  if(!file || !uploadTarget || !currentUser) return;
-  if(file.size > 20 * 1024 * 1024) { alert('檔案不能超過 20MB。'); return; }
-  $('statusText').textContent = '檔案上傳中…';
-  const path = `fengtung-handover/${safePart(currentRole)}/${safePart(uploadTarget)}/${Date.now()}-${safePart(file.name)}`;
-  try {
-    const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, file, { contentType: file.type || 'application/octet-stream' });
-    const fileUrl = await getDownloadURL(storageRef);
-    await addDoc(entriesCol, {
-      type:'file', role:currentRole, parentId:uploadTarget,
-      fileName:file.name, fileUrl, storagePath:path, contentType:file.type || '', size:file.size,
-      ownerUid:currentUser.uid, createdAt:serverTimestamp()
-    });
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-  } catch(err) {
-    console.error(err);
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-    alert('上傳失敗：' + (err.message || err));
-  }
-}
-
-async function deleteFileEntry(id) {
-  const f = entries.find(e => e.id === id);
-  if(!f || !isMine(f)) return;
-  if(!confirm('確定刪除這個附件？')) return;
-  try {
-    if(f.storagePath) await deleteObject(ref(storage, f.storagePath)).catch(() => {});
-    await deleteDoc(doc(db, 'fengtungHandoverEntries', id));
-  } catch(err) { alert('刪除附件失敗：' + (err.message || err)); }
-}
-
-
-
-function defaultProgressTitle(key=currentProgressKey) {
-  return (PROGRESS_TYPES.find(t => t.key === key) || PROGRESS_TYPES[2]).defaultTitle;
-}
-function progressTitleEdit(key=currentProgressKey) {
-  const a = entries.filter(e => e.type === 'progressTitle' && (e.progressKey || 'show') === key);
-  return a.length ? a[a.length - 1].title : null;
-}
-function currentProgressTitle() { return progressTitleEdit() || defaultProgressTitle(); }
-function isProgressScoped(e, key=currentProgressKey) {
-  const k = e.progressKey || 'show';
-  return k === key;
-}
-function renderProgressTabs() {
-  const tabs = $('progressTabs');
-  if(!tabs) return;
-  tabs.innerHTML = PROGRESS_TYPES.map(t => `<button type="button" class="progressTab ${t.key===currentProgressKey?'active':''}" data-progress-tab="${esc(t.key)}">${esc(progressTitleEdit(t.key) || t.defaultTitle)}</button>`).join('');
-  $('progressTitleText').textContent = currentProgressTitle();
-}
-function progressEditsFor(scheduleId) { return entries.filter(e => e.type === 'progressEdit' && e.scheduleId === scheduleId && isProgressScoped(e)); }
-function latestProgressEdit(scheduleId) { const a = progressEditsFor(scheduleId); return a.length ? a[a.length - 1] : null; }
-function progressRows() {
-  const base = PROGRESS_BASE.map(r => ({...r, source:'base'}));
-  const custom = entries.filter(e => e.type === 'progressRow' && isProgressScoped(e)).map(e => ({
-    id:e.scheduleId || e.id, source:'custom', order:typeof e.order === 'number' ? e.order : 999,
-    time:e.time || '', item:e.item || '', primary:e.primary || '', helper:e.helper || '', note:e.note || ''
-  }));
-  const rows = [...base, ...custom].map(r => {
-    const edit = latestProgressEdit(r.id);
-    if(!edit) return r;
-    return {...r, time:edit.time ?? r.time, item:edit.item ?? r.item, primary:edit.primary ?? r.primary, helper:edit.helper ?? r.helper, note:edit.note ?? r.note, order:typeof edit.order === 'number' ? edit.order : r.order, hidden:!!edit.hidden};
-  }).filter(r => !r.hidden);
-  return rows.sort((a,b) => (a.order || 0) - (b.order || 0));
-}
-function progressCell(text, id, field) {
-  return `<span class="progressCellText">${esc(text || '')}</span><button type="button" class="progressMiniBtn progressInlineEdit" data-progress-cell="${esc(id)}" data-field="${esc(field)}">修改</button>`;
-}
-function progressRoleCell(text, id, field) {
-  const bg = field === 'primary' ? progressRoleBg(text) : '';
-  const style = bg ? ` style="background:${bg}"` : '';
-  return `<td class="${field === 'primary' ? 'progressRoleCell' : ''}"${style}>${progressCell(text, id, field)}</td>`;
-}
-function renderProgress() {
-  renderProgressTabs();
-  const rows = progressRows();
-  const table = $('progressTable');
-  if(!table) return;
-  table.innerHTML = `<thead><tr>
-    <th class="timeCol">時間</th><th class="itemCol">事項</th><th class="ownerCol">主要負責人</th><th class="helperCol">協助負責人</th><th class="noteCol">備註</th>
-  </tr></thead><tbody>${rows.map(row => `
-    <tr data-progress-row="${esc(row.id)}">
-      <td class="timeCol">${progressCell(row.time, row.id, 'time')}
-        <div class="progressActions">
-          <button type="button" class="progressMiniBtn" data-progress-add-before="${esc(row.id)}">上方新增</button>
-          <button type="button" class="progressMiniBtn" data-progress-add-after="${esc(row.id)}">下方新增</button>
-          <button type="button" class="progressMiniBtn danger" data-progress-delete="${esc(row.id)}">刪除這一列</button>
-        </div>
-      </td>
-      <td>${progressCell(row.item, row.id, 'item')}</td>
-      ${progressRoleCell(row.primary, row.id, 'primary')}
-      ${progressRoleCell(row.helper, row.id, 'helper')}
-      <td>${progressCell(row.note, row.id, 'note')}</td>
-    </tr>`).join('')}</tbody>`;
-}
-function fillTimeSelects(hourId, minuteId, value='') {
-  const hSel = $(hourId), mSel = $(minuteId);
-  if(!hSel || !mSel) return;
-  if(!hSel.options.length) hSel.innerHTML = Array.from({length:24},(_,i)=>`<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`).join('');
-  if(!mSel.options.length) mSel.innerHTML = ['00','10','20','30','40','50'].map(m=>`<option value="${m}">${m}</option>`).join('');
-  const m = String(value||'').match(/^(\d{1,2}):(\d{2})/);
-  const hh = m ? String(Math.min(23, Math.max(0, Number(m[1])))).padStart(2,'0') : '09';
-  let mm = m ? m[2] : '00';
-  if(!['00','10','20','30','40','50'].includes(mm)) mm = String(Math.round(Number(mm||0)/10)*10).padStart(2,'0');
-  if(mm === '60') mm = '50';
-  hSel.value = hh; mSel.value = ['00','10','20','30','40','50'].includes(mm) ? mm : '00';
-}
-function selectedTime(hourId, minuteId) { return `${$(hourId).value}:${$(minuteId).value}`; }
-function openProgressModal(mode, row=null, order=null) {
-  progressModalState = { mode, rowId: row?.id || null, order };
-  $('progressModalTitle').textContent = mode === 'new' ? '新增行程' : '修改行程';
-  fillTimeSelects('progressHourSelect','progressMinuteSelect', row?.time || '09:00');
-  $('progressItemInput').value = row?.item || '';
-  setupResponsibleSelect('progressPrimarySelect','progressPrimaryOther', row?.primary || '');
-  setupResponsibleSelect('progressHelperSelect','progressHelperOther', row?.helper || '');
-  $('progressNoteInput').value = row?.note || '';
-  $('progressModalBackdrop').classList.add('show');
-  setTimeout(() => $('progressItemInput').focus(), 50);
-}
-function closeProgressModal() {
-  $('progressModalBackdrop').classList.remove('show');
-  progressModalState = null;
-}
-async function saveProgressModal(e) {
+document.getElementById('addItemBtn').addEventListener('click', () => {
+  editing = { mode:'newItem' };
+  showModal('新增內容');
+});
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('modalBackdrop').addEventListener('click', e => {
+  if(e.target.id === 'modalBackdrop') closeModal();
+});
+document.getElementById('modalForm').addEventListener('submit', e => {
   e.preventDefault();
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const data = {
-    progressKey: currentProgressKey,
-    time:selectedTime('progressHourSelect','progressMinuteSelect'),
-    item:$('progressItemInput').value.trim(),
-    primary:readResponsible('progressPrimarySelect','progressPrimaryOther'),
-    helper:readResponsible('progressHelperSelect','progressHelperOther'),
-    note:$('progressNoteInput').value.trim(),
-    ownerUid:currentUser.uid,
-    createdAt:serverTimestamp()
-  };
-  if(!data.item) return;
-  try {
-    if(progressModalState?.mode === 'new') {
-      const scheduleId = currentProgressKey + '-progress-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
-      await addDoc(entriesCol, { type:'progressRow', scheduleId, order:progressModalState.order ?? Date.now(), ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    } else if(progressModalState?.mode === 'edit') {
-      await addDoc(entriesCol, { type:'progressEdit', scheduleId:progressModalState.rowId, ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() });
-    }
-    closeProgressModal();
-  } catch(err) { alert('儲存行程失敗：' + (err.message || err)); }
-}
-async function saveProgressCell(rowId, field) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const row = progressRows().find(r => r.id === rowId);
-  if(!row) return;
-  const data = { progressKey: currentProgressKey, time:row.time || '', item:row.item || '', primary:row.primary || '', helper:row.helper || '', note:row.note || '', order:row.order || 0 };
-  if(field === 'time') {
-    const cur = row.time || '09:00';
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<div style="padding:6px 0 2px;font-weight:900">請選擇時間</div><div class="timeSelectRow"><select id="tempHourSelect"></select><span>:</span><select id="tempMinuteSelect"></select></div>`;
-    const modal = document.createElement('div');
-    document.body.appendChild(modal);
-    const next = await new Promise(resolve => {
-      const box = document.createElement('div');
-      box.className = 'modalBackdrop show';
-      box.innerHTML = `<div class="modal"><h2>修改時間</h2>${wrap.innerHTML}<div class="modalActions"><button type="button" class="btn secondary" id="timeCancelBtn">取消</button><button type="button" class="btn" id="timeSaveBtn">儲存</button></div></div>`;
-      document.body.appendChild(box);
-      fillTimeSelects('tempHourSelect','tempMinuteSelect',cur);
-      box.querySelector('#timeCancelBtn').onclick = () => { box.remove(); resolve(null); };
-      box.querySelector('#timeSaveBtn').onclick = () => { const v = selectedTime('tempHourSelect','tempMinuteSelect'); box.remove(); resolve(v); };
-      box.onclick = e => { if(e.target === box) { box.remove(); resolve(null); } };
-    });
-    modal.remove();
-    if(next === null) return;
-    if(!confirm('確定要修改時間嗎？')) return;
-    data.time = next;
-  } else if(field === 'primary' || field === 'helper') {
-    const label = field === 'primary' ? '主要負責人' : '協助負責人';
-    const next = await new Promise(resolve => {
-      const box = document.createElement('div');
-      box.className = 'modalBackdrop show';
-      box.innerHTML = `<div class="modal"><h2>修改${label}</h2>
-        <div class="field"><label>${label}</label>${responsibleSelectHTML('tempResponsibleSelect', row[field] || '')}<input type="text" id="tempResponsibleOther" placeholder="請輸入其他負責人" style="display:none;margin-top:8px"></div>
-        <div class="modalActions"><button type="button" class="btn secondary" id="responsibleCancelBtn">取消</button><button type="button" class="btn" id="responsibleSaveBtn">儲存</button></div></div>`;
-      document.body.appendChild(box);
-      setupResponsibleSelect('tempResponsibleSelect','tempResponsibleOther', row[field] || '');
-      box.querySelector('#responsibleCancelBtn').onclick = () => { box.remove(); resolve(null); };
-      box.querySelector('#responsibleSaveBtn').onclick = () => {
-        try { const v = readResponsible('tempResponsibleSelect','tempResponsibleOther'); box.remove(); resolve(v); }
-        catch(err) { alert(err.message || err); }
-      };
-      box.onclick = e => { if(e.target === box) { box.remove(); resolve(null); } };
-    });
-    if(next === null) return;
-    if(!confirm('確定要修改' + label + '嗎？')) return;
-    data[field] = next;
-  } else {
-    const label = {item:'事項', note:'備註'}[field] || '內容';
-    const next = prompt('修改' + label, row[field] || '');
-    if(next === null) return;
-    if(!confirm('確定要修改這一格嗎？')) return;
-    data[field] = next.trim();
+  const content = document.getElementById('contentInput').value.trim();
+  if(!content) return;
+  if(editing && editing.mode === 'edit'){
+    state.entries = state.entries.map(x => x.id === editing.id ? {...x, content, updatedAt:new Date().toISOString()} : x);
+  }else if(editing && editing.mode === 'reply'){
+    state.entries.push({id:uid('reply'), type:'reply', role:currentRole, parentId:editing.parentId, content, createdAt:new Date().toISOString()});
+  }else{
+    state.entries.push({id:uid('item'), type:'item', role:currentRole, parentId:null, content, createdAt:new Date().toISOString()});
   }
-  try { await addDoc(entriesCol, { type:'progressEdit', scheduleId:rowId, ...data, ownerUid:currentUser.uid, createdAt:serverTimestamp() }); }
-  catch(err) { alert('修改失敗：' + (err.message || err)); }
-}
-async function deleteProgressRow(rowId) {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const row = progressRows().find(r => r.id === rowId);
-  if(!row) return;
-  if(!confirm('確定要刪除這一列嗎？')) return;
-  try { await addDoc(entriesCol, { type:'progressEdit', progressKey:currentProgressKey, scheduleId:rowId, hidden:true, order:row.order || 0, ownerUid:currentUser.uid, createdAt:serverTimestamp() }); }
-  catch(err) { alert('刪除失敗：' + (err.message || err)); }
-}
-function addProgressNear(rowId, after=false) {
-  const rows = progressRows();
-  const idx = rows.findIndex(r => r.id === rowId);
-  const row = rows[idx];
-  const neighbor = rows[after ? idx+1 : idx-1];
-  let order;
-  if(!row) order = Date.now();
-  else if(neighbor) order = (row.order + neighbor.order) / 2;
-  else order = row.order + (after ? 0.5 : -0.5);
-  openProgressModal('new', null, order);
-}
-async function editProgressTitle() {
-  if(!currentUser) { alert('Firebase 匿名登入尚未完成，請稍後再試。'); return; }
-  const next = prompt('修改進度表名稱', currentProgressTitle());
-  if(next === null) return;
-  const title = next.trim() || defaultProgressTitle();
-  if(!confirm('確定要修改進度表名稱嗎？')) return;
-  try { await addDoc(entriesCol, { type:'progressTitle', progressKey:currentProgressKey, title, ownerUid:currentUser.uid, createdAt:serverTimestamp() }); }
-  catch(err) { alert('修改名稱失敗：' + (err.message || err)); }
-}
-
-
-$('roleGrid').addEventListener('click', e => {
-  const btn = e.target.closest('[data-role]');
-  if(!btn) return;
-  currentRole = btn.dataset.role;
-  render();
+  saveState();
+  closeModal();
+  renderContent();
 });
-$('progressToggleBtn').addEventListener('click', () => {
-  $('progressBody').classList.toggle('collapsed');
-  $('progressToggleBtn').textContent = $('progressBody').classList.contains('collapsed') ? '展開' : '收合';
-});
-$('editProgressTitleBtn').addEventListener('click', editProgressTitle);
-$('progressTabs').addEventListener('click', e => {
-  const tab = e.target.closest('[data-progress-tab]');
-  if(!tab) return;
-  currentProgressKey = tab.dataset.progressTab;
-  render();
-});
-$('progressTable').addEventListener('click', e => {
-  const cell = e.target.closest('[data-progress-cell]');
-  const del = e.target.closest('[data-progress-delete]');
-  const before = e.target.closest('[data-progress-add-before]');
-  const after = e.target.closest('[data-progress-add-after]');
-  if(cell) saveProgressCell(cell.dataset.progressCell, cell.dataset.field);
-  if(del) deleteProgressRow(del.dataset.progressDelete);
-  if(before) addProgressNear(before.dataset.progressAddBefore, false);
-  if(after) addProgressNear(after.dataset.progressAddAfter, true);
-});
-$('cancelProgressModalBtn').addEventListener('click', closeProgressModal);
-$('progressModalBackdrop').addEventListener('click', e => { if(e.target.id === 'progressModalBackdrop') closeProgressModal(); });
-$('progressModalForm').addEventListener('submit', saveProgressModal);
-
-$('content').addEventListener('click', e => {
-  const reply = e.target.closest('[data-reply]');
-  const edit = e.target.closest('[data-edit]');
-  const del = e.target.closest('[data-delete]');
-  const upload = e.target.closest('[data-upload]');
-  const fileDel = e.target.closest('[data-file-delete]');
-  const baseLineEdit = e.target.closest('[data-base-line-edit]');
-  const assign = e.target.closest('[data-assign]');
-  if(reply) { editing = { mode:'reply', parentId:reply.dataset.reply }; showModal('補充內容'); }
-  if(edit) openEdit(edit.dataset.edit);
-  if(del) deleteEntry(del.dataset.delete);
-  if(upload) openUpload(upload.dataset.upload);
-  if(fileDel) deleteFileEntry(fileDel.dataset.fileDelete);
-  if(baseLineEdit) editBaseLine(baseLineEdit.dataset.baseLineEdit);
-  if(assign) promptAssign(assign.dataset.assign);
-});
-$('addItemBtn').addEventListener('click', () => { editing = { mode:'newItem' }; showModal('新增一項'); });
-$('cancelModalBtn').addEventListener('click', closeModal);
-$('modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
-$('modalForm').addEventListener('submit', saveModal);
-$('fileInput').addEventListener('change', handleFilePicked);
 
 render();
-setTimeout(render, 500);
-setTimeout(render, 1500);
-
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if(user) {
-    $('statusText').textContent = '已連線 Firebase，可共同填寫。';
-    render();
-  }
-});
-
-signInAnonymously(auth).catch(err => {
-  console.error(err);
-  $('statusText').textContent = 'Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。';
-});
-
-onSnapshot(query(entriesCol, orderBy('createdAt', 'asc')), snap => {
-  entries = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  render();
-}, err => {
-  console.error(err);
-  $('statusText').textContent = 'Firestore 讀取失敗，請確認規則已發布。';
-});
 </script>
 </body>
 </html>
