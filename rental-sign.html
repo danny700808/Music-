@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>設備租賃資料確認與合約簽署</title>
+  <link rel="stylesheet" href="style.css?v=rental-sign-20260614-payment">
+  <style>
+    body{background:#eef3f7;color:#18314a}.wrap{max-width:980px;margin:0 auto;padding:22px 14px 54px}.card2{background:#fff;border:1px solid #dbe5ef;border-radius:24px;padding:20px;margin-bottom:16px;box-shadow:0 10px 28px rgba(15,23,42,.04)}.title{font-size:30px;font-weight:950;margin:0 0 10px}.small{font-size:13px;color:#64748b;line-height:1.8}.btn{border:0;border-radius:14px;background:#1f7a5a;color:#fff;font-weight:950;padding:12px 18px;cursor:pointer}.btn.secondary{background:#e2e8f0;color:#18314a}.btn:disabled{opacity:.6;cursor:not-allowed}.btn-row{display:flex;gap:10px;flex-wrap:wrap}.msg{margin-top:12px;border-radius:14px;padding:12px 14px;font-weight:900;line-height:1.7}.msg.ok{background:#e8fff4;color:#146c43}.msg.bad{background:#fff0f0;color:#b42318}.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:12px}.field label{display:block;font-weight:950;margin-bottom:6px}.field input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:14px;padding:11px 12px;font-size:15px}.field.required-missing input,.field.required-missing canvas{border-color:#dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.12)}.error-note{display:none;color:#b42318;font-weight:900;font-size:13px;margin-top:4px}.field.required-missing .error-note{display:block}.hint{font-size:13px;color:#64748b;line-height:1.8}.preview-img{max-width:100%;max-height:220px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;margin-top:8px}.agree{display:flex;gap:10px;line-height:1.8;font-weight:900}#signatureCanvas{width:100%;height:230px;border:2px dashed #94a3b8;border-radius:16px;background:#fff;touch-action:none}#signatureCanvas.signature-locked{background:#f8fafc;border-style:solid;cursor:not-allowed}.sig-confirm-note{display:none;margin-top:8px;background:#e8fff4;color:#146c43;border-radius:12px;padding:8px 10px;font-weight:900}.contractNotice{background:#fff7ed;border:1px solid #fdba74;color:#9a3412;border-radius:16px;padding:12px 14px;font-weight:900;line-height:1.7;margin-bottom:14px}.paymentNotice{background:#f8fafc;border:1px solid #cbd5e1;border-radius:18px;padding:14px 16px;margin-top:12px;line-height:1.8;color:#334155}.paymentNotice b{color:#18314a}.paymentNotice .bank-line{font-weight:950;color:#0f172a}.paymentNotice .copyText{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;font-weight:950;letter-spacing:.02em}.contractPreviewShell{overflow-x:hidden;max-width:100%}.submitBox{border:1px solid #dbe5ef;border-radius:18px;padding:14px;background:#f8fafc}.progressWrap{display:none;margin-top:12px;background:#e2e8f0;border-radius:999px;overflow:hidden;height:14px}.progressBar{width:0%;height:100%;background:#1f7a5a;transition:width .28s ease}.progressText{font-size:13px;font-weight:950;margin-top:6px;color:#475569}.dialogMask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:9999;align-items:center;justify-content:center;padding:18px}.dialogBox{background:#fff;border-radius:22px;max-width:520px;width:100%;padding:22px;box-shadow:0 24px 80px rgba(15,23,42,.35)}.dialogTitle{font-size:22px;font-weight:950;margin:0 0 10px}.dialogText{line-height:1.8;color:#334155}.dialogText ul{margin:8px 0 0 20px}.dialogActions{text-align:right;margin-top:18px}.section-title{margin-top:0}.required-tag{display:inline-block;margin-left:6px;color:#dc2626;font-size:12px;font-weight:950}.print-area{overflow:hidden}@media(max-width:840px){.row2{grid-template-columns:1fr}.wrap{padding:12px 8px}.title{font-size:24px}#signatureCanvas{height:260px}.card2{padding:16px;border-radius:18px}}@media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}.card2:not(.print-area){display:none}.rental-contract-sheet{border:none!important;box-shadow:none!important;margin:0!important;width:210mm!important;min-height:297mm!important}@page{size:A4;margin:0}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card2"><h1 class="title">設備租賃資料確認與合約簽署</h1><div class="small">請先補上甲方身分證資料、上傳證明圖片並完成簽名，再查看契約預覽。此頁為資料確認與預覽，尚未正式生效。</div><div id="msg"></div></section>
+
+    <section id="identityPanel" class="card2">
+      <h2 class="section-title">甲方身分證資料</h2>
+      <div class="row2"><div class="field" id="idNumberField"><label>身分證字號 / 統編<span class="required-tag">必填</span></label><input id="customerIdNumber" placeholder="例如 A123456789"><div class="error-note">請填寫身分證字號 / 統編。</div></div><div class="field" id="idImageField"><label>甲方證明圖片<span class="required-tag">必填</span></label><input id="idImageInput" type="file" accept="image/*"><div class="hint">請上傳身分證或可供確認身分之證明圖片。圖片會自動加上「限柚子樂器設備租用使用」浮水印，並放在契約第二頁最下方備查。</div><div class="error-note">請上傳身分證證明圖片。</div></div></div>
+      <img id="idPreview" class="preview-img" style="display:none" alt="身分證證明預覽">
+    </section>
+
+    <section id="signPanel" class="card2">
+      <h2 class="section-title">甲方簽名</h2>
+      <div class="hint">請於下方框內簽名。手機上可以直接用手指簽名。</div>
+      <div class="field" id="signatureField" style="margin-top:10px"><canvas id="signatureCanvas" width="1000" height="320"></canvas><div class="error-note">請先在簽名框內完成簽名。</div></div>
+      <div class="btn-row"><button class="btn" id="confirmSigBtn" type="button">確認簽名</button><button class="btn secondary" id="clearSigBtn" type="button">清除重簽</button></div><div id="sigConfirmNote" class="sig-confirm-note">簽名已確認，契約預覽已更新。若需修改，請按「清除重簽」。</div>
+    </section>
+
+    <section class="card2 print-area"><h2 class="section-title">契約預覽</h2><div class="contractNotice">此為租賃資料確認與契約預覽，尚未正式生效。送出資料後，柚子樂器會依雙方約定時間安裝／交付；完成付款並由店家確認後，系統會另行傳送正式租賃契約連結。</div><div id="contractPreview" class="contractPreviewShell">讀取中...</div></section>
+
+    <section id="submitPanel" class="card2">
+      <h2 class="section-title">送出確認</h2>
+      <label class="agree" id="agreeField"><input id="agreeContract" type="checkbox"> <span>我已確認租賃資料、身分證資料、證明圖片、簽名與契約預覽內容，並同意送出本次租賃資料確認。</span></label>
+      <div class="error-note" id="agreeError">請勾選確認同意契約內容。</div>
+      <div class="submitBox" style="margin-top:14px"><button class="btn" id="submitSigBtn" type="button">送出確認資料與簽名</button><div id="progressWrap" class="progressWrap"><div id="progressBar" class="progressBar"></div></div><div id="progressText" class="progressText"></div></div>
+    </section>
+  </div>
+
+  <div id="dialogMask" class="dialogMask"><div class="dialogBox"><h3 id="dialogTitle" class="dialogTitle"></h3><div id="dialogText" class="dialogText"></div><div class="dialogActions"><button class="btn" type="button" onclick="closeDialog()">知道了</button></div></div></div>
+
+  <script src="config.js?v=rental-sign-20260614-payment"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="rental-common.js?v=rental-sign-20260614-payment"></script>
+  <script>
+    const R=window.YZRental; const params=new URLSearchParams(location.search); const contractId=params.get('contractId')||''; const token=params.get('token')||''; let contract=null; let signed=false; let watermarkedIdImage='';
+    const PAYMENT_INFO_TEXT = `付款方式可擇一：
+
+1. 先行匯款
+銀行：台新國際商業銀行
+銀行代碼：812
+分行：敦南分行
+分行代碼：0023
+戶名：黃銘廷
+帳號：28881010149129
+備註：帳號請輸入連續數字，中間不需輸入分隔線。
+
+完成匯款後，請將匯款截圖回傳至官方 LINE。
+
+2. 現場付款
+可於安裝／自取當下完成付款。`;
+    const FORMAL_RECEIVED_MESSAGE = `柚子樂器已收到您補填的租賃資料。
+
+若資料確認無誤，我們會依雙方約定的時間前往安裝／交付設備。
+
+${PAYMENT_INFO_TEXT}
+
+店家確認資料與款項後，系統會再傳送正式租賃契約連結給您，您可於連結中查看、列印或另存契約。
+
+如資料需補正，柚子樂器會再透過 LINE 與您聯繫。`;
+    function paymentInfoHtml(){ return `<div class="paymentNotice"><b>付款方式可擇一</b><br><br><b>1. 先行匯款</b><br><span class="bank-line">銀行：台新國際商業銀行</span><br>銀行代碼：812<br>分行：敦南分行<br>分行代碼：0023<br>戶名：黃銘廷<br>帳號：<span class="copyText">28881010149129</span><br><span class="small">備註：帳號請輸入連續數字，中間不需輸入分隔線。</span><br><br>完成匯款後，請將匯款截圖回傳至官方 LINE。<br><br><b>2. 現場付款</b><br>可於安裝／自取當下完成付款。</div>`; }
+    function successHtml(){ return '<h2>資料已送出完成</h2><p class="small">柚子樂器已收到您補填的租賃資料。若資料確認無誤，我們會依雙方約定的時間前往安裝／交付設備。店家確認資料與款項後，系統會再傳送正式租賃契約連結給您。</p>'+paymentInfoHtml(); }
+    function showDialog(title, html){ R.qs('dialogTitle').textContent=title; R.qs('dialogText').innerHTML=html; R.qs('dialogMask').style.display='flex'; }
+    function closeDialog(){ R.qs('dialogMask').style.display='none'; }
+    window.closeDialog=closeDialog;
+    function setProgress(p, text){ R.qs('progressWrap').style.display='block'; R.qs('progressBar').style.width=Math.max(0,Math.min(100,p))+'%'; R.qs('progressText').textContent=text||''; }
+    function clearValidation(){ ['idNumberField','idImageField','signatureField'].forEach(id=>R.qs(id)?.classList.remove('required-missing')); R.qs('agreeError').style.display='none'; }
+    function validateForm(){
+      clearValidation(); const errors=[];
+      if(!R.val('customerIdNumber')){ errors.push('請填寫身分證字號 / 統一編號'); R.qs('idNumberField').classList.add('required-missing'); }
+      if(!watermarkedIdImage){ errors.push('請上傳身分證證明圖片'); R.qs('idImageField').classList.add('required-missing'); }
+      if(!signatureConfirmed || !signatureDataUrl){ errors.push('請完成並按下「確認簽名」'); R.qs('signatureField').classList.add('required-missing'); }
+      if(!R.checked('agreeContract')){ errors.push('請勾選確認同意契約內容'); R.qs('agreeError').style.display='block'; }
+      if(errors.length){ showDialog('請先完成以下項目', '<ul>'+errors.map(e=>'<li>'+R.esc(e)+'</li>').join('')+'</ul>'); window.scrollTo({top:0,behavior:'smooth'}); return false; }
+      return true;
+    }
+    async function load(){
+      try{
+        contract=await R.get('rentalContracts', contractId); if(!contract) throw new Error('找不到合約');
+        if(R.clean(contract.signToken||contract.token)!==R.clean(token)) throw new Error('合約連結驗證失敗');
+        signed=!!contract.customerSignedAt;
+        R.setVal('customerIdNumber', contract.customerIdNumber||contract.customerTaxId||'');
+        watermarkedIdImage=contract.customerIdImageWatermarkedDataUrl||contract.idImageWatermarkedDataUrl||'';
+        if(watermarkedIdImage){ const img=R.qs('idPreview'); img.src=watermarkedIdImage; img.style.display='block'; }
+        refreshPreview();
+        if(signed){ R.qs('identityPanel').style.display='none'; R.qs('signPanel').style.display='none'; R.qs('submitPanel').innerHTML=successHtml(); }
+      }catch(err){ R.toast(err.message||String(err), false); R.qs('contractPreview').textContent='讀取失敗'; R.hide('identityPanel'); R.hide('signPanel'); R.hide('submitPanel'); }
+    }
+    function fitA4Preview(){
+      const box=R.qs('contractPreview'); if(!box) return; const sheets=[...box.querySelectorAll('.rental-contract-sheet')];
+      sheets.forEach(sheet=>{ sheet.style.transform=''; sheet.style.transformOrigin=''; sheet.style.marginLeft=''; sheet.style.marginBottom='10mm'; });
+      if(window.innerWidth>840) return;
+      requestAnimationFrame(()=>{
+        const available=Math.max(280, box.clientWidth-2);
+        sheets.forEach(sheet=>{
+          const sw=sheet.offsetWidth || 794; const sh=sheet.offsetHeight || 1122; const scale=Math.min(1, available/sw);
+          sheet.style.transform='scale('+scale+')'; sheet.style.transformOrigin='top left';
+          sheet.style.marginLeft=Math.max(0,(available-sw*scale)/2)+'px';
+          sheet.style.marginBottom=(Math.round(sh*scale-sh)+18)+'px';
+        });
+      });
+    }
+    function refreshPreview(){
+      const c=Object.assign({}, contract||{}, {customerIdNumber:R.val('customerIdNumber'), customerIdImageWatermarkedDataUrl:watermarkedIdImage, customerSignatureDataUrl:signatureDataUrl || (contract&&contract.customerSignatureDataUrl) || ''});
+      R.qs('contractPreview').innerHTML=R.renderContractHtml(c, {customerView:true})+`<style>#contractPreview .rental-contract-sheet{width:210mm!important;min-height:297mm!important;padding:11mm 12mm!important}#contractPreview .sign-grid{grid-template-columns:1.1fr .9fr!important}#contractPreview .period-bottom{position:absolute!important;left:12mm!important;right:12mm!important;bottom:12mm!important;grid-template-columns:1.15fr .85fr!important}#contractPreview .rental-page-no{position:absolute!important;right:12mm!important;bottom:7mm!important}@media(max-width:840px){#contractPreview .rental-contract-sheet{max-width:none!important}}</style>`;
+      fitA4Preview();
+    }
+    async function makeWatermark(file){
+      return new Promise((resolve,reject)=>{
+        const reader=new FileReader(); reader.onerror=()=>reject(new Error('圖片讀取失敗'));
+        reader.onload=()=>{ const img=new Image(); img.onload=()=>{ try{ const maxW=1200; const scale=Math.min(1,maxW/img.width); const w=Math.round(img.width*scale), h=Math.round(img.height*scale); const cv=document.createElement('canvas'); cv.width=w; cv.height=h; const ctx=cv.getContext('2d'); ctx.drawImage(img,0,0,w,h); ctx.save(); ctx.translate(w/2,h/2); ctx.rotate(-Math.PI/8); ctx.globalAlpha=.22; ctx.fillStyle='#b42318'; ctx.textAlign='center'; ctx.font=`bold ${Math.max(28,Math.round(w/24))}px sans-serif`; const txt='限柚子樂器設備租用使用'; for(let y=-h;y<=h;y+=Math.max(70,h/5)){ ctx.fillText(txt,0,y); } ctx.restore(); ctx.globalAlpha=1; ctx.fillStyle='rgba(0,0,0,.65)'; ctx.font=`bold ${Math.max(18,Math.round(w/42))}px sans-serif`; ctx.fillText('限柚子樂器設備租用使用',w/2,h-24); resolve(cv.toDataURL('image/jpeg',.82)); }catch(e){ reject(e); } }; img.onerror=()=>reject(new Error('圖片載入失敗')); img.src=reader.result; };
+        reader.readAsDataURL(file);
+      });
+    }
+    document.getElementById('idImageInput').onchange=async(e)=>{ const f=e.target.files && e.target.files[0]; if(!f) return; try{ watermarkedIdImage=await makeWatermark(f); const img=R.qs('idPreview'); img.src=watermarkedIdImage; img.style.display='block'; refreshPreview(); R.toast('身分證證明圖片已加上浮水印並更新預覽。', true); }catch(err){ R.toast(err.message||String(err), false); } };
+    const canvas=document.getElementById('signatureCanvas'), ctx=canvas.getContext('2d'); let drawing=false, hasDraw=false, signatureConfirmed=false, signatureDataUrl='';
+    function pos(e){ const r=canvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:(t.clientX-r.left)*canvas.width/r.width,y:(t.clientY-r.top)*canvas.height/r.height}; }
+    function start(e){ if(signatureConfirmed) return; drawing=true; const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+    function move(e){ if(signatureConfirmed) return; if(!drawing) return; const p=pos(e); ctx.lineWidth=5; ctx.lineCap='round'; ctx.strokeStyle='#111827'; ctx.lineTo(p.x,p.y); ctx.stroke(); hasDraw=true; e.preventDefault(); }
+    function end(){ drawing=false; }
+    ['mousedown','touchstart'].forEach(ev=>canvas.addEventListener(ev,start)); ['mousemove','touchmove'].forEach(ev=>canvas.addEventListener(ev,move)); ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>canvas.addEventListener(ev,end));
+    document.getElementById('confirmSigBtn').onclick=()=>{
+      if(!hasDraw){ showDialog('請先完成簽名','請先在簽名框內簽名，再按「確認簽名」。'); R.qs('signatureField').classList.add('required-missing'); return; }
+      signatureDataUrl=canvas.toDataURL('image/png');
+      signatureConfirmed=true;
+      canvas.classList.add('signature-locked');
+      R.qs('confirmSigBtn').disabled=true;
+      R.qs('sigConfirmNote').style.display='block';
+      R.qs('signatureField').classList.remove('required-missing');
+      refreshPreview();
+      R.toast('簽名已確認，已放入契約甲方簽名處。', true);
+    };
+    document.getElementById('clearSigBtn').onclick=()=>{
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      hasDraw=false; signatureConfirmed=false; signatureDataUrl=''; drawing=false;
+      canvas.classList.remove('signature-locked');
+      R.qs('confirmSigBtn').disabled=false;
+      R.qs('sigConfirmNote').style.display='none';
+      refreshPreview();
+    };
+
+    async function queueFormalReceivedNotice(){
+      try{
+        const fresh = await R.get('rentalContracts', contractId) || contract || {};
+        const lineId = R.clean(fresh.customerLineUserId || fresh.lineUserId);
+        const qid = 'rental-formal-received-' + contractId + '-' + Date.now();
+        if(lineId){
+          await R.db().collection('notificationQueue').doc(qid).set({
+            queueId: qid,
+            channel: 'line',
+            targetLineUserId: lineId,
+            targetName: R.clean(fresh.customerName || fresh.partyAName),
+            targetEmail: R.clean(fresh.customerEmail),
+            title: '租賃資料已收到與付款資訊',
+            body: FORMAL_RECEIVED_MESSAGE,
+            message: FORMAL_RECEIVED_MESSAGE,
+            status: '待發送',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAtText: R.nowText(),
+            source: 'rental-formal-received',
+            contractId: contractId
+          }, {merge:true});
+        }
+        await R.db().collection('rentalContracts').doc(contractId).set({
+          formalReceivedNoticeText: FORMAL_RECEIVED_MESSAGE,
+          formalReceivedNoticeQueuedAt: R.nowText(),
+          paymentInfoSentAtText: R.nowText(),
+          updatedAtText: R.nowText()
+        }, {merge:true});
+      }catch(e){
+        console.warn('queueFormalReceivedNotice failed:', e);
+      }
+    }
+
+    document.getElementById('submitSigBtn').onclick=async()=>{
+      if(!validateForm()) return;
+      const btn=R.qs('submitSigBtn'); btn.disabled=true; btn.textContent='送出中...'; setProgress(8,'準備送出資料...');
+      try{
+        setProgress(30,'儲存身分證資料與簽名...');
+        await R.db().collection('rentalContracts').doc(contractId).set({ customerIdNumber:R.val('customerIdNumber'), customerIdImageWatermarkedDataUrl:watermarkedIdImage, customerIdImageUpdatedAt:R.nowText(), customerSubmittedFormalAt:R.nowText(), formalReceivedNoticeText:FORMAL_RECEIVED_MESSAGE, status:'待店家確認' }, {merge:true});
+        setProgress(68,'送出確認資料...');
+        await R.call('rentalSignContractHttp',{contractId,token,signatureDataUrl,customerIdNumber:R.val('customerIdNumber'),customerIdImageWatermarkedDataUrl:watermarkedIdImage, formalReceivedNoticeText:FORMAL_RECEIVED_MESSAGE});
+        setProgress(82,'建立資料收到與付款資訊通知...');
+        await queueFormalReceivedNotice();
+        setProgress(100,'送出完成');
+        showDialog('確認送出完成','柚子樂器已收到您補填的租賃資料。<br><br>若資料確認無誤，我們會依雙方約定的時間前往安裝／交付設備。<br><br>您可先行匯款並回傳截圖，也可於安裝／自取當下付款。店家確認資料與款項後，系統會再傳送正式租賃契約連結給您。'+paymentInfoHtml());
+        await load(); window.scrollTo({top:0,behavior:'smooth'});
+      }catch(err){ showDialog('送出失敗', R.esc(err.message||String(err))); }
+      finally{ btn.disabled=false; btn.textContent='送出確認資料與簽名'; setTimeout(()=>{ R.qs('progressWrap').style.display='none'; R.qs('progressBar').style.width='0%'; R.qs('progressText').textContent=''; },1600); }
+    };
+    window.refreshPreview=refreshPreview; window.addEventListener('resize', fitA4Preview);
+    load();
+  </script>
+</body>
+</html>
