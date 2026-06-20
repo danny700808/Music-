@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>豐東管樂成果展進度表｜家長閱讀版</title>
+<style>
+:root{--bg:#f7f4ed;--panel:#fffdf8;--text:#2d2922;--muted:#7a7166;--line:#e4d9c8;--accent:#b3261e;--shadow:0 12px 28px rgba(48,39,24,.10)}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;background:linear-gradient(180deg,#fbf7ee 0%,#f2eadf 100%);color:var(--text);line-height:1.7}
+.wrap{max-width:1080px;margin:0 auto}
+header{padding:22px 14px 8px}
+.hero{background:linear-gradient(135deg,#fdeff5 0%,#eef5ff 100%);border:1px solid #d9dbe8;border-radius:22px;padding:22px 20px;box-shadow:var(--shadow);text-align:center}
+.hero h1{margin:0;font-size:clamp(26px,5vw,40px);letter-spacing:.05em;color:#3a3a46}
+.hero p{margin:8px 0 0;color:var(--muted);font-weight:800}
+main{padding:10px 14px 34px}
+.status{margin:14px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;color:var(--muted);font-weight:800}
+.progressSection{background:#fffdf8;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);margin:14px 0 18px;overflow:hidden}
+.progressHeader{padding:16px 18px;background:#b3261e;color:#fff;text-align:center}
+.progressHeader h2{margin:0;font-size:clamp(22px,4.8vw,34px);letter-spacing:.03em;font-weight:950}
+.progressBody{padding:14px}
+.progressTitleRow{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0 14px;flex-wrap:wrap}
+.progressTitleRow h3{margin:0;font-size:clamp(23px,4.5vw,36px);line-height:1.2;font-weight:950;letter-spacing:.04em;text-align:center}
+.progressScroll{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;border:1px solid #e7dfd2;background:#fff;padding:10px}
+.progressPaper{width:980px;max-width:none;margin:0 auto;background:#fff;padding:18px 18px 22px}
+.progressTable{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff;color:#111;font-size:13px;line-height:1.45}
+.progressTable th,.progressTable td{border:1.4px solid #222;vertical-align:top;padding:8px 7px;word-break:break-word;overflow-wrap:anywhere}
+.progressTable th{background:#f3efe4;text-align:center;font-weight:900}
+.progressTable .timeCol{width:82px;text-align:center}
+.progressTable .itemCol{width:51%}
+.progressTable .helperCol{width:170px}
+.progressTable .noteCol{width:240px}
+.progressCellText{white-space:pre-wrap}
+.progressItemList{margin:0 0 5px 1.15em;padding:0}
+.progressItemList li{margin:0 0 5px 0;padding-left:2px}
+.progressLineText{white-space:pre-wrap}
+.progressLineRoles{display:inline-flex;flex-wrap:wrap;gap:3px;vertical-align:middle;margin:0 4px 0 6px}
+.progressLineRoles .progressRoleTag{font-size:11px;padding:2px 6px}
+.progressRoleTags{display:flex;flex-wrap:wrap;gap:5px;align-items:flex-start;min-height:26px;margin-bottom:5px}
+.progressRoleTag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 8px;font-size:12px;line-height:1.35;font-weight:900;color:#1f1b14;border:1px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.05);white-space:normal}
+.empty{text-align:center;color:var(--muted);font-weight:900;padding:24px}
+@media(max-width:620px){header{padding:12px 10px 6px}main{padding:8px 6px 26px}.hero{padding:18px 14px;border-radius:18px}.progressBody{padding:8px 4px}.progressTitleRow{gap:6px;margin-bottom:8px}.progressTitleRow h3{font-size:20px}.progressScroll{padding:6px}.progressPaper{width:900px;padding:8px}.progressTable{font-size:12px;line-height:1.35}.progressTable th,.progressTable td{padding:6px 5px}}
+@media print{@page{size:A4 landscape;margin:8mm}body{background:#fff!important}header,.status{display:none!important}main,.wrap{padding:0!important;margin:0!important;max-width:none!important;width:100%!important}.progressSection{box-shadow:none!important;border:0!important;border-radius:0!important;margin:0!important;overflow:visible!important;background:#fff!important}.progressHeader{display:none!important}.progressBody{padding:0!important}.progressScroll{overflow:visible!important;border:0!important;padding:0!important}.progressPaper{width:100%!important;padding:0!important;margin:0!important}.progressTable{font-size:9.5pt!important;line-height:1.35!important}.progressTable th,.progressTable td{border:1px solid #111!important;padding:5px!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap hero"><h1>豐東管樂成果展進度表</h1><p>家長閱讀版｜資料會與後台成果展進度表同步更新</p></div></header>
+<main><div class="wrap">
+<div class="status" id="statusText">資料讀取中…</div>
+<section class="progressSection"><div class="progressHeader"><h2>成果展進度表</h2></div><div class="progressBody"><div class="progressTitleRow"><h3 id="progressTitleText">成果展進度表</h3></div><div class="progressScroll"><div class="progressPaper"><table class="progressTable" id="progressTable"><tbody><tr><td class="empty">資料讀取中…</td></tr></tbody></table></div></div></div></section>
+</div></main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",authDomain:"youzi-c1b74.firebaseapp.com",projectId:"youzi-c1b74",storageBucket:"youzi-c1b74.firebasestorage.app",messagingSenderId:"187002582910",appId:"1:187002582910:web:f5c73a46e5a773a860a52f",measurementId:"G-WLYK892EDW"};
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app), entriesCol=collection(db,'fengtungHandoverEntries');
+const roleColors={'團務老師':{bg:'#F7E4D0',accent:'#B76E3C'},'會長':{bg:'#FBE2BF',accent:'#A85B30'},'副會長':{bg:'#FBE2BF',accent:'#A85B30'},'總務':{bg:'#F1E0C6',accent:'#8A6A3A'},'文書':{bg:'#F8E6D8',accent:'#C07147'},'攝影':{bg:'#F4D8C8',accent:'#B75C3A'},'化妝':{bg:'#F4D8C8',accent:'#B75C3A'},'全體幹部':{bg:'#EFE1CF',accent:'#7A5A3A'},'家長志工':{bg:'#FFF3E4',accent:'#B88A58'},'文化中心人員':{bg:'#FFF3E4',accent:'#B88A58'},'學生':{bg:'#FFF3E4',accent:'#B88A58'},'全體團員':{bg:'#FFF3E4',accent:'#B88A58'},'大團團員':{bg:'#FFF3E4',accent:'#B88A58'},'新生團團員':{bg:'#FFF3E4',accent:'#B88A58'},'其他':{bg:'#FFF3E4',accent:'#B88A58'}};
+const SHOW_PROGRESS_BASE=[
+{id:'show000',order:0,time:'',item:'',primary:'',helper:'',note:''},
+{id:'showOld001',order:0.5,time:'07:20',item:'幹部集合點名、搬羅馬旗座、場布用品箱。',primary:'',helper:'',note:'原先資料｜全體幹部及家長志工'},
+{id:'show001',order:1,time:'08:00',item:'管樂室集合點名；上身穿著團服紅 T，攜帶全套演奏服、黑鞋、長統黑襪。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'show002',order:2,time:'08:05',item:'搬打擊樂器、個人中大型樂器、特殊譜架和木椅上樂器車；08:45 步行前往文化中心。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'showOld002',order:2.5,time:'08:10',item:'全體師生家長上遊覽車、出發。',primary:'',helper:'',note:'原先資料'},
+{id:'show003',order:3,time:'09:00',item:'較忙的家長可直接進入後台，協助搬椅子、做舞台及場地布置。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'showOld003',order:3.1,time:'09:00',item:'抵達活動場地。',primary:'',helper:'',note:'原先資料'},
+{id:'showOld004',order:3.2,time:'09:00',item:'空檔拍照與場地紀錄。',primary:'',helper:'',note:'原先資料'},
+{id:'show004',order:4,time:'09:20',item:'打擊搬上樓定位，擺放椅子譜架。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'show005',order:5,time:'10:00',item:'彩排、拍照。',primary:'團務老師',helper:'攝影',note:''},
+{id:'showOld005',order:5.1,time:'10:00',item:'熱管、彩排、試音。',primary:'',helper:'',note:'原先資料'},
+{id:'showOld006',order:5.2,time:'10:00',item:'前台布置、簽到與節目單準備。',primary:'',helper:'',note:'原先資料'},
+{id:'showOld007',order:5.7,time:'11:15',item:'幹部及家長志工提早用午餐。',primary:'',helper:'',note:'原先資料｜確認餐點。'},
+{id:'show006',order:6,time:'12:00',item:'用餐。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'show007',order:7,time:'12:30',item:'換全套演奏服、妝髮、休息。',primary:'團務老師',helper:'家長志工',note:'協助妝髮的家長請提早到後台休息室。'},
+{id:'show008',order:8,time:'13:00',item:'前台工作的家長幹部協助接待、驗票、發節目單，並與文化中心人員志工協調工作。',primary:'團務老師',helper:'文書',note:''},
+{id:'show009',order:9,time:'13:30',item:'開放現場索票及取票。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'showOld008',order:9.1,time:'13:30',item:'現場索票、引導來賓入座、貴賓接待。',primary:'',helper:'',note:'原先資料'},
+{id:'show010',order:10,time:'14:00',item:'開放入場；組裝樂器、熱管調音。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'show011',order:11,time:'14:20',item:'大團團員前往舞台兩側預備上台。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'show012',order:12,time:'14:30',item:'音樂會；中場休息 15 分鐘。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'showOld009',order:12.1,time:'14:30',item:'演出與後台協助。',primary:'',helper:'',note:'原先資料'},
+{id:'show013',order:13,time:'下半場',item:'新生團團員提早 10 分鐘到舞台兩側預備上台；安排感謝祝福 9 年級團員儀式。',primary:'團務老師',helper:'全體幹部',note:''},
+{id:'show014',order:14,time:'16:00',item:'終場撤收樂器等物上樂器車，完成後換回紅 T。',primary:'團務老師',helper:'家長志工',note:'麻煩家長協助清理舞台及後台休息室。'},
+{id:'showOld010',order:14.1,time:'16:25',item:'撤場、器材歸位與場地復原。',primary:'',helper:'',note:'原先資料'},
+{id:'show015',order:15,time:'17:10',item:'步行返校。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'show016',order:16,time:'17:30',item:'復原管樂室。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'show017',order:17,time:'18:00',item:'步行前往「大喜鍋」慶功宴。',primary:'團務老師',helper:'家長志工',note:''},
+{id:'show999',order:999,time:'',item:'',primary:'',helper:'',note:''}];
+const DEFAULT_OFFICER_LISTS={
+  '27':{'副會長':'黃瓊慧（林佳翰）小號','總務':'黃萱（連沛歆）薩克斯風＋打擊','攝影':'陳怡穎（吳宇婕）長號','文書':'連恭賢（連沛歆）薩克斯風＋打擊'},
+  '26':{'會長':'黃銘廷（黃晴沂）長笛','總務':'曾郁喬（黃紹涵）法國號','文書':'黃雅鈴（游家婕）長號'},
+  '25':{'會長':'陳巧芬／Chen Chiao Fen（容碩）Sax','總務':'劉佳雯（張宥絜）長號','文書':'美伶／Mei Ling（佳綸）打擊','攝影':'鄭聯臺（淮毓）豎笛','化妝':'楊玉菁（羅巧喬）法國號'}
+};
+let entries=[];
+const PROGRESS_KEY='show';
+const $=id=>document.getElementById(id);
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function progressOwnerArray(v){if(Array.isArray(v))return v.map(x=>String(x||''));if(!v)return[];return String(v||'').split(/\n+/).map(x=>x.trim()).filter(x=>x||x==='')}
+function progressTitleEdit(){const a=entries.filter(e=>e.type==='progressTitle'&&(e.progressKey||'show')===PROGRESS_KEY);return a.length?a[a.length-1].title:null}
+function progressTitle(){return progressTitleEdit()||'成果展進度表'}
+function latestOfficerConfig(){const a=entries.filter(e=>e.type==='officerConfig');return a.length?a[a.length-1]:null}
+function normalizeOfficerYear(year=''){return String(year||'').replace(/第/g,'').replace(/屆/g,'').trim()}
+function cloneOfficerLists(src={}){const out={};Object.entries(src||{}).forEach(([year,roles])=>{const y=normalizeOfficerYear(year);if(!y)return;out[y]={};Object.entries(roles||{}).forEach(([role,name])=>{const r=String(role||'').trim(),n=String(name||'').trim();if(r&&n)out[y][r]=n});if(!Object.keys(out[y]).length)delete out[y]});return out}
+function officerLists(){return cloneOfficerLists(latestOfficerConfig()?.lists||DEFAULT_OFFICER_LISTS)}
+function officerAutoName(role,year){return officerLists()[normalizeOfficerYear(year)]?.[role]||''}
+function parseOfficerRef(tag=''){const raw=String(tag||'').trim();const m=raw.match(/^@officer:([^:]+):([^:]+)$/);if(!m)return null;try{return{year:normalizeOfficerYear(decodeURIComponent(m[1])),role:decodeURIComponent(m[2]).trim()}}catch(err){return null}}
+function officerShortName(name=''){return String(name||'').split(/[（(／\/]/)[0].trim()}
+function officerRefDisplay(ref){if(!ref)return'';const name=officerAutoName(ref.role,ref.year);const short=officerShortName(name)||name;return short?`${ref.role}：${short}`:ref.role}
+function progressRoleDisplay(tag=''){const raw=String(tag||'').trim();if(!raw)return'';const ref=parseOfficerRef(raw);if(ref)return officerRefDisplay(ref);const parts=raw.split(/[：:]/);const role=(parts.shift()||'').trim();const detail=parts.join('：').trim();if(!detail)return role;const short=officerShortName(detail)||detail;return `${role}：${short}`}
+function progressRoleName(tag=''){const ref=parseOfficerRef(tag);if(ref)return ref.role;const display=progressRoleDisplay(tag)||String(tag||'');return display.split(/[：:]/)[0].trim()}
+function progressRoleStyle(tag=''){const key=progressRoleName(tag);return roleColors[key]||roleColors['其他']||roleColors['全體幹部']}
+function progressRoleList(v=''){return String(v||'').split('|').map(x=>x.trim()).filter(x=>progressRoleDisplay(x))}
+function progressRoleTagHtml(tag=''){const display=progressRoleDisplay(tag);if(!display)return'';const st=progressRoleStyle(tag);return `<span class="progressRoleTag" style="background:${st.bg};border-color:${st.accent};color:#1f1b14">${esc(display)}</span>`}
+function progressTextList(v=''){return String(v||'').split(/\n+/).map(x=>x.trim()).filter(Boolean)}
+function progressLineField(field){return field==='note'?'note':'item'}
+function progressOwnerField(field){return progressLineField(field)==='note'?'noteOwners':'itemOwners'}
+function progressLineData(row,field){field=progressLineField(field);const texts=progressTextList(row[field]);const owners=progressOwnerArray(row[progressOwnerField(field)]);return texts.map((text,i)=>({text,roles:owners[i]||''}))}
+function progressLineRolesHtml(roles=''){const tags=progressRoleList(roles);return tags.length?`<span class="progressLineRoles">${tags.map(progressRoleTagHtml).join('')}</span>`:''}
+function progressListCell(row,field){const lines=progressLineData(row,field);return lines.length?`<ul class="progressItemList">${lines.map(line=>`<li><span class="progressLineText">${esc(line.text)}</span>${progressLineRolesHtml(line.roles)}</li>`).join('')}</ul>`:'<span class="progressCellText"></span>'}
+function progressRoleCell(t){const tags=progressRoleList(t);return `<td><div class="progressRoleTags">${tags.map(progressRoleTagHtml).join('')}</div></td>`}
+function progressEditsFor(id){return entries.filter(e=>e.type==='progressEdit'&&e.scheduleId===id&&(e.progressKey||'show')===PROGRESS_KEY)}
+function latestProgressEdit(id){const a=progressEditsFor(id);return a.length?a[a.length-1]:null}
+function progressRows(){const custom=entries.filter(e=>e.type==='progressRow'&&(e.progressKey||'show')===PROGRESS_KEY).map(e=>({id:e.scheduleId||e.id,order:typeof e.order==='number'?e.order:999,time:e.time||'',item:e.item||'',itemOwners:progressOwnerArray(e.itemOwners),primary:e.primary||'',helper:e.helper||'',note:e.note||'',noteOwners:progressOwnerArray(e.noteOwners)}));return[...SHOW_PROGRESS_BASE,...custom].map(r=>{const base={...r,itemOwners:progressOwnerArray(r.itemOwners),noteOwners:progressOwnerArray(r.noteOwners)};const ed=latestProgressEdit(base.id);return ed?{...base,time:ed.time??base.time,item:ed.item??base.item,itemOwners:Array.isArray(ed.itemOwners)?progressOwnerArray(ed.itemOwners):base.itemOwners,primary:ed.primary??base.primary,helper:ed.helper??base.helper,note:ed.note??base.note,noteOwners:Array.isArray(ed.noteOwners)?progressOwnerArray(ed.noteOwners):base.noteOwners,order:typeof ed.order==='number'?ed.order:base.order,hidden:!!ed.hidden}:base}).filter(r=>!r.hidden).sort((a,b)=>(a.order||0)-(b.order||0))}
+function renderProgress(){$('progressTitleText').textContent=progressTitle();const rows=progressRows();$('progressTable').innerHTML=`<thead><tr><th class="timeCol">時間</th><th class="itemCol">事項</th><th class="helperCol">協助負責人</th><th class="noteCol">備註</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="timeCol"><span class="progressCellText">${esc(r.time||'')}</span></td><td>${progressListCell(r,'item')}</td>${progressRoleCell(r.helper)}<td>${progressListCell(r,'note')}</td></tr>`).join('')}</tbody>`}
+function startRealtime(){onSnapshot(query(entriesCol,orderBy('createdAt','asc')),snap=>{entries=snap.docs.map(d=>({id:d.id,...d.data()}));renderProgress();$('statusText').textContent='資料已同步更新';},err=>{console.error(err);$('statusText').textContent='資料讀取失敗，請確認網路或 Firebase 權限。';})}
+signInAnonymously(auth).then(startRealtime).catch(err=>{console.error(err);$('statusText').textContent='Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。';});
+</script>
+</body>
+</html>
