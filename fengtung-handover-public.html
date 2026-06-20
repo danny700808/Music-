@@ -92,8 +92,7 @@ let entries=[];
 const PROGRESS_KEY='show';
 const $=id=>document.getElementById(id);
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function progressOwnerArray(v){if(Array.isArray(v))return v.map(x=>String(x||''));if(!v)return[];return String(v||'').split(/
-+/).map(x=>x.trim()).filter(x=>x||x==='')}
+function progressOwnerArray(v){if(Array.isArray(v))return v.map(x=>String(x||''));if(!v)return[];return String(v||'').split(/\n+/).map(x=>x.trim()).filter(x=>x||x==='')}
 function progressTitleEdit(){const a=entries.filter(e=>e.type==='progressTitle'&&(e.progressKey||'show')===PROGRESS_KEY);return a.length?a[a.length-1].title:null}
 function progressTitle(){return progressTitleEdit()||'成果展進度表'}
 function latestOfficerConfig(){const a=entries.filter(e=>e.type==='officerConfig');return a.length?a[a.length-1]:null}
@@ -109,8 +108,7 @@ function progressRoleName(tag=''){const ref=parseOfficerRef(tag);if(ref)return r
 function progressRoleStyle(tag=''){const key=progressRoleName(tag);return roleColors[key]||roleColors['其他']||roleColors['全體幹部']}
 function progressRoleList(v=''){return String(v||'').split('|').map(x=>x.trim()).filter(x=>progressRoleDisplay(x))}
 function progressRoleTagHtml(tag=''){const display=progressRoleDisplay(tag);if(!display)return'';const st=progressRoleStyle(tag);return `<span class="progressRoleTag" style="background:${st.bg};border-color:${st.accent};color:#1f1b14">${esc(display)}</span>`}
-function progressTextList(v=''){return String(v||'').split(/
-+/).map(x=>x.trim()).filter(Boolean)}
+function progressTextList(v=''){return String(v||'').split(/\n+/).map(x=>x.trim()).filter(Boolean)}
 function progressLineField(field){return field==='note'?'note':'item'}
 function progressOwnerField(field){return progressLineField(field)==='note'?'noteOwners':'itemOwners'}
 function progressLineData(row,field){field=progressLineField(field);const texts=progressTextList(row[field]);const owners=progressOwnerArray(row[progressOwnerField(field)]);return texts.map((text,i)=>({text,roles:owners[i]||''}))}
@@ -122,7 +120,8 @@ function latestProgressEdit(id){const a=progressEditsFor(id);return a.length?a[a
 function progressRows(){const custom=entries.filter(e=>e.type==='progressRow'&&(e.progressKey||'show')===PROGRESS_KEY).map(e=>({id:e.scheduleId||e.id,order:typeof e.order==='number'?e.order:999,time:e.time||'',item:e.item||'',itemOwners:progressOwnerArray(e.itemOwners),primary:e.primary||'',helper:e.helper||'',note:e.note||'',noteOwners:progressOwnerArray(e.noteOwners)}));return[...SHOW_PROGRESS_BASE,...custom].map(r=>{const base={...r,itemOwners:progressOwnerArray(r.itemOwners),noteOwners:progressOwnerArray(r.noteOwners)};const ed=latestProgressEdit(base.id);return ed?{...base,time:ed.time??base.time,item:ed.item??base.item,itemOwners:Array.isArray(ed.itemOwners)?progressOwnerArray(ed.itemOwners):base.itemOwners,primary:ed.primary??base.primary,helper:ed.helper??base.helper,note:ed.note??base.note,noteOwners:Array.isArray(ed.noteOwners)?progressOwnerArray(ed.noteOwners):base.noteOwners,order:typeof ed.order==='number'?ed.order:base.order,hidden:!!ed.hidden}:base}).filter(r=>!r.hidden).sort((a,b)=>(a.order||0)-(b.order||0))}
 function renderProgress(){const rows=progressRows();$('progressTable').innerHTML=`<thead><tr><th class="timeCol">時間</th><th class="itemCol">事項</th><th class="helperCol">協助負責人</th><th class="noteCol">備註</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="timeCol"><span class="progressCellText">${esc(r.time||'')}</span></td><td>${progressListCell(r,'item')}</td>${progressRoleCell(r.helper)}<td>${progressListCell(r,'note')}</td></tr>`).join('')}</tbody>`}
 function startRealtime(){onSnapshot(query(entriesCol,orderBy('createdAt','asc')),snap=>{entries=snap.docs.map(d=>({id:d.id,...d.data()}));renderProgress();},err=>{console.error(err);})}
-signInAnonymously(auth).then(startRealtime).catch(err=>{console.error(err);});
+renderProgress();
+signInAnonymously(auth).then(startRealtime).catch(err=>{console.error(err);renderProgress();});
 </script>
 </body>
 </html>
