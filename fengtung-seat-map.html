@@ -6,7 +6,7 @@
 <title>臺中市葫蘆墩文化中心演奏廳－可編輯座位圖</title>
 <style>
   :root{
-    --zoom:.43;
+    --zoom:.20;
     --line:#242424;
     --assigned:#eaf7e7;
     --empty:#fff0a8;
@@ -99,7 +99,7 @@
 <body>
 <div class="toolbar">
   <strong>可編輯座位圖</strong>
-  <button id="zoomOut">－</button><span class="zoom-value" id="zoomLabel">43%</span><button id="zoomIn">＋</button>
+  <button id="zoomOut">－</button><span class="zoom-value" id="zoomLabel">20%</span><button id="zoomIn">＋</button>
   <button id="fit">全圖</button>
   <span class="section-label">分區</span>
   <button class="section-btn active" data-zone="all">全圖</button>
@@ -456,7 +456,7 @@ if(exportBtn)exportBtn.onclick=()=>{const blob=new Blob([JSON.stringify(currentS
 const importFile=document.getElementById('importFile');
 if(importFile)importFile.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
 
-let zoom=.43;
+let zoom=.20;
 let activeZoneKey='all';
 const zoneViews={
   all:{label:'全圖',x:0,y:0,w:3400,h:1920},
@@ -477,9 +477,8 @@ function setZoom(z){
 }
 function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
 function fitWhole(){
-  const fitW=(viewport.clientWidth-36)/3400;
-  const fitH=(viewport.clientHeight-36)/1920;
-  setZoom(Math.min(.95,Math.max(.18,Math.min(fitW,fitH))));
+  // 全圖固定用 20%，讓手機一開始是最小預覽。
+  setZoom(.20);
 }
 function fitZoomForZone(zone){
   const padding=36;
@@ -509,7 +508,8 @@ function centerOnZone(zoneKey){
     requestAnimationFrame(()=>viewport.scrollTo({left:0,top:0,behavior:'smooth'}));
     return;
   }
-  setZoom(fitZoomForZone(zone));
+  // 分區固定先用 100%，不要自動放到 170%～190%。
+  setZoom(1);
   requestAnimationFrame(()=>requestAnimationFrame(()=>scrollViewportToZoneCenter(zone)));
 }
 function zoomAroundViewportPoint(newZoom,clientX,clientY){
