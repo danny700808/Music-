@@ -70,6 +70,13 @@
   input[type=file]{display:none}
   .sync-status{font-size:13px;font-weight:800;background:#263442;color:#fff;border:1px solid #ffffff55;border-radius:999px;padding:6px 10px;white-space:nowrap}
   .sync-status.ok{background:#1f7a3f}.sync-status.warn{background:#9a5b00}.sync-status.error{background:#9b2424}
+
+  .print-dialog-body{padding:18px;display:grid;gap:12px}
+  .print-help{font-size:14px;line-height:1.55;color:#4c5968;font-weight:600}
+  .print-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .print-grid button{padding:12px 10px;font-weight:800;background:#f5f7fa;border:1px solid #d8e0ea}
+  .print-grid button:hover{background:#e9f2ff;border-color:#146ef5}
+  .print-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}
   @media (max-width:900px){
     .overview{position:sticky;top:64px;right:auto;width:calc(100% - 24px);margin:10px 12px 0;z-index:25}
     .toolbar{gap:6px}
@@ -150,15 +157,35 @@
     <button id="applyEdit" class="primary">套用</button>
   </div>
 </dialog>
+<dialog id="printDialog">
+  <div class="editor-head">選擇要列印的區塊</div>
+  <div class="print-dialog-body">
+    <div class="print-help">列印時會只放大輸出你選的區塊，不會整張座位圖一起縮小。</div>
+    <div class="print-grid">
+      <button data-print-zone="f1l">一樓左區</button>
+      <button data-print-zone="f1c">一樓中區</button>
+      <button data-print-zone="f1r">一樓右區</button>
+      <button data-print-zone="wheel">輪椅席／陪伴席</button>
+      <button data-print-zone="f2l">二樓左區</button>
+      <button data-print-zone="f2c">二樓中區</button>
+      <button data-print-zone="f2r">二樓右區</button>
+    </div>
+  </div>
+  <div class="print-actions">
+    <button id="cancelPrint">取消</button>
+  </div>
+</dialog>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 const firebaseConfig = {apiKey:"AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",authDomain:"youzi-c1b74.firebaseapp.com",projectId:"youzi-c1b74",storageBucket:"youzi-c1b74.firebasestorage.app",messagingSenderId:"187002582910",appId:"1:187002582910:web:f5c73a46e5a773a860a52f",measurementId:"G-WLYK892EDW"};
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
-const seatMapDoc = doc(db, 'fengtungHandoverEntries', 'huludun-seat-map-v1');
+const entriesCol = collection(db, 'fengtungHandoverEntries');
+const seatMapKey = 'huludun-seat-map-v1';
 let firebaseUser = null;
 (() => {
 const CELL_W=58, CELL_H=48;
@@ -317,13 +344,14 @@ async function saveCloud({silent=false}={}){
   }
   try{
     setSyncStatus('同步中…','warn');
-    await setDoc(seatMapDoc,{
+    await addDoc(entriesCol,{
       type:'seatMapSnapshot',
+      seatMapKey,
       title:'葫蘆墩文化中心座位表',
       seats:currentSeatSnapshot(),
-      updatedAt:serverTimestamp(),
-      updatedBy:firebaseUser.uid
-    },{merge:true});
+      ownerUid:firebaseUser.uid,
+      createdAt:serverTimestamp()
+    });
     setSyncStatus('已同步到雲端','ok');
     if(!silent)alert('已同步到雲端，其他人重新打開座位表就會看到最新資料。');
   }catch(err){
@@ -350,17 +378,18 @@ function startFirebaseSync(){
     setSyncStatus('雲端登入失敗','error');
     alert('Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。');
   });
-  onSnapshot(seatMapDoc,snap=>{
-    if(!snap.exists()){
+  onSnapshot(query(entriesCol,orderBy('createdAt','asc')),snap=>{
+    const cloudDocs=snap.docs
+      .map(d=>({id:d.id,...d.data()}))
+      .filter(e=>e.type==='seatMapSnapshot'&&(e.seatMapKey||e.seatMapId)===seatMapKey&&e.seats&&typeof e.seats==='object');
+    if(!cloudDocs.length){
       setSyncStatus('尚未建立雲端資料','warn');
       return;
     }
-    const data=snap.data()||{};
-    if(data.seats&&typeof data.seats==='object'){
-      applySeatData(data.seats);
-      saveLocal();
-      setSyncStatus('已讀取雲端資料','ok');
-    }
+    const latest=cloudDocs[cloudDocs.length-1];
+    applySeatData(latest.seats);
+    saveLocal();
+    setSyncStatus('已讀取雲端資料','ok');
   },err=>{
     console.error(err);
     setSyncStatus('雲端讀取失敗','error');
@@ -371,7 +400,55 @@ loadLocal();
 startFirebaseSync();
 
 document.getElementById('save').onclick=()=>saveCloud({silent:false});
-document.getElementById('print').onclick=()=>window.print();
+const printZoneViews={
+  f1l:{label:'一樓左區',orientation:'portrait',x:350,y:250,w:760,h:930},
+  f1c:{label:'一樓中區',orientation:'landscape',x:1120,y:250,w:1180,h:930},
+  f1r:{label:'一樓右區',orientation:'portrait',x:2320,y:250,w:760,h:930},
+  wheel:{label:'輪椅席／陪伴席',orientation:'landscape',x:350,y:980,w:2700,h:260},
+  f2l:{label:'二樓左區',orientation:'landscape',x:300,y:1260,w:820,h:610},
+  f2c:{label:'二樓中區',orientation:'landscape',x:1120,y:1260,w:1200,h:610},
+  f2r:{label:'二樓右區',orientation:'landscape',x:2320,y:1260,w:820,h:610}
+};
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
+function openZonePrint(zoneKey){
+  const zone=printZoneViews[zoneKey];
+  if(!zone){alert('請先選擇要列印的區塊。');return;}
+  const printWin=window.open('', '_blank');
+  if(!printWin){alert('瀏覽器封鎖了列印視窗，請允許彈出式視窗後再試一次。');return;}
+  const styleText=Array.from(document.querySelectorAll('style')).map(style=>style.textContent).join('\n');
+  const clonedChart=chart.cloneNode(true);
+  clonedChart.removeAttribute('id');
+  clonedChart.classList.add('print-chart');
+  const pageW=zone.orientation==='portrait'?720:1050;
+  const pageH=zone.orientation==='portrait'?980:650;
+  const scale=Math.min(pageW/zone.w,pageH/zone.h);
+  const frameW=Math.round(zone.w*scale);
+  const frameH=Math.round(zone.h*scale);
+  const html=`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>${escapeHtml(zone.label)}列印</title><style>${styleText}
+    @page{size:A4 ${zone.orientation};margin:8mm}
+    html,body{margin:0;background:white;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+    .print-page{width:100%;margin:0 auto;text-align:center}
+    .print-title{font-size:22px;font-weight:900;letter-spacing:2px;margin:0 0 8px}
+    .print-subtitle{font-size:13px;font-weight:700;color:#596675;margin:0 0 8px}
+    .print-frame{position:relative;overflow:hidden;width:${frameW}px;height:${frameH}px;margin:0 auto;border:1px solid #999;background:white}
+    .print-chart{position:absolute!important;left:${Math.round(-zone.x*scale)}px!important;top:${Math.round(-zone.y*scale)}px!important;width:3400px!important;height:1920px!important;background:white!important;box-shadow:none!important;transform:scale(${scale})!important;transform-origin:top left!important}
+    .print-chart .seat-name{font-size:11px;line-height:12px;max-height:34px}
+    .print-chart .seat-number{font-size:14px;line-height:14px}
+    .print-chart .seat.has-name .seat-number{font-size:12px;line-height:12px}
+    .print-chart .seat.has-name .seat-name{font-size:10.5px;line-height:11.5px;max-height:34px}
+    .print-actions{display:flex;gap:8px;justify-content:center;margin:12px 0}.print-actions button{border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:#17202a;color:white}
+    @media print{.print-actions{display:none}.print-title{margin-top:0}.print-frame{break-inside:avoid;page-break-inside:avoid}}
+  </style></head><body><div class="print-page"><div class="print-title">臺中市葫蘆墩文化中心演奏廳座位圖｜${escapeHtml(zone.label)}</div><div class="print-subtitle">只列印目前選取區塊</div><div class="print-frame">${clonedChart.outerHTML}</div><div class="print-actions"><button onclick="window.print()">列印這一區</button><button onclick="window.close()">關閉</button></div></div></body></html>`;
+  printWin.document.open();
+  printWin.document.write(html);
+  printWin.document.close();
+  printWin.focus();
+  setTimeout(()=>printWin.print(),500);
+}
+const printDialog=document.getElementById('printDialog');
+document.getElementById('print').onclick=()=>printDialog.showModal();
+document.getElementById('cancelPrint').onclick=()=>printDialog.close();
+document.querySelectorAll('[data-print-zone]').forEach(btn=>btn.addEventListener('click',()=>{printDialog.close();openZonePrint(btn.dataset.printZone)}));
 document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資料？這會同步覆蓋雲端座位資料。')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveCloud({silent:false})}};
 document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentSeatSnapshot(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
 document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
@@ -389,6 +466,22 @@ const zoneViews={
 };
 function setZoom(z){zoom=Math.max(.2,Math.min(2.6,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
 function fitWhole(){const vw=viewport.clientWidth-36;setZoom(Math.min(.95,vw/3400))}
+function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
+function scrollViewportToZoneCenter(zone){
+  const scaled=document.getElementById('scaled');
+  const overview=document.getElementById('overview');
+  const overviewStyle=overview?getComputedStyle(overview):null;
+  const overviewReserve=overview&&overviewStyle&&overviewStyle.position==='fixed'?overview.offsetWidth+28:0;
+  const availableW=Math.max(360,viewport.clientWidth-overviewReserve);
+  const availableH=Math.max(320,viewport.clientHeight-24);
+  const centerX=(zone.x+zone.w/2)*zoom;
+  const centerY=(zone.y+zone.h/2)*zoom;
+  const rawLeft=scaled.offsetLeft+centerX-availableW/2;
+  const rawTop=scaled.offsetTop+centerY-availableH/2;
+  const maxLeft=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+  const maxTop=Math.max(0,viewport.scrollHeight-viewport.clientHeight);
+  viewport.scrollTo({left:clamp(rawLeft,0,maxLeft),top:clamp(rawTop,0,maxTop),behavior:'smooth'});
+}
 function centerOnZone(zoneKey){
   const zone=zoneViews[zoneKey]||zoneViews.all;
   document.querySelectorAll('[data-zone]').forEach(el=>el.classList.toggle('active',el.dataset.zone===zoneKey));
@@ -399,14 +492,7 @@ function centerOnZone(zoneKey){
     return;
   }
   setZoom(zone.zoom);
-  requestAnimationFrame(()=>{
-    const reserve=document.getElementById('overview')?.offsetWidth||0;
-    const visibleW=Math.max(360,viewport.clientWidth-reserve-52);
-    const visibleH=Math.max(320,viewport.clientHeight-40);
-    const targetLeft=(zone.x+zone.w/2)*zoom-visibleW/2;
-    const targetTop=(zone.y+zone.h/2)*zoom-visibleH/2;
-    viewport.scrollTo({left:Math.max(0,targetLeft),top:Math.max(0,targetTop),behavior:'smooth'});
-  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>scrollViewportToZoneCenter(zone)));
 }
 document.getElementById('zoomIn').onclick=()=>setZoom(zoom+.1);document.getElementById('zoomOut').onclick=()=>setZoom(zoom-.1);
 document.getElementById('fit').onclick=()=>centerOnZone('all');
