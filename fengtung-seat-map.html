@@ -15,7 +15,7 @@
     --paper:#ffffff;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:#e9edf1;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+  body{margin:0;background:#e9edf1;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
   .toolbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:#17202a;color:white;box-shadow:0 2px 8px #0004}
   .toolbar strong{margin-right:8px}
   button,.file-label{border:0;border-radius:7px;padding:8px 12px;font:inherit;cursor:pointer;background:#fff;color:#17202a}
@@ -25,18 +25,7 @@
   .section-label{font-size:13px;opacity:.85;margin-left:4px}
   .section-btn{padding:7px 10px;border:1px solid transparent}
   .section-btn.active{background:#ffd166;color:#17202a;border-color:#ffe7a3;font-weight:800}
-  .overview{position:fixed;right:16px;top:74px;z-index:28;width:236px;background:#fffffff2;border:1px solid #c9d2dc;border-radius:14px;box-shadow:0 12px 34px #0003;padding:10px;color:#17202a;backdrop-filter:blur(6px)}
-  .overview-title{font-weight:800;font-size:14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
-  .overview-title small{font-weight:600;color:#576574}
-  .overview-stage{height:18px;border-radius:5px;background:#293440;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:4px;margin-bottom:6px}
-  .overview-map{position:relative;height:132px;background:#f4f7fa;border:1px solid #d4dde7;border-radius:10px;overflow:hidden}
-  .mini-region{position:absolute;border:1.5px solid #8190a3;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;color:#17202a;transition:.15s ease}
-  .mini-region:hover{background:#eef5ff;border-color:#146ef5}
-  .mini-region.active{background:#146ef5;color:white;border-color:#0b55c8;box-shadow:0 0 0 3px #146ef533}
-  .mini-wheel{background:#fff4df;border-color:#f5a623;color:#5e3d00}
-  .mini-wheel.active{background:#f5a623;color:#231500;border-color:#bc7615}
-  .mini-label{position:absolute;left:8px;font-size:10px;color:#5d6976;font-weight:800}
-  #viewport{overflow:auto;padding:18px;min-height:calc(100vh - 58px);scroll-behavior:smooth}
+  #viewport{overflow:auto;padding:18px;flex:1 1 auto;min-height:0;scroll-behavior:smooth}
   #scaled{width:calc(3400px * var(--zoom));height:calc(1920px * var(--zoom));position:relative;margin:auto}
   #chart{position:absolute;left:0;top:0;width:3400px;height:1920px;background:var(--paper);transform:scale(var(--zoom));transform-origin:top left;box-shadow:0 2px 20px #0003}
   .main-title{position:absolute;top:24px;left:0;width:100%;text-align:center;font-size:54px;letter-spacing:16px;font-weight:700}
@@ -47,7 +36,7 @@
   .aisle{position:absolute;text-align:center;font-size:20px;letter-spacing:22px;color:#333}
   .row-label{position:absolute;width:62px;text-align:right;font-size:17px;line-height:48px;color:#333}
   .seat{position:absolute;width:58px;height:48px;border:1.5px solid var(--line);background:var(--seat);padding:1px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;overflow:hidden;user-select:none}
-  .seat:hover{outline:4px solid #2475ff66;z-index:10}
+  .seat:hover{outline:4px solid #2475ff66;z-index:30}
   .seat.assigned{background:var(--assigned)}
   .seat.empty{background:var(--empty)}
   .seat.wheelchair{background:var(--wheel)}
@@ -57,6 +46,10 @@
   .seat.has-name .seat-name{font-size:7.2px;line-height:8px}
   .legend{position:absolute;left:140px;top:110px;display:flex;gap:18px;align-items:center;font-size:17px}
   .legend i{display:inline-block;width:28px;height:20px;border:1px solid #333;vertical-align:middle;margin-right:5px}
+
+  .zone-watermark{position:absolute;z-index:18;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;font-size:210px;line-height:1;font-weight:900;color:#146ef5;opacity:.105;text-shadow:0 2px 0 #fff,0 0 18px #fff;letter-spacing:0}
+  .zone-watermark .zone-note{position:absolute;bottom:18px;left:0;width:100%;font-size:34px;letter-spacing:2px;color:#b56b00;opacity:.95;text-shadow:0 1px 0 #fff}
+  .section-btn{font-weight:800}
   dialog{border:0;border-radius:14px;padding:0;box-shadow:0 20px 70px #0008;max-width:460px;width:calc(100% - 32px)}
   dialog::backdrop{background:#0008}
   .editor-head{background:#17202a;color:white;padding:14px 18px;font-size:19px;font-weight:700}
@@ -78,12 +71,11 @@
   .print-grid button:hover{background:#e9f2ff;border-color:#146ef5}
   .print-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}
   @media (max-width:900px){
-    .overview{position:sticky;top:64px;right:auto;width:calc(100% - 24px);margin:10px 12px 0;z-index:25}
     .toolbar{gap:6px}
     .section-btn{padding:7px 8px;font-size:14px}
   }
   @media print{
-    body{background:white}
+    body{background:white;display:block;overflow:visible;height:auto}
     .toolbar{display:none}
     #viewport{padding:0;overflow:visible}
     #scaled{margin:0;--zoom:.32}
@@ -94,40 +86,22 @@
 </head>
 <body>
 <div class="toolbar">
-  <strong>可編輯座位圖（輪椅席定位修正版）</strong>
+  <strong>可編輯座位圖</strong>
   <button id="zoomOut">－</button><span class="zoom-value" id="zoomLabel">43%</span><button id="zoomIn">＋</button>
-  <button id="fit">符合畫面</button>
+  <button id="fit">全圖</button>
   <span class="section-label">分區</span>
   <button class="section-btn active" data-zone="all">全圖</button>
-  <button class="section-btn" data-zone="f1l">一樓左</button>
-  <button class="section-btn" data-zone="f1c">一樓中</button>
-  <button class="section-btn" data-zone="f1r">一樓右</button>
-  <button class="section-btn" data-zone="wheel">輪椅席</button>
-  <button class="section-btn" data-zone="f2l">二樓左</button>
-  <button class="section-btn" data-zone="f2c">二樓中</button>
-  <button class="section-btn" data-zone="f2r">二樓右</button>
+  <button class="section-btn" data-zone="z1">1 一樓左前</button>
+  <button class="section-btn" data-zone="z2">2 一樓中前</button>
+  <button class="section-btn" data-zone="z3">3 一樓右前</button>
+  <button class="section-btn" data-zone="z4">4 一樓左後／輪椅</button>
+  <button class="section-btn" data-zone="z5">5 一樓中後</button>
+  <button class="section-btn" data-zone="z6">6 一樓右後／輪椅</button>
+  <button class="section-btn" data-zone="z7">7 二樓左</button>
+  <button class="section-btn" data-zone="z8">8 二樓中</button>
+  <button class="section-btn" data-zone="z9">9 二樓右</button>
   <button id="save">儲存</button>
   <button id="print">列印</button>
-  <button id="export">匯出資料</button>
-  <label class="file-label">匯入資料<input id="importFile" type="file" accept="application/json"></label>
-  <button id="reset">還原初始資料</button>
-  <span id="syncStatus" class="sync-status warn">雲端連線中…</span>
-  <span class="hint">點選任一座位即可修改姓名、單位與顏色。</span>
-</div>
-<div id="overview" class="overview">
-  <div class="overview-title"><span id="currentZoneLabel">全圖</span><small>目前區塊</small></div>
-  <div class="overview-stage">舞臺</div>
-  <div class="overview-map" aria-label="座位分區小圖">
-    <div class="mini-label" style="top:9px">一樓</div>
-    <button class="mini-region" data-zone="f1l" style="left:38px;top:26px;width:52px;height:42px">一樓<br>左</button>
-    <button class="mini-region" data-zone="f1c" style="left:92px;top:26px;width:64px;height:42px">一樓<br>中</button>
-    <button class="mini-region" data-zone="f1r" style="left:158px;top:26px;width:52px;height:42px">一樓<br>右</button>
-    <button class="mini-region mini-wheel" data-zone="wheel" style="left:42px;top:72px;width:168px;height:24px">輪椅席／陪伴席</button>
-    <div class="mini-label" style="top:101px">二樓</div>
-    <button class="mini-region" data-zone="f2l" style="left:38px;top:102px;width:52px;height:24px">左</button>
-    <button class="mini-region" data-zone="f2c" style="left:92px;top:102px;width:64px;height:24px">中</button>
-    <button class="mini-region" data-zone="f2r" style="left:158px;top:102px;width:52px;height:24px">右</button>
-  </div>
 </div>
 <div id="viewport"><div id="scaled"><div id="chart">
   <div class="main-title">臺中市葫蘆墩文化中心演奏廳座位圖</div>
@@ -137,6 +111,15 @@
   <div class="note" style="left:1100px;top:235px;width:1250px">（第16排為輪椅席及陪伴席空間或移動式座椅）</div>
   <div class="legend"><span><i style="background:var(--assigned)"></i>已安排</span><span><i style="background:var(--empty)"></i>空位</span><span><i style="background:var(--wheel)"></i>輪椅席</span></div>
   <div class="floor-title" style="left:250px;top:1250px;width:2900px">二　樓　　319 席</div>
+  <div class="zone-watermark" style="left:300px;top:250px;width:820px;height:430px">1</div>
+  <div class="zone-watermark" style="left:1120px;top:250px;width:1180px;height:430px">2</div>
+  <div class="zone-watermark" style="left:2300px;top:250px;width:820px;height:430px">3</div>
+  <div class="zone-watermark" style="left:300px;top:660px;width:820px;height:580px">4<span class="zone-note">含輪椅席</span></div>
+  <div class="zone-watermark" style="left:1120px;top:660px;width:1180px;height:580px">5</div>
+  <div class="zone-watermark" style="left:2300px;top:660px;width:820px;height:580px">6<span class="zone-note">含輪椅席</span></div>
+  <div class="zone-watermark" style="left:300px;top:1260px;width:820px;height:620px">7</div>
+  <div class="zone-watermark" style="left:1120px;top:1260px;width:1180px;height:620px">8</div>
+  <div class="zone-watermark" style="left:2300px;top:1260px;width:820px;height:620px">9</div>
 </div></div></div>
 
 <dialog id="editor">
@@ -160,15 +143,17 @@
 <dialog id="printDialog">
   <div class="editor-head">選擇要列印的區塊</div>
   <div class="print-dialog-body">
-    <div class="print-help">列印時會只放大輸出你選的區塊，不會整張座位圖一起縮小。</div>
+    <div class="print-help">請選擇第 1–9 區，系統會只把該區放大列印到紙上。</div>
     <div class="print-grid">
-      <button data-print-zone="f1l">一樓左區</button>
-      <button data-print-zone="f1c">一樓中區</button>
-      <button data-print-zone="f1r">一樓右區</button>
-      <button data-print-zone="wheel">輪椅席／陪伴席</button>
-      <button data-print-zone="f2l">二樓左區</button>
-      <button data-print-zone="f2c">二樓中區</button>
-      <button data-print-zone="f2r">二樓右區</button>
+      <button data-print-zone="z1">1　一樓左前</button>
+      <button data-print-zone="z2">2　一樓中前</button>
+      <button data-print-zone="z3">3　一樓右前</button>
+      <button data-print-zone="z4">4　一樓左後（含輪椅席）</button>
+      <button data-print-zone="z5">5　一樓中後</button>
+      <button data-print-zone="z6">6　一樓右後（含輪椅席）</button>
+      <button data-print-zone="z7">7　二樓左</button>
+      <button data-print-zone="z8">8　二樓中</button>
+      <button data-print-zone="z9">9　二樓右</button>
     </div>
   </div>
   <div class="print-actions">
@@ -401,14 +386,16 @@ startFirebaseSync();
 
 document.getElementById('save').onclick=()=>saveCloud({silent:false});
 const printZoneViews={
-  f1l:{label:'一樓左區',orientation:'portrait',x:350,y:250,w:760,h:930},
-  f1c:{label:'一樓中區',orientation:'landscape',x:1120,y:250,w:1180,h:930},
-  f1r:{label:'一樓右區',orientation:'portrait',x:2320,y:250,w:760,h:930},
-  wheel:{label:'輪椅席／陪伴席',orientation:'landscape',x:350,y:980,w:2700,h:260},
-  f2l:{label:'二樓左區',orientation:'landscape',x:300,y:1260,w:820,h:610},
-  f2c:{label:'二樓中區',orientation:'landscape',x:1120,y:1260,w:1200,h:610},
-  f2r:{label:'二樓右區',orientation:'landscape',x:2320,y:1260,w:820,h:610}
-};
+  z1:{label:'第1區｜一樓左前',orientation:'landscape',x:300,y:250,w:820,h:430},
+  z2:{label:'第2區｜一樓中前',orientation:'landscape',x:1120,y:250,w:1180,h:430},
+  z3:{label:'第3區｜一樓右前',orientation:'landscape',x:2300,y:250,w:820,h:430},
+  z4:{label:'第4區｜一樓左後（含輪椅席／陪伴席）',orientation:'landscape',x:300,y:660,w:820,h:580,note:'含輪椅席／陪伴席'},
+  z5:{label:'第5區｜一樓中後',orientation:'landscape',x:1120,y:660,w:1180,h:580},
+  z6:{label:'第6區｜一樓右後（含輪椅席／陪伴席）',orientation:'landscape',x:2300,y:660,w:820,h:580,note:'含輪椅席／陪伴席'},
+  z7:{label:'第7區｜二樓左',orientation:'landscape',x:300,y:1260,w:820,h:620},
+  z8:{label:'第8區｜二樓中',orientation:'landscape',x:1120,y:1260,w:1180,h:620},
+  z9:{label:'第9區｜二樓右',orientation:'landscape',x:2300,y:1260,w:820,h:620}
+}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
 function openZonePrint(zoneKey){
   const zone=printZoneViews[zoneKey];
@@ -426,19 +413,20 @@ function openZonePrint(zoneKey){
   const frameH=Math.round(zone.h*scale);
   const html=`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>${escapeHtml(zone.label)}列印</title><style>${styleText}
     @page{size:A4 ${zone.orientation};margin:8mm}
-    html,body{margin:0;background:white;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+    html,body{margin:0;background:white;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;height:auto!important;overflow:visible!important;display:block!important}
     .print-page{width:100%;margin:0 auto;text-align:center}
     .print-title{font-size:22px;font-weight:900;letter-spacing:2px;margin:0 0 8px}
     .print-subtitle{font-size:13px;font-weight:700;color:#596675;margin:0 0 8px}
     .print-frame{position:relative;overflow:hidden;width:${frameW}px;height:${frameH}px;margin:0 auto;border:1px solid #999;background:white}
     .print-chart{position:absolute!important;left:${Math.round(-zone.x*scale)}px!important;top:${Math.round(-zone.y*scale)}px!important;width:3400px!important;height:1920px!important;background:white!important;box-shadow:none!important;transform:scale(${scale})!important;transform-origin:top left!important}
+    .print-chart .zone-watermark{opacity:.08}
     .print-chart .seat-name{font-size:11px;line-height:12px;max-height:34px}
     .print-chart .seat-number{font-size:14px;line-height:14px}
     .print-chart .seat.has-name .seat-number{font-size:12px;line-height:12px}
     .print-chart .seat.has-name .seat-name{font-size:10.5px;line-height:11.5px;max-height:34px}
     .print-actions{display:flex;gap:8px;justify-content:center;margin:12px 0}.print-actions button{border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:#17202a;color:white}
     @media print{.print-actions{display:none}.print-title{margin-top:0}.print-frame{break-inside:avoid;page-break-inside:avoid}}
-  </style></head><body><div class="print-page"><div class="print-title">臺中市葫蘆墩文化中心演奏廳座位圖｜${escapeHtml(zone.label)}</div><div class="print-subtitle">只列印目前選取區塊</div><div class="print-frame">${clonedChart.outerHTML}</div><div class="print-actions"><button onclick="window.print()">列印這一區</button><button onclick="window.close()">關閉</button></div></div></body></html>`;
+  </style></head><body><div class="print-page"><div class="print-title">臺中市葫蘆墩文化中心演奏廳座位圖｜${escapeHtml(zone.label)}</div><div class="print-subtitle">${zone.note?escapeHtml(zone.note):'只列印目前選取區塊'}</div><div class="print-frame">${clonedChart.outerHTML}</div><div class="print-actions"><button onclick="window.print()">列印這一區</button><button onclick="window.close()">關閉</button></div></div></body></html>`;
   printWin.document.open();
   printWin.document.write(html);
   printWin.document.close();
@@ -449,31 +437,33 @@ const printDialog=document.getElementById('printDialog');
 document.getElementById('print').onclick=()=>printDialog.showModal();
 document.getElementById('cancelPrint').onclick=()=>printDialog.close();
 document.querySelectorAll('[data-print-zone]').forEach(btn=>btn.addEventListener('click',()=>{printDialog.close();openZonePrint(btn.dataset.printZone)}));
-document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資料？這會同步覆蓋雲端座位資料。')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveCloud({silent:false})}};
-document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentSeatSnapshot(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
-document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
+const resetBtn=document.getElementById('reset');
+if(resetBtn)resetBtn.onclick=()=>{if(confirm('確定還原初始資料？這會同步覆蓋雲端座位資料。')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveCloud({silent:false})}};
+const exportBtn=document.getElementById('export');
+if(exportBtn)exportBtn.onclick=()=>{const blob=new Blob([JSON.stringify(currentSeatSnapshot(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
+const importFile=document.getElementById('importFile');
+if(importFile)importFile.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
 
 let zoom=.43;
 const zoneViews={
   all:{label:'全圖',zoom:.43,x:0,y:0,w:3400,h:1920},
-  f1l:{label:'一樓左區',zoom:1.85,x:350,y:250,w:760,h:930},
-  f1c:{label:'一樓中區',zoom:1.85,x:1120,y:250,w:1180,h:930},
-  f1r:{label:'一樓右區',zoom:1.85,x:2320,y:250,w:760,h:930},
-  wheel:{label:'輪椅席／陪伴席',zoom:1.35,x:350,y:980,w:2700,h:260},
-  f2l:{label:'二樓左區',zoom:1.9,x:300,y:1260,w:820,h:610},
-  f2c:{label:'二樓中區',zoom:1.9,x:1120,y:1260,w:1200,h:610},
-  f2r:{label:'二樓右區',zoom:1.9,x:2320,y:1260,w:820,h:610}
+  z1:{label:'第1區｜一樓左前',zoom:1.9,x:300,y:250,w:820,h:430},
+  z2:{label:'第2區｜一樓中前',zoom:1.75,x:1120,y:250,w:1180,h:430},
+  z3:{label:'第3區｜一樓右前',zoom:1.9,x:2300,y:250,w:820,h:430},
+  z4:{label:'第4區｜一樓左後（含輪椅席）',zoom:1.9,x:300,y:660,w:820,h:580},
+  z5:{label:'第5區｜一樓中後',zoom:1.75,x:1120,y:660,w:1180,h:580},
+  z6:{label:'第6區｜一樓右後（含輪椅席）',zoom:1.9,x:2300,y:660,w:820,h:580},
+  z7:{label:'第7區｜二樓左',zoom:1.9,x:300,y:1260,w:820,h:620},
+  z8:{label:'第8區｜二樓中',zoom:1.75,x:1120,y:1260,w:1180,h:620},
+  z9:{label:'第9區｜二樓右',zoom:1.9,x:2300,y:1260,w:820,h:620}
 };
 function setZoom(z){zoom=Math.max(.2,Math.min(2.6,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
 function fitWhole(){const vw=viewport.clientWidth-36;setZoom(Math.min(.95,vw/3400))}
 function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
 function scrollViewportToZoneCenter(zone){
   const scaled=document.getElementById('scaled');
-  const overview=document.getElementById('overview');
-  const overviewStyle=overview?getComputedStyle(overview):null;
-  const overviewReserve=overview&&overviewStyle&&overviewStyle.position==='fixed'?overview.offsetWidth+28:0;
-  const availableW=Math.max(360,viewport.clientWidth-overviewReserve);
-  const availableH=Math.max(320,viewport.clientHeight-24);
+  const availableW=viewport.clientWidth;
+  const availableH=viewport.clientHeight;
   const centerX=(zone.x+zone.w/2)*zoom;
   const centerY=(zone.y+zone.h/2)*zoom;
   const rawLeft=scaled.offsetLeft+centerX-availableW/2;
@@ -483,10 +473,10 @@ function scrollViewportToZoneCenter(zone){
   viewport.scrollTo({left:clamp(rawLeft,0,maxLeft),top:clamp(rawTop,0,maxTop),behavior:'smooth'});
 }
 function centerOnZone(zoneKey){
-  const zone=zoneViews[zoneKey]||zoneViews.all;
-  document.querySelectorAll('[data-zone]').forEach(el=>el.classList.toggle('active',el.dataset.zone===zoneKey));
-  document.getElementById('currentZoneLabel').textContent=zone.label;
-  if(zoneKey==='all'){
+  const normalizedZoneKey=zoneViews[zoneKey]?zoneKey:'all';
+  const zone=zoneViews[normalizedZoneKey];
+  document.querySelectorAll('[data-zone]').forEach(el=>el.classList.toggle('active',el.dataset.zone===normalizedZoneKey));
+  if(normalizedZoneKey==='all'){
     fitWhole();
     requestAnimationFrame(()=>viewport.scrollTo({left:0,top:0,behavior:'smooth'}));
     return;
