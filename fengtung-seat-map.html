@@ -30,7 +30,7 @@
   .overview-title small{font-weight:600;color:#576574}
   .overview-stage{height:18px;border-radius:5px;background:#293440;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:4px;margin-bottom:6px}
   .overview-map{position:relative;height:132px;background:#f4f7fa;border:1px solid #d4dde7;border-radius:10px;overflow:hidden}
-  .mini-region{position:absolute;padding:0;border:1.5px solid #8190a3;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;color:#17202a;transition:.15s ease}
+  .mini-region{position:absolute;border:1.5px solid #8190a3;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;color:#17202a;transition:.15s ease}
   .mini-region:hover{background:#eef5ff;border-color:#146ef5}
   .mini-region.active{background:#146ef5;color:white;border-color:#0b55c8;box-shadow:0 0 0 3px #146ef533}
   .mini-wheel{background:#fff4df;border-color:#f5a623;color:#5e3d00}
@@ -68,6 +68,8 @@
   .primary{background:#146ef5;color:white}
   .danger{background:#b42318;color:white}
   input[type=file]{display:none}
+  .sync-status{font-size:13px;font-weight:800;background:#263442;color:#fff;border:1px solid #ffffff55;border-radius:999px;padding:6px 10px;white-space:nowrap}
+  .sync-status.ok{background:#1f7a3f}.sync-status.warn{background:#9a5b00}.sync-status.error{background:#9b2424}
   @media (max-width:900px){
     .overview{position:sticky;top:64px;right:auto;width:calc(100% - 24px);margin:10px 12px 0;z-index:25}
     .toolbar{gap:6px}
@@ -102,6 +104,7 @@
   <button id="export">匯出資料</button>
   <label class="file-label">匯入資料<input id="importFile" type="file" accept="application/json"></label>
   <button id="reset">還原初始資料</button>
+  <span id="syncStatus" class="sync-status warn">雲端連線中…</span>
   <span class="hint">點選任一座位即可修改姓名、單位與顏色。</span>
 </div>
 <div id="overview" class="overview">
@@ -147,7 +150,16 @@
     <button id="applyEdit" class="primary">套用</button>
   </div>
 </dialog>
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyBTrUyhQSEI2mun5O1mjnSN_mO10c_t-Xs",authDomain:"youzi-c1b74.firebaseapp.com",projectId:"youzi-c1b74",storageBucket:"youzi-c1b74.firebasestorage.app",messagingSenderId:"187002582910",appId:"1:187002582910:web:f5c73a46e5a773a860a52f",measurementId:"G-WLYK892EDW"};
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const seatMapDoc = doc(db, 'fengtungHandoverEntries', 'huludun-seat-map-v1');
+let firebaseUser = null;
 (() => {
 const CELL_W=58, CELL_H=48;
 const chart=document.getElementById('chart');
@@ -262,16 +274,107 @@ const editor=document.getElementById('editor'),seatId=document.getElementById('s
 function openEditor(key){editingKey=key;seatId.value=displaySeatNumber(key);seatName.value=currentData[key]?.name||'';seatStatus.value=currentData[key]?.status||'normal';document.getElementById('editorTitle').textContent='編輯座位';editor.showModal()}
 document.getElementById('cancelEdit').onclick=()=>editor.close();
 document.getElementById('clearName').onclick=()=>seatName.value='';
-document.getElementById('applyEdit').onclick=()=>{currentData[editingKey]={name:seatName.value.trim(),status:seatStatus.value};updateSeat(editingKey);editor.close();saveLocal()};
-function saveLocal(){localStorage.setItem('huludun-seats-v1',JSON.stringify(currentData))}
-function loadLocal(){try{const d=JSON.parse(localStorage.getItem('huludun-seats-v1')||'null');if(d)Object.keys(d).forEach(k=>{if(currentData[k])currentData[k]=d[k]});Object.keys(currentData).forEach(updateSeat)}catch(e){}}
-loadLocal();
+document.getElementById('applyEdit').onclick=()=>{
+  currentData[editingKey]={name:seatName.value.trim(),status:seatStatus.value};
+  updateSeat(editingKey);
+  editor.close();
+  saveLocal();
+  scheduleCloudSave();
+};
 
-document.getElementById('save').onclick=()=>{saveLocal();alert('已儲存在這台裝置的瀏覽器中。')};
+const allowedStatuses=new Set(['normal','assigned','empty','wheelchair']);
+let saveTimer=null,pendingCloudSave=false;
+function setSyncStatus(text,kind='warn'){
+  const el=document.getElementById('syncStatus');
+  if(!el)return;
+  el.textContent=text;
+  el.classList.remove('ok','warn','error');
+  el.classList.add(kind);
+}
+function cleanSeatRecord(value){
+  const d=value&&typeof value==='object'?value:{};
+  return {name:String(d.name||''),status:allowedStatuses.has(d.status)?d.status:'normal'};
+}
+function currentSeatSnapshot(){
+  const seats={};
+  Object.keys(currentData).forEach(k=>seats[k]=cleanSeatRecord(currentData[k]));
+  return seats;
+}
+function applySeatData(data){
+  if(!data||typeof data!=='object')return;
+  Object.keys(data).forEach(k=>{if(currentData[k])currentData[k]=cleanSeatRecord(data[k])});
+  Object.keys(currentData).forEach(updateSeat);
+}
+function saveLocal(){try{localStorage.setItem('huludun-seats-v1',JSON.stringify(currentSeatSnapshot()))}catch(e){console.warn(e)}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem('huludun-seats-v1')||'null');if(d)applySeatData(d)}catch(e){console.warn(e)}}
+async function saveCloud({silent=false}={}){
+  saveLocal();
+  if(!firebaseUser){
+    pendingCloudSave=true;
+    setSyncStatus('雲端登入中…','warn');
+    if(!silent)alert('Firebase 還在登入中，稍後會自動同步。');
+    return;
+  }
+  try{
+    setSyncStatus('同步中…','warn');
+    await setDoc(seatMapDoc,{
+      type:'seatMapSnapshot',
+      title:'葫蘆墩文化中心座位表',
+      seats:currentSeatSnapshot(),
+      updatedAt:serverTimestamp(),
+      updatedBy:firebaseUser.uid
+    },{merge:true});
+    setSyncStatus('已同步到雲端','ok');
+    if(!silent)alert('已同步到雲端，其他人重新打開座位表就會看到最新資料。');
+  }catch(err){
+    console.error(err);
+    setSyncStatus('雲端同步失敗','error');
+    if(!silent)alert('雲端同步失敗：'+(err.message||err)+'\n目前已先保存在這台裝置。');
+  }
+}
+function scheduleCloudSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>saveCloud({silent:true}),650);
+}
+function startFirebaseSync(){
+  setSyncStatus('雲端連線中…','warn');
+  onAuthStateChanged(auth,u=>{
+    firebaseUser=u;
+    if(u){
+      setSyncStatus('讀取雲端中…','warn');
+      if(pendingCloudSave){pendingCloudSave=false;saveCloud({silent:true})}
+    }
+  });
+  signInAnonymously(auth).catch(err=>{
+    console.error(err);
+    setSyncStatus('雲端登入失敗','error');
+    alert('Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。');
+  });
+  onSnapshot(seatMapDoc,snap=>{
+    if(!snap.exists()){
+      setSyncStatus('尚未建立雲端資料','warn');
+      return;
+    }
+    const data=snap.data()||{};
+    if(data.seats&&typeof data.seats==='object'){
+      applySeatData(data.seats);
+      saveLocal();
+      setSyncStatus('已讀取雲端資料','ok');
+    }
+  },err=>{
+    console.error(err);
+    setSyncStatus('雲端讀取失敗','error');
+    alert('Firestore 讀取失敗，請確認 Firestore 規則允許匿名使用者讀取。');
+  });
+}
+loadLocal();
+startFirebaseSync();
+
+document.getElementById('save').onclick=()=>saveCloud({silent:false});
 document.getElementById('print').onclick=()=>window.print();
-document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資料？')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveLocal()}};
-document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentData,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
-document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);Object.keys(d).forEach(k=>{if(currentData[k])currentData[k]=d[k]});Object.keys(currentData).forEach(updateSeat);saveLocal();alert('匯入完成。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
+document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資料？這會同步覆蓋雲端座位資料。')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveCloud({silent:false})}};
+document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentSeatSnapshot(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
+document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
 
 let zoom=.43;
 const zoneViews={
