@@ -22,7 +22,21 @@
   button:hover,.file-label:hover{background:#dfe8f0}
   .zoom-value{min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
   .hint{margin-left:auto;font-size:13px;opacity:.9}
-  #viewport{overflow:auto;padding:18px;min-height:calc(100vh - 58px)}
+  .section-label{font-size:13px;opacity:.85;margin-left:4px}
+  .section-btn{padding:7px 10px;border:1px solid transparent}
+  .section-btn.active{background:#ffd166;color:#17202a;border-color:#ffe7a3;font-weight:800}
+  .overview{position:fixed;right:16px;top:74px;z-index:28;width:236px;background:#fffffff2;border:1px solid #c9d2dc;border-radius:14px;box-shadow:0 12px 34px #0003;padding:10px;color:#17202a;backdrop-filter:blur(6px)}
+  .overview-title{font-weight:800;font-size:14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+  .overview-title small{font-weight:600;color:#576574}
+  .overview-stage{height:18px;border-radius:5px;background:#293440;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:4px;margin-bottom:6px}
+  .overview-map{position:relative;height:132px;background:#f4f7fa;border:1px solid #d4dde7;border-radius:10px;overflow:hidden}
+  .mini-region{position:absolute;padding:0;border:1.5px solid #8190a3;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;color:#17202a;transition:.15s ease}
+  .mini-region:hover{background:#eef5ff;border-color:#146ef5}
+  .mini-region.active{background:#146ef5;color:white;border-color:#0b55c8;box-shadow:0 0 0 3px #146ef533}
+  .mini-wheel{background:#fff4df;border-color:#f5a623;color:#5e3d00}
+  .mini-wheel.active{background:#f5a623;color:#231500;border-color:#bc7615}
+  .mini-label{position:absolute;left:8px;font-size:10px;color:#5d6976;font-weight:800}
+  #viewport{overflow:auto;padding:18px;min-height:calc(100vh - 58px);scroll-behavior:smooth}
   #scaled{width:calc(3400px * var(--zoom));height:calc(1920px * var(--zoom));position:relative;margin:auto}
   #chart{position:absolute;left:0;top:0;width:3400px;height:1920px;background:var(--paper);transform:scale(var(--zoom));transform-origin:top left;box-shadow:0 2px 20px #0003}
   .main-title{position:absolute;top:24px;left:0;width:100%;text-align:center;font-size:54px;letter-spacing:16px;font-weight:700}
@@ -54,6 +68,11 @@
   .primary{background:#146ef5;color:white}
   .danger{background:#b42318;color:white}
   input[type=file]{display:none}
+  @media (max-width:900px){
+    .overview{position:sticky;top:64px;right:auto;width:calc(100% - 24px);margin:10px 12px 0;z-index:25}
+    .toolbar{gap:6px}
+    .section-btn{padding:7px 8px;font-size:14px}
+  }
   @media print{
     body{background:white}
     .toolbar{display:none}
@@ -69,12 +88,36 @@
   <strong>可編輯座位圖（輪椅席定位修正版）</strong>
   <button id="zoomOut">－</button><span class="zoom-value" id="zoomLabel">43%</span><button id="zoomIn">＋</button>
   <button id="fit">符合畫面</button>
+  <span class="section-label">分區</span>
+  <button class="section-btn active" data-zone="all">全圖</button>
+  <button class="section-btn" data-zone="f1l">一樓左</button>
+  <button class="section-btn" data-zone="f1c">一樓中</button>
+  <button class="section-btn" data-zone="f1r">一樓右</button>
+  <button class="section-btn" data-zone="wheel">輪椅席</button>
+  <button class="section-btn" data-zone="f2l">二樓左</button>
+  <button class="section-btn" data-zone="f2c">二樓中</button>
+  <button class="section-btn" data-zone="f2r">二樓右</button>
   <button id="save">儲存</button>
   <button id="print">列印</button>
   <button id="export">匯出資料</button>
   <label class="file-label">匯入資料<input id="importFile" type="file" accept="application/json"></label>
   <button id="reset">還原初始資料</button>
   <span class="hint">點選任一座位即可修改姓名、單位與顏色。</span>
+</div>
+<div id="overview" class="overview">
+  <div class="overview-title"><span id="currentZoneLabel">全圖</span><small>目前區塊</small></div>
+  <div class="overview-stage">舞臺</div>
+  <div class="overview-map" aria-label="座位分區小圖">
+    <div class="mini-label" style="top:9px">一樓</div>
+    <button class="mini-region" data-zone="f1l" style="left:38px;top:26px;width:52px;height:42px">一樓<br>左</button>
+    <button class="mini-region" data-zone="f1c" style="left:92px;top:26px;width:64px;height:42px">一樓<br>中</button>
+    <button class="mini-region" data-zone="f1r" style="left:158px;top:26px;width:52px;height:42px">一樓<br>右</button>
+    <button class="mini-region mini-wheel" data-zone="wheel" style="left:42px;top:72px;width:168px;height:24px">輪椅席／陪伴席</button>
+    <div class="mini-label" style="top:101px">二樓</div>
+    <button class="mini-region" data-zone="f2l" style="left:38px;top:102px;width:52px;height:24px">左</button>
+    <button class="mini-region" data-zone="f2c" style="left:92px;top:102px;width:64px;height:24px">中</button>
+    <button class="mini-region" data-zone="f2r" style="left:158px;top:102px;width:52px;height:24px">右</button>
+  </div>
 </div>
 <div id="viewport"><div id="scaled"><div id="chart">
   <div class="main-title">臺中市葫蘆墩文化中心演奏廳座位圖</div>
@@ -108,6 +151,7 @@
 (() => {
 const CELL_W=58, CELL_H=48;
 const chart=document.getElementById('chart');
+const viewport=document.getElementById('viewport');
 const initialData={};
 const currentData={};
 const seatEls=new Map();
@@ -229,9 +273,41 @@ document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資�
 document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentData,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
 document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);Object.keys(d).forEach(k=>{if(currentData[k])currentData[k]=d[k]});Object.keys(currentData).forEach(updateSeat);saveLocal();alert('匯入完成。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
 
-let zoom=.43;function setZoom(z){zoom=Math.max(.2,Math.min(1.5,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
-document.getElementById('zoomIn').onclick=()=>setZoom(zoom+.05);document.getElementById('zoomOut').onclick=()=>setZoom(zoom-.05);
-document.getElementById('fit').onclick=()=>{const vw=document.getElementById('viewport').clientWidth-36;setZoom(Math.min(.95,vw/3400))};
+let zoom=.43;
+const zoneViews={
+  all:{label:'全圖',zoom:.43,x:0,y:0,w:3400,h:1920},
+  f1l:{label:'一樓左區',zoom:1.85,x:350,y:250,w:760,h:930},
+  f1c:{label:'一樓中區',zoom:1.85,x:1120,y:250,w:1180,h:930},
+  f1r:{label:'一樓右區',zoom:1.85,x:2320,y:250,w:760,h:930},
+  wheel:{label:'輪椅席／陪伴席',zoom:1.35,x:350,y:980,w:2700,h:260},
+  f2l:{label:'二樓左區',zoom:1.9,x:300,y:1260,w:820,h:610},
+  f2c:{label:'二樓中區',zoom:1.9,x:1120,y:1260,w:1200,h:610},
+  f2r:{label:'二樓右區',zoom:1.9,x:2320,y:1260,w:820,h:610}
+};
+function setZoom(z){zoom=Math.max(.2,Math.min(2.6,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
+function fitWhole(){const vw=viewport.clientWidth-36;setZoom(Math.min(.95,vw/3400))}
+function centerOnZone(zoneKey){
+  const zone=zoneViews[zoneKey]||zoneViews.all;
+  document.querySelectorAll('[data-zone]').forEach(el=>el.classList.toggle('active',el.dataset.zone===zoneKey));
+  document.getElementById('currentZoneLabel').textContent=zone.label;
+  if(zoneKey==='all'){
+    fitWhole();
+    requestAnimationFrame(()=>viewport.scrollTo({left:0,top:0,behavior:'smooth'}));
+    return;
+  }
+  setZoom(zone.zoom);
+  requestAnimationFrame(()=>{
+    const reserve=document.getElementById('overview')?.offsetWidth||0;
+    const visibleW=Math.max(360,viewport.clientWidth-reserve-52);
+    const visibleH=Math.max(320,viewport.clientHeight-40);
+    const targetLeft=(zone.x+zone.w/2)*zoom-visibleW/2;
+    const targetTop=(zone.y+zone.h/2)*zoom-visibleH/2;
+    viewport.scrollTo({left:Math.max(0,targetLeft),top:Math.max(0,targetTop),behavior:'smooth'});
+  });
+}
+document.getElementById('zoomIn').onclick=()=>setZoom(zoom+.1);document.getElementById('zoomOut').onclick=()=>setZoom(zoom-.1);
+document.getElementById('fit').onclick=()=>centerOnZone('all');
+document.querySelectorAll('[data-zone]').forEach(el=>el.addEventListener('click',()=>centerOnZone(el.dataset.zone)));
 window.addEventListener('resize',()=>{});
 })();
 </script>
