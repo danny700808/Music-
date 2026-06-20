@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>臺中市葫蘆墩文化中心演奏廳－可編輯座位圖</title>
+<style>
+  :root{
+    --zoom:.43;
+    --line:#242424;
+    --assigned:#eaf7e7;
+    --empty:#fff0a8;
+    --wheel:#f5a623;
+    --seat:#ffffff;
+    --paper:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9edf1;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+  .toolbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:#17202a;color:white;box-shadow:0 2px 8px #0004}
+  .toolbar strong{margin-right:8px}
+  button,.file-label{border:0;border-radius:7px;padding:8px 12px;font:inherit;cursor:pointer;background:#fff;color:#17202a}
+  button:hover,.file-label:hover{background:#dfe8f0}
+  .zoom-value{min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+  .hint{margin-left:auto;font-size:13px;opacity:.9}
+  #viewport{overflow:auto;padding:18px;min-height:calc(100vh - 58px)}
+  #scaled{width:calc(3400px * var(--zoom));height:calc(1920px * var(--zoom));position:relative;margin:auto}
+  #chart{position:absolute;left:0;top:0;width:3400px;height:1920px;background:var(--paper);transform:scale(var(--zoom));transform-origin:top left;box-shadow:0 2px 20px #0003}
+  .main-title{position:absolute;top:24px;left:0;width:100%;text-align:center;font-size:54px;letter-spacing:16px;font-weight:700}
+  .total{position:absolute;top:102px;left:0;width:100%;text-align:center;font-size:23px}
+  .floor-title{position:absolute;text-align:center;font-size:31px;letter-spacing:10px;font-weight:600}
+  .stage{position:absolute;text-align:center;font-size:29px;letter-spacing:28px;font-weight:600}
+  .note{position:absolute;text-align:center;font-size:20px}
+  .aisle{position:absolute;text-align:center;font-size:20px;letter-spacing:22px;color:#333}
+  .row-label{position:absolute;width:62px;text-align:right;font-size:17px;line-height:48px;color:#333}
+  .seat{position:absolute;width:58px;height:48px;border:1.5px solid var(--line);background:var(--seat);padding:1px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;overflow:hidden;user-select:none}
+  .seat:hover{outline:4px solid #2475ff66;z-index:10}
+  .seat.assigned{background:var(--assigned)}
+  .seat.empty{background:var(--empty)}
+  .seat.wheelchair{background:var(--wheel)}
+  .seat-number{font-size:13px;line-height:14px;font-weight:700;white-space:nowrap}
+  .seat-name{font-size:8px;line-height:9px;font-weight:600;white-space:pre-line;word-break:break-all;max-height:28px;overflow:hidden}
+  .seat.has-name .seat-number{font-size:11px;line-height:11px}
+  .seat.has-name .seat-name{font-size:7.2px;line-height:8px}
+  .legend{position:absolute;left:140px;top:110px;display:flex;gap:18px;align-items:center;font-size:17px}
+  .legend i{display:inline-block;width:28px;height:20px;border:1px solid #333;vertical-align:middle;margin-right:5px}
+  dialog{border:0;border-radius:14px;padding:0;box-shadow:0 20px 70px #0008;max-width:460px;width:calc(100% - 32px)}
+  dialog::backdrop{background:#0008}
+  .editor-head{background:#17202a;color:white;padding:14px 18px;font-size:19px;font-weight:700}
+  .editor-body{padding:18px;display:grid;gap:12px}
+  label{font-weight:700;display:grid;gap:5px}
+  input,textarea,select{font:inherit;border:1px solid #aeb7c0;border-radius:7px;padding:9px;width:100%}
+  textarea{min-height:92px;resize:vertical}
+  .editor-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}
+  .primary{background:#146ef5;color:white}
+  .danger{background:#b42318;color:white}
+  input[type=file]{display:none}
+  @media print{
+    body{background:white}
+    .toolbar{display:none}
+    #viewport{padding:0;overflow:visible}
+    #scaled{margin:0;--zoom:.32}
+    #chart{box-shadow:none}
+    @page{size:A3 landscape;margin:5mm}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <strong>可編輯座位圖（輪椅席定位修正版）</strong>
+  <button id="zoomOut">－</button><span class="zoom-value" id="zoomLabel">43%</span><button id="zoomIn">＋</button>
+  <button id="fit">符合畫面</button>
+  <button id="save">儲存</button>
+  <button id="print">列印</button>
+  <button id="export">匯出資料</button>
+  <label class="file-label">匯入資料<input id="importFile" type="file" accept="application/json"></label>
+  <button id="reset">還原初始資料</button>
+  <span class="hint">點選任一座位即可修改姓名、單位與顏色。</span>
+</div>
+<div id="viewport"><div id="scaled"><div id="chart">
+  <div class="main-title">臺中市葫蘆墩文化中心演奏廳座位圖</div>
+  <div class="total">總席數：828席</div>
+  <div class="floor-title" style="left:250px;top:155px;width:2900px">一　樓　　509 席</div>
+  <div class="stage" style="left:1220px;top:195px;width:1000px">舞　臺</div>
+  <div class="note" style="left:1100px;top:235px;width:1250px">（第16排為輪椅席及陪伴席空間或移動式座椅）</div>
+  <div class="legend"><span><i style="background:var(--assigned)"></i>已安排</span><span><i style="background:var(--empty)"></i>空位</span><span><i style="background:var(--wheel)"></i>輪椅席</span></div>
+  <div class="floor-title" style="left:250px;top:1250px;width:2900px">二　樓　　319 席</div>
+</div></div></div>
+
+<dialog id="editor">
+  <div class="editor-head" id="editorTitle">編輯座位</div>
+  <div class="editor-body">
+    <label>座位編號<input id="seatId" readonly></label>
+    <label>姓名／單位／職稱<textarea id="seatName" placeholder="可輸入多行"></textarea></label>
+    <label>顯示狀態<select id="seatStatus">
+      <option value="normal">一般座位（白色）</option>
+      <option value="assigned">已安排（淡綠色）</option>
+      <option value="empty">空位（黃色）</option>
+      <option value="wheelchair">輪椅席（橘色）</option>
+    </select></label>
+  </div>
+  <div class="editor-actions">
+    <button id="clearName" class="danger">清除文字</button>
+    <button id="cancelEdit">取消</button>
+    <button id="applyEdit" class="primary">套用</button>
+  </div>
+</dialog>
+<script>
+(() => {
+const CELL_W=58, CELL_H=48;
+const chart=document.getElementById('chart');
+const initialData={};
+const currentData={};
+const seatEls=new Map();
+
+const frontAssignments={
+  '1F-C-1-9':['長官預留位','assigned'],'1F-C-1-7':['長官預留位','assigned'],
+  '1F-C-1-5':['潭陽國小\n校長','assigned'],'1F-C-1-3':['潭陽國小\n校長','assigned'],
+  '1F-C-1-1':['校長位置','assigned'],'1F-C-1-2':['家長會\n涂智傑會長','assigned'],
+  '1F-C-1-4':['莊文賢\n理事長','assigned'],'1F-C-1-6':['劉茂昇\n理事長','assigned'],
+  '1F-C-1-8':['顧問團\n江青松團長','assigned'],'1F-C-1-10':['林明德\n輔導會長','assigned'],
+  '1F-C-2-11':['長官預留位','assigned'],'1F-C-2-9':['長官預留位','assigned'],'1F-C-2-7':['長官預留位','assigned'],
+  '1F-C-2-5':['潭陽國小\n教務主任','assigned'],'1F-C-2-3':['潭陽國小\n教務主任','assigned'],
+  '1F-C-2-1':['黃明瑞\n理事','assigned'],'1F-C-2-2':['黃明瑞\n理事','assigned'],
+  '1F-C-2-4':['林祐鴻','assigned'],'1F-C-2-6':['劉演湧','assigned'],'1F-C-2-8':['劉演湧','assigned'],'1F-C-2-10':['朱貴毓','assigned'],
+  '1F-C-3-9':['天地教','assigned'],'1F-C-3-7':['天地教','assigned'],'1F-C-3-5':['天地教','assigned'],'1F-C-3-3':['天地教','assigned'],'1F-C-3-1':['天地教','assigned'],
+  '1F-C-3-2':['吳安修\n里長','assigned'],'1F-C-3-4':['楊國勝\n理事','assigned'],'1F-C-3-6':['徐媛淳\n主任','assigned'],'1F-C-3-8':['鄭春女\n主任','assigned'],'1F-C-3-10':['人事\n黃仲正主任','assigned'],
+  '1F-C-4-11':['空位','empty'],'1F-C-4-9':['空位','empty'],'1F-C-4-7':['空位','empty'],'1F-C-4-5':['空位','empty'],'1F-C-4-3':['空位','empty'],
+  '1F-C-4-1':['南陽\n家長會','assigned'],'1F-C-4-2':['南陽\n家長會','assigned'],'1F-C-4-4':['南陽\n家長會','assigned'],'1F-C-4-6':['南陽\n家長會','assigned'],'1F-C-4-8':['南陽\n家長會','assigned'],'1F-C-4-10':['南陽\n家長會','assigned'],
+  '1F-C-5-11':['空位','empty'],'1F-C-5-9':['空位','empty'],
+  '1F-C-5-7':['副會長\n家人','assigned'],'1F-C-5-5':['副會長\n家人','assigned'],'1F-C-5-3':['副會長\n家人','assigned'],'1F-C-5-1':['副會長\n家人','assigned'],'1F-C-5-2':['副會長\n家人','assigned'],'1F-C-5-4':['副會長\n家人','assigned'],'1F-C-5-6':['副會長\n家人','assigned'],'1F-C-5-8':['副會長\n家人','assigned'],'1F-C-5-10':['副會長\n家人','assigned'],'1F-C-5-12':['副會長\n家人','assigned'],
+  '1F-C-6-11':['空位','empty'],'1F-C-6-9':['空位','empty'],'1F-C-6-7':['空位','empty'],
+  '1F-C-6-5':['林松裕\n後援會第9屆會長','assigned'],'1F-C-6-3':['林松裕\n後援會第9屆會長','assigned'],
+  '1F-C-6-1':['何桂芬\n後援會第10屆會長','assigned'],'1F-C-6-2':['何桂芬\n後援會第10屆會長','assigned'],
+  '1F-C-6-4':['張錦彩\n後援會第11屆會長','assigned'],'1F-C-6-6':['張錦彩\n後援會第11屆會長','assigned'],
+  '1F-C-6-8':['酷比數位','assigned'],'1F-C-6-10':['酷比數位','assigned'],
+  '1F-C-7-11':['後援會24屆\n幹部','assigned'],'1F-C-7-9':['後援會24屆\n幹部','assigned'],'1F-C-7-7':['後援會24屆\n幹部','assigned'],'1F-C-7-5':['後援會24屆\n幹部','assigned'],'1F-C-7-3':['後援會24屆\n幹部','assigned'],
+  '1F-C-7-1':['空位','empty'],'1F-C-7-2':['空位','empty'],'1F-C-7-4':['空位','empty'],'1F-C-7-6':['空位','empty'],'1F-C-7-8':['空位','empty'],'1F-C-7-10':['空位','empty'],'1F-C-7-12':['空位','empty']
+};
+
+const blocks=[
+// 一樓左前
+{id:'1F-L',align:'right',right:1060,y:300,order:[39,37,35,33,31,29,27,25,23,21,19,17,15,13,11],rows:{1:[27,25,23,21,19,17,15,13,11],2:[29,27,25,23,21,19,17,15,13],3:[27,25,23,21,19,17,15,13,11],4:[31,29,27,25,23,21,19,17,15,13],5:[31,29,27,25,23,21,19,17,15,13],6:[31,29,27,25,23,21,19,17,15,13],7:[31,29,27,25,23,21,19,17,15,13]}},
+// 一樓中前
+{id:'1F-C',x:1200,y:300,order:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],rows:{1:[9,7,5,3,1,2,4,6,8,10],2:[11,9,7,5,3,1,2,4,6,8,10],3:[9,7,5,3,1,2,4,6,8,10],4:[11,9,7,5,3,1,2,4,6,8,10],5:[11,9,7,5,3,1,2,4,6,8,10,12],6:[11,9,7,5,3,1,2,4,6,8,10],7:[11,9,7,5,3,1,2,4,6,8,10,12]}},
+// 一樓右前
+{id:'1F-R',align:'left',left:2410,y:300,order:[12,14,16,18,20,22,24,26,28,30,32,34,36,38,40],rows:{1:[12,14,16,18,20,22,24,26,28],2:[12,14,16,18,20,22,24,26,28],3:[12,14,16,18,20,22,24,26,28],4:[12,14,16,18,20,22,24,26,28,30],5:[14,16,18,20,22,24,26,28,30,32],6:[12,14,16,18,20,22,24,26,28,30],7:[14,16,18,20,22,24,26,28,30,32]}},
+// 一樓左後
+{id:'1F-L',align:'right',right:1060,y:700,order:[39,37,35,33,31,29,27,25,23,21,19,17,15,13,11],rows:{8:[33,31,29,27,25,23,21,19,17,15],9:[35,33,31,29,27,25,23,21,19,17,15],10:[35,33,31,29,27,25,23,21,19,17,15],11:[35,33,31,29,27,25,23,21,19,17,15],12:[37,35,33,31,29,27,25,23,21,19,17],13:[35,33,31,29,27,25,23,21,19,17,15],14:[37,35,33,31,29,27,25,23,21,19,17],15:[39,37,35,33,31,29,27,25,23,21,19,17]}},
+// 一樓中後
+{id:'1F-C',x:1200,y:700,order:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16,18],rows:{8:[13,11,9,7,5,3,1,2,4,6,8,10,12],9:[13,11,9,7,5,3,1,2,4,6,8,10,12,14],10:[13,11,9,7,5,3,1,2,4,6,8,10,12],11:[13,11,9,7,5,3,1,2,4,6,8,10,12,14],12:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14],13:[13,11,9,7,5,3,1,2,4,6,8,10,12,14],14:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14],15:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16]}},
+// 一樓右後
+{id:'1F-R',align:'left',left:2410,y:700,order:[12,14,16,18,20,22,24,26,28,30,32,34,36,38,40],rows:{8:[14,16,18,20,22,24,26,28,30,32],9:[16,18,20,22,24,26,28,30,32,34,36],10:[14,16,18,20,22,24,26,28,30,32,34],11:[16,18,20,22,24,26,28,30,32,34,36],12:[16,18,20,22,24,26,28,30,32,34,36],13:[16,18,20,22,24,26,28,30,32,34,36],14:[16,18,20,22,24,26,28,30,32,34,36],15:[18,20,22,24,26,28,30,32,34,36,38,40]}},
+// 二樓左第一排與後排
+{id:'2F-L',align:'right',right:1050,y:1340,order:[41,39,37,35,33,31,29,27,25,23,21,19,17,15],rows:{1:[35,33,31,29,27,25,23,21,19,17,15]}},
+{id:'2F-L',align:'right',right:1050,y:1480,order:[41,39,37,35,33,31,29,27,25,23,21,19,17,15],rows:{2:[39,37,35,33,31,29,27,25,23,21,19,17],3:[39,37,35,33,31,29,27,25,23,21,19,17],4:[39,37,35,33,31,29,27,25,23,21,19,17],5:[39,37,35,33,31,29,27,25,23,21,19,17],6:[41,39,37,35,33,31,29,27,25,23,21,19],7:[41,39,37,35,33,31,29,27,25,23,21,19],8:[41,39,37,35,33,31,29,27,25,23,21,19]}},
+// 二樓中
+{id:'2F-C',x:1180,y:1340,order:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16,18],rows:{1:[13,11,9,7,5,3,1,2,4,6,8,10,12,14]}},
+{id:'2F-C',x:1180,y:1480,order:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16,18],rows:{2:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14],3:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],4:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],5:[15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],6:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],7:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16],8:[17,15,13,11,9,7,5,3,1,2,4,6,8,10,12,14,16,18]}},
+// 二樓右
+{id:'2F-R',align:'left',left:2440,y:1340,order:[16,18,20,22,24,26,28,30,32,34,36,38,40,42],rows:{1:[16,18,20,22,24,26,28,30,32,34,36]}},
+{id:'2F-R',align:'left',left:2440,y:1480,order:[16,18,20,22,24,26,28,30,32,34,36,38,40,42],rows:{2:[16,18,20,22,24,26,28,30,32,34,36,38],3:[18,20,22,24,26,28,30,32,34,36,38,40],4:[18,20,22,24,26,28,30,32,34,36,38,40],5:[18,20,22,24,26,28,30,32,34,36,38,40],6:[18,20,22,24,26,28,30,32,34,36,38,40],7:[18,20,22,24,26,28,30,32,34,36,38,40],8:[20,22,24,26,28,30,32,34,36,38,40,42]}}
+];
+
+function addText(cls,text,left,top,width){const d=document.createElement('div');d.className=cls;d.textContent=text;d.style.left=left+'px';d.style.top=top+'px';if(width)d.style.width=width+'px';chart.appendChild(d)}
+addText('aisle','走　道',560,640,500);addText('aisle','走　道',2340,640,500);addText('aisle','走　道',650,1425,400);addText('aisle','走　道',2200,1425,500);
+
+function renderSeat(block,row,seat){
+  const seats=block.rows[row];
+  const seatIndex=seats.indexOf(seat); if(seatIndex<0)return;
+  const key=`${block.id}-${row}-${seat}`;
+  const el=document.createElement('div'); el.className='seat'; el.dataset.key=key;
+  let left;
+  if(block.align==='right'){
+    // 左側區塊：所有排以靠近中間走道的右邊界對齊。
+    left=block.right-seats.length*CELL_W+seatIndex*CELL_W;
+  }else if(block.align==='left'){
+    // 右側區塊：所有排以靠近中間走道的左邊界對齊。
+    left=block.left+seatIndex*CELL_W;
+  }else{
+    // 中間區塊：依原座號欄位保留左右凸出與缺口。
+    const idx=block.order.indexOf(seat); if(idx<0)return;
+    left=block.x+idx*CELL_W;
+  }
+  el.style.left=left+'px';
+  const rowKeys=Object.keys(block.rows).map(Number); const rowIndex=rowKeys.indexOf(row);
+  el.style.top=(block.y+rowIndex*CELL_H)+'px';
+  const initial=frontAssignments[key]||['','normal'];
+  initialData[key]={name:initial[0],status:initial[1]};
+  currentData[key]={...initialData[key]};
+  el.innerHTML='<span class="seat-number"></span><span class="seat-name"></span>';
+  el.addEventListener('click',()=>openEditor(key)); chart.appendChild(el); seatEls.set(key,el); updateSeat(key);
+}
+blocks.forEach(block=>Object.entries(block.rows).forEach(([row,seats])=>seats.forEach(seat=>renderSeat(block,+row,seat))));
+
+// 一樓排號
+for(let r=1;r<=7;r++){addText('row-label',`${r}排`,100,300+(r-1)*CELL_H)}
+for(let r=8;r<=15;r++){addText('row-label',`${r}排`,100,700+(r-8)*CELL_H)}
+for(let r=1;r<=7;r++){addText('row-label',`${r}排`,3260,300+(r-1)*CELL_H)}
+for(let r=8;r<=15;r++){addText('row-label',`${r}排`,3260,700+(r-8)*CELL_H)}
+// 二樓排號
+for(let r=1;r<=8;r++){addText('row-label',`${r}排`,70,r===1?1340:1480+(r-2)*CELL_H)}
+for(let r=1;r<=8;r++){addText('row-label',`${r}排`,3270,r===1?1340:1480+(r-2)*CELL_H)}
+
+// 輪椅席（依原圖位置）
+function wheelchair(id,x,y,num){const key=`WC-${id}-${num}`;const el=document.createElement('div');el.className='seat wheelchair';el.dataset.key=key;el.style.left=x+'px';el.style.top=y+'px';el.innerHTML=`<span class="seat-number">16-${num}</span><span class="seat-name">輪椅席</span>`;initialData[key]={name:'輪椅席',status:'wheelchair'};currentData[key]={...initialData[key]};el.addEventListener('click',()=>openEditor(key));chart.appendChild(el);seatEls.set(key,el)}
+// 第16排輪椅席：依第15排座位欄位精準對齊
+// 左側：16-7 對齊 15-35、16-5 對齊 15-33、16-3 對齊 15-21、16-1 對齊 15-19
+wheelchair('L',480,1095,7);wheelchair('L',538,1095,5);wheelchair('L',886,1095,3);wheelchair('L',944,1095,1);
+// 右側：16-2 對齊 15-20、16-4 對齊 15-22、16-6 對齊 15-32、16-8 對齊 15-34
+wheelchair('R',2468,1095,2);wheelchair('R',2526,1095,4);wheelchair('R',2816,1095,6);wheelchair('R',2874,1095,8);
+addText('note','輪椅席及陪伴席空間',596,1106,290);addText('note','輪椅席及陪伴席空間',2584,1106,232);
+addText('row-label','16排',100,1095);addText('row-label','16排',3260,1095);
+
+function displaySeatNumber(key){const parts=key.split('-');return key.startsWith('WC-')?`16-${parts.at(-1)}`:`${parts.at(-2)}-${parts.at(-1)}`}
+function updateSeat(key){const el=seatEls.get(key);if(!el)return;const d=currentData[key];el.classList.remove('normal','assigned','empty','wheelchair','has-name');el.classList.add(d.status||'normal');const number=displaySeatNumber(key);el.querySelector('.seat-number').textContent=number;el.querySelector('.seat-name').textContent=d.name||'';if(d.name)el.classList.add('has-name');el.title=`${number}${d.name?'\n'+d.name:''}`}
+
+const editor=document.getElementById('editor'),seatId=document.getElementById('seatId'),seatName=document.getElementById('seatName'),seatStatus=document.getElementById('seatStatus');let editingKey='';
+function openEditor(key){editingKey=key;seatId.value=displaySeatNumber(key);seatName.value=currentData[key]?.name||'';seatStatus.value=currentData[key]?.status||'normal';document.getElementById('editorTitle').textContent='編輯座位';editor.showModal()}
+document.getElementById('cancelEdit').onclick=()=>editor.close();
+document.getElementById('clearName').onclick=()=>seatName.value='';
+document.getElementById('applyEdit').onclick=()=>{currentData[editingKey]={name:seatName.value.trim(),status:seatStatus.value};updateSeat(editingKey);editor.close();saveLocal()};
+function saveLocal(){localStorage.setItem('huludun-seats-v1',JSON.stringify(currentData))}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem('huludun-seats-v1')||'null');if(d)Object.keys(d).forEach(k=>{if(currentData[k])currentData[k]=d[k]});Object.keys(currentData).forEach(updateSeat)}catch(e){}}
+loadLocal();
+
+document.getElementById('save').onclick=()=>{saveLocal();alert('已儲存在這台裝置的瀏覽器中。')};
+document.getElementById('print').onclick=()=>window.print();
+document.getElementById('reset').onclick=()=>{if(confirm('確定還原初始資料？')){Object.keys(initialData).forEach(k=>currentData[k]={...initialData[k]});Object.keys(currentData).forEach(updateSeat);saveLocal()}};
+document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(currentData,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='葫蘆墩文化中心座位資料.json';a.click();URL.revokeObjectURL(a.href)};
+document.getElementById('importFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);Object.keys(d).forEach(k=>{if(currentData[k])currentData[k]=d[k]});Object.keys(currentData).forEach(updateSeat);saveLocal();alert('匯入完成。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
+
+let zoom=.43;function setZoom(z){zoom=Math.max(.2,Math.min(1.5,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
+document.getElementById('zoomIn').onclick=()=>setZoom(zoom+.05);document.getElementById('zoomOut').onclick=()=>setZoom(zoom-.05);
+document.getElementById('fit').onclick=()=>{const vw=document.getElementById('viewport').clientWidth-36;setZoom(Math.min(.95,vw/3400))};
+window.addEventListener('resize',()=>{});
+})();
+</script>
+</body>
+</html>
