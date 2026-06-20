@@ -25,7 +25,18 @@
   .section-label{font-size:13px;opacity:.85;margin-left:4px}
   .section-btn{padding:7px 10px;border:1px solid transparent}
   .section-btn.active{background:#ffd166;color:#17202a;border-color:#ffe7a3;font-weight:800}
-  #viewport{overflow:auto;padding:18px;flex:1 1 auto;min-height:0;scroll-behavior:smooth}
+  .overview{position:fixed;right:16px;top:74px;z-index:28;width:236px;background:#fffffff2;border:1px solid #c9d2dc;border-radius:14px;box-shadow:0 12px 34px #0003;padding:10px;color:#17202a;backdrop-filter:blur(6px)}
+  .overview-title{font-weight:800;font-size:14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+  .overview-title small{font-weight:600;color:#576574}
+  .overview-stage{height:18px;border-radius:5px;background:#293440;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:4px;margin-bottom:6px}
+  .overview-map{position:relative;height:132px;background:#f4f7fa;border:1px solid #d4dde7;border-radius:10px;overflow:hidden}
+  .mini-region{position:absolute;border:1.5px solid #8190a3;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;color:#17202a;transition:.15s ease}
+  .mini-region:hover{background:#eef5ff;border-color:#146ef5}
+  .mini-region.active{background:#146ef5;color:white;border-color:#0b55c8;box-shadow:0 0 0 3px #146ef533}
+  .mini-wheel{background:#fff4df;border-color:#f5a623;color:#5e3d00}
+  .mini-wheel.active{background:#f5a623;color:#231500;border-color:#bc7615}
+  .mini-label{position:absolute;left:8px;font-size:10px;color:#5d6976;font-weight:800}
+  #viewport{overflow:auto;padding:18px;flex:1 1 auto;min-height:0;scroll-behavior:smooth;touch-action:pan-x pan-y}
   #scaled{width:calc(3400px * var(--zoom));height:calc(1920px * var(--zoom));position:relative;margin:auto}
   #chart{position:absolute;left:0;top:0;width:3400px;height:1920px;background:var(--paper);transform:scale(var(--zoom));transform-origin:top left;box-shadow:0 2px 20px #0003}
   .main-title{position:absolute;top:24px;left:0;width:100%;text-align:center;font-size:54px;letter-spacing:16px;font-weight:700}
@@ -47,7 +58,7 @@
   .legend{position:absolute;left:140px;top:110px;display:flex;gap:18px;align-items:center;font-size:17px}
   .legend i{display:inline-block;width:28px;height:20px;border:1px solid #333;vertical-align:middle;margin-right:5px}
 
-  .zone-watermark{position:absolute;z-index:18;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;font-size:210px;line-height:1;font-weight:900;color:#146ef5;opacity:.105;text-shadow:0 2px 0 #fff,0 0 18px #fff;letter-spacing:0}
+  .zone-watermark{position:absolute;z-index:18;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;font-size:210px;line-height:1;font-weight:900;color:#146ef5;opacity:.16;text-shadow:0 2px 0 #fff,0 0 18px #fff;letter-spacing:0}
   .zone-watermark .zone-note{position:absolute;bottom:18px;left:0;width:100%;font-size:34px;letter-spacing:2px;color:#b56b00;opacity:.95;text-shadow:0 1px 0 #fff}
   .section-btn{font-weight:800}
   dialog{border:0;border-radius:14px;padding:0;box-shadow:0 20px 70px #0008;max-width:460px;width:calc(100% - 32px)}
@@ -71,6 +82,7 @@
   .print-grid button:hover{background:#e9f2ff;border-color:#146ef5}
   .print-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}
   @media (max-width:900px){
+    .overview{position:sticky;top:64px;right:auto;width:calc(100% - 24px);margin:10px 12px 0;z-index:25}
     .toolbar{gap:6px}
     .section-btn{padding:7px 8px;font-size:14px}
   }
@@ -413,13 +425,13 @@ function openZonePrint(zoneKey){
   const frameH=Math.round(zone.h*scale);
   const html=`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>${escapeHtml(zone.label)}列印</title><style>${styleText}
     @page{size:A4 ${zone.orientation};margin:8mm}
-    html,body{margin:0;background:white;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;height:auto!important;overflow:visible!important;display:block!important}
+    html,body{margin:0;background:white;color:#111;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
     .print-page{width:100%;margin:0 auto;text-align:center}
     .print-title{font-size:22px;font-weight:900;letter-spacing:2px;margin:0 0 8px}
     .print-subtitle{font-size:13px;font-weight:700;color:#596675;margin:0 0 8px}
     .print-frame{position:relative;overflow:hidden;width:${frameW}px;height:${frameH}px;margin:0 auto;border:1px solid #999;background:white}
     .print-chart{position:absolute!important;left:${Math.round(-zone.x*scale)}px!important;top:${Math.round(-zone.y*scale)}px!important;width:3400px!important;height:1920px!important;background:white!important;box-shadow:none!important;transform:scale(${scale})!important;transform-origin:top left!important}
-    .print-chart .zone-watermark{opacity:.08}
+    .print-chart .zone-watermark{opacity:.12}
     .print-chart .seat-name{font-size:11px;line-height:12px;max-height:34px}
     .print-chart .seat-number{font-size:14px;line-height:14px}
     .print-chart .seat.has-name .seat-number{font-size:12px;line-height:12px}
@@ -445,22 +457,37 @@ const importFile=document.getElementById('importFile');
 if(importFile)importFile.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const d=JSON.parse(reader.result);applySeatData(d);await saveCloud({silent:true});alert('匯入完成，已同步到雲端。')}catch(err){alert('檔案格式不正確。')}};reader.readAsText(file)};
 
 let zoom=.43;
+let activeZoneKey='all';
 const zoneViews={
-  all:{label:'全圖',zoom:.43,x:0,y:0,w:3400,h:1920},
-  z1:{label:'第1區｜一樓左前',zoom:1.9,x:300,y:250,w:820,h:430},
-  z2:{label:'第2區｜一樓中前',zoom:1.75,x:1120,y:250,w:1180,h:430},
-  z3:{label:'第3區｜一樓右前',zoom:1.9,x:2300,y:250,w:820,h:430},
-  z4:{label:'第4區｜一樓左後（含輪椅席）',zoom:1.9,x:300,y:660,w:820,h:580},
-  z5:{label:'第5區｜一樓中後',zoom:1.75,x:1120,y:660,w:1180,h:580},
-  z6:{label:'第6區｜一樓右後（含輪椅席）',zoom:1.9,x:2300,y:660,w:820,h:580},
-  z7:{label:'第7區｜二樓左',zoom:1.9,x:300,y:1260,w:820,h:620},
-  z8:{label:'第8區｜二樓中',zoom:1.75,x:1120,y:1260,w:1180,h:620},
-  z9:{label:'第9區｜二樓右',zoom:1.9,x:2300,y:1260,w:820,h:620}
+  all:{label:'全圖',x:0,y:0,w:3400,h:1920},
+  z1:{label:'第1區｜一樓左前',x:300,y:250,w:820,h:430},
+  z2:{label:'第2區｜一樓中前',x:1120,y:250,w:1180,h:430},
+  z3:{label:'第3區｜一樓右前',x:2300,y:250,w:820,h:430},
+  z4:{label:'第4區｜一樓左後（含輪椅席）',x:300,y:660,w:820,h:580},
+  z5:{label:'第5區｜一樓中後',x:1120,y:660,w:1180,h:580},
+  z6:{label:'第6區｜一樓右後（含輪椅席）',x:2300,y:660,w:820,h:580},
+  z7:{label:'第7區｜二樓左',x:300,y:1260,w:820,h:620},
+  z8:{label:'第8區｜二樓中',x:1120,y:1260,w:1180,h:620},
+  z9:{label:'第9區｜二樓右',x:2300,y:1260,w:820,h:620}
 };
-function setZoom(z){zoom=Math.max(.2,Math.min(2.6,z));document.documentElement.style.setProperty('--zoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%'}
-function fitWhole(){const vw=viewport.clientWidth-36;setZoom(Math.min(.95,vw/3400))}
+function setZoom(z){
+  zoom=Math.max(.18,Math.min(2.6,z));
+  document.documentElement.style.setProperty('--zoom',zoom);
+  document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%';
+}
 function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
-function scrollViewportToZoneCenter(zone){
+function fitWhole(){
+  const fitW=(viewport.clientWidth-36)/3400;
+  const fitH=(viewport.clientHeight-36)/1920;
+  setZoom(Math.min(.95,Math.max(.18,Math.min(fitW,fitH))));
+}
+function fitZoomForZone(zone){
+  const padding=36;
+  const fitW=(viewport.clientWidth-padding)/zone.w;
+  const fitH=(viewport.clientHeight-padding)/zone.h;
+  return Math.max(.18,Math.min(2.6,fitW,fitH));
+}
+function scrollViewportToZoneCenter(zone,behavior='smooth'){
   const scaled=document.getElementById('scaled');
   const availableW=viewport.clientWidth;
   const availableH=viewport.clientHeight;
@@ -470,24 +497,79 @@ function scrollViewportToZoneCenter(zone){
   const rawTop=scaled.offsetTop+centerY-availableH/2;
   const maxLeft=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
   const maxTop=Math.max(0,viewport.scrollHeight-viewport.clientHeight);
-  viewport.scrollTo({left:clamp(rawLeft,0,maxLeft),top:clamp(rawTop,0,maxTop),behavior:'smooth'});
+  viewport.scrollTo({left:clamp(rawLeft,0,maxLeft),top:clamp(rawTop,0,maxTop),behavior});
 }
 function centerOnZone(zoneKey){
   const normalizedZoneKey=zoneViews[zoneKey]?zoneKey:'all';
   const zone=zoneViews[normalizedZoneKey];
+  activeZoneKey=normalizedZoneKey;
   document.querySelectorAll('[data-zone]').forEach(el=>el.classList.toggle('active',el.dataset.zone===normalizedZoneKey));
   if(normalizedZoneKey==='all'){
     fitWhole();
     requestAnimationFrame(()=>viewport.scrollTo({left:0,top:0,behavior:'smooth'}));
     return;
   }
-  setZoom(zone.zoom);
+  setZoom(fitZoomForZone(zone));
   requestAnimationFrame(()=>requestAnimationFrame(()=>scrollViewportToZoneCenter(zone)));
 }
-document.getElementById('zoomIn').onclick=()=>setZoom(zoom+.1);document.getElementById('zoomOut').onclick=()=>setZoom(zoom-.1);
+function zoomAroundViewportPoint(newZoom,clientX,clientY){
+  const scaled=document.getElementById('scaled');
+  const rect=viewport.getBoundingClientRect();
+  const localX=clientX-rect.left;
+  const localY=clientY-rect.top;
+  const contentX=(viewport.scrollLeft+localX-scaled.offsetLeft)/zoom;
+  const contentY=(viewport.scrollTop+localY-scaled.offsetTop)/zoom;
+  setZoom(newZoom);
+  requestAnimationFrame(()=>{
+    const maxLeft=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+    const maxTop=Math.max(0,viewport.scrollHeight-viewport.clientHeight);
+    viewport.scrollLeft=clamp(scaled.offsetLeft+contentX*zoom-localX,0,maxLeft);
+    viewport.scrollTop=clamp(scaled.offsetTop+contentY*zoom-localY,0,maxTop);
+  });
+}
+function zoomFromButton(delta){
+  const rect=viewport.getBoundingClientRect();
+  zoomAroundViewportPoint(zoom+delta,rect.left+rect.width/2,rect.top+rect.height/2);
+}
+let pinchStartDistance=0;
+let pinchStartZoom=zoom;
+function touchDistance(touches){
+  const dx=touches[0].clientX-touches[1].clientX;
+  const dy=touches[0].clientY-touches[1].clientY;
+  return Math.hypot(dx,dy);
+}
+function touchCenter(touches){
+  return {x:(touches[0].clientX+touches[1].clientX)/2,y:(touches[0].clientY+touches[1].clientY)/2};
+}
+viewport.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){
+    pinchStartDistance=touchDistance(e.touches);
+    pinchStartZoom=zoom;
+  }
+},{passive:true});
+viewport.addEventListener('touchmove',e=>{
+  if(e.touches.length===2&&pinchStartDistance){
+    e.preventDefault();
+    const ratio=touchDistance(e.touches)/pinchStartDistance;
+    const center=touchCenter(e.touches);
+    zoomAroundViewportPoint(pinchStartZoom*ratio,center.x,center.y);
+  }
+},{passive:false});
+viewport.addEventListener('touchend',e=>{
+  if(e.touches.length<2){
+    pinchStartDistance=0;
+    pinchStartZoom=zoom;
+  }
+},{passive:true});
+document.getElementById('zoomIn').onclick=()=>zoomFromButton(.1);
+document.getElementById('zoomOut').onclick=()=>zoomFromButton(-.1);
 document.getElementById('fit').onclick=()=>centerOnZone('all');
 document.querySelectorAll('[data-zone]').forEach(el=>el.addEventListener('click',()=>centerOnZone(el.dataset.zone)));
-window.addEventListener('resize',()=>{});
+window.addEventListener('resize',()=>{
+  if(activeZoneKey&&zoneViews[activeZoneKey]){
+    centerOnZone(activeZoneKey);
+  }
+});
 })();
 </script>
 </body>
