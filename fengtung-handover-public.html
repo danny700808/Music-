@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>豐東管樂成果展進度表｜家長閱讀版</title>
+<title>成果展進度表</title>
 <style>
 :root{--bg:#f7f4ed;--panel:#fffdf8;--text:#2d2922;--muted:#7a7166;--line:#e4d9c8;--accent:#b3261e;--shadow:0 12px 28px rgba(48,39,24,.10)}
 *{box-sizing:border-box}
@@ -12,9 +12,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans
 header{padding:22px 14px 8px}
 .hero{background:linear-gradient(135deg,#fdeff5 0%,#eef5ff 100%);border:1px solid #d9dbe8;border-radius:22px;padding:22px 20px;box-shadow:var(--shadow);text-align:center}
 .hero h1{margin:0;font-size:clamp(26px,5vw,40px);letter-spacing:.05em;color:#3a3a46}
-.hero p{margin:8px 0 0;color:var(--muted);font-weight:800}
 main{padding:10px 14px 34px}
-.status{margin:14px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;color:var(--muted);font-weight:800}
 .progressSection{background:#fffdf8;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);margin:14px 0 18px;overflow:hidden}
 .progressHeader{padding:16px 18px;background:#b3261e;color:#fff;text-align:center}
 .progressHeader h2{margin:0;font-size:clamp(22px,4.8vw,34px);letter-spacing:.03em;font-weight:950}
@@ -40,14 +38,13 @@ main{padding:10px 14px 34px}
 .progressRoleTag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 8px;font-size:12px;line-height:1.35;font-weight:900;color:#1f1b14;border:1px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.05);white-space:normal}
 .empty{text-align:center;color:var(--muted);font-weight:900;padding:24px}
 @media(max-width:620px){header{padding:12px 10px 6px}main{padding:8px 6px 26px}.hero{padding:18px 14px;border-radius:18px}.progressBody{padding:8px 4px}.progressTitleRow{gap:6px;margin-bottom:8px}.progressTitleRow h3{font-size:20px}.progressScroll{padding:6px}.progressPaper{width:900px;padding:8px}.progressTable{font-size:12px;line-height:1.35}.progressTable th,.progressTable td{padding:6px 5px}}
-@media print{@page{size:A4 landscape;margin:8mm}body{background:#fff!important}header,.status{display:none!important}main,.wrap{padding:0!important;margin:0!important;max-width:none!important;width:100%!important}.progressSection{box-shadow:none!important;border:0!important;border-radius:0!important;margin:0!important;overflow:visible!important;background:#fff!important}.progressHeader{display:none!important}.progressBody{padding:0!important}.progressScroll{overflow:visible!important;border:0!important;padding:0!important}.progressPaper{width:100%!important;padding:0!important;margin:0!important}.progressTable{font-size:9.5pt!important;line-height:1.35!important}.progressTable th,.progressTable td{border:1px solid #111!important;padding:5px!important}}
+@media print{@page{size:A4 landscape;margin:8mm}body{background:#fff!important}header{display:none!important}main,.wrap{padding:0!important;margin:0!important;max-width:none!important;width:100%!important}.progressSection{box-shadow:none!important;border:0!important;border-radius:0!important;margin:0!important;overflow:visible!important;background:#fff!important}.progressHeader{display:none!important}.progressBody{padding:0!important}.progressScroll{overflow:visible!important;border:0!important;padding:0!important}.progressPaper{width:100%!important;padding:0!important;margin:0!important}.progressTable{font-size:9.5pt!important;line-height:1.35!important}.progressTable th,.progressTable td{border:1px solid #111!important;padding:5px!important}}
 </style>
 </head>
 <body>
-<header><div class="wrap hero"><h1>豐東管樂成果展進度表</h1><p>家長閱讀版｜資料會與後台成果展進度表同步更新</p></div></header>
+<header><div class="wrap hero"><h1>成果展進度表</h1></div></header>
 <main><div class="wrap">
-<div class="status" id="statusText">資料讀取中…</div>
-<section class="progressSection"><div class="progressHeader"><h2>成果展進度表</h2></div><div class="progressBody"><div class="progressTitleRow"><h3 id="progressTitleText">成果展進度表</h3></div><div class="progressScroll"><div class="progressPaper"><table class="progressTable" id="progressTable"><tbody><tr><td class="empty">資料讀取中…</td></tr></tbody></table></div></div></div></section>
+<section class="progressSection"><div class="progressBody"><div class="progressScroll"><div class="progressPaper"><table class="progressTable" id="progressTable"><tbody><tr><td class="empty">資料讀取中…</td></tr></tbody></table></div></div></div></section>
 </div></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -95,7 +92,8 @@ let entries=[];
 const PROGRESS_KEY='show';
 const $=id=>document.getElementById(id);
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function progressOwnerArray(v){if(Array.isArray(v))return v.map(x=>String(x||''));if(!v)return[];return String(v||'').split(/\n+/).map(x=>x.trim()).filter(x=>x||x==='')}
+function progressOwnerArray(v){if(Array.isArray(v))return v.map(x=>String(x||''));if(!v)return[];return String(v||'').split(/
++/).map(x=>x.trim()).filter(x=>x||x==='')}
 function progressTitleEdit(){const a=entries.filter(e=>e.type==='progressTitle'&&(e.progressKey||'show')===PROGRESS_KEY);return a.length?a[a.length-1].title:null}
 function progressTitle(){return progressTitleEdit()||'成果展進度表'}
 function latestOfficerConfig(){const a=entries.filter(e=>e.type==='officerConfig');return a.length?a[a.length-1]:null}
@@ -111,7 +109,8 @@ function progressRoleName(tag=''){const ref=parseOfficerRef(tag);if(ref)return r
 function progressRoleStyle(tag=''){const key=progressRoleName(tag);return roleColors[key]||roleColors['其他']||roleColors['全體幹部']}
 function progressRoleList(v=''){return String(v||'').split('|').map(x=>x.trim()).filter(x=>progressRoleDisplay(x))}
 function progressRoleTagHtml(tag=''){const display=progressRoleDisplay(tag);if(!display)return'';const st=progressRoleStyle(tag);return `<span class="progressRoleTag" style="background:${st.bg};border-color:${st.accent};color:#1f1b14">${esc(display)}</span>`}
-function progressTextList(v=''){return String(v||'').split(/\n+/).map(x=>x.trim()).filter(Boolean)}
+function progressTextList(v=''){return String(v||'').split(/
++/).map(x=>x.trim()).filter(Boolean)}
 function progressLineField(field){return field==='note'?'note':'item'}
 function progressOwnerField(field){return progressLineField(field)==='note'?'noteOwners':'itemOwners'}
 function progressLineData(row,field){field=progressLineField(field);const texts=progressTextList(row[field]);const owners=progressOwnerArray(row[progressOwnerField(field)]);return texts.map((text,i)=>({text,roles:owners[i]||''}))}
@@ -121,9 +120,9 @@ function progressRoleCell(t){const tags=progressRoleList(t);return `<td><div cla
 function progressEditsFor(id){return entries.filter(e=>e.type==='progressEdit'&&e.scheduleId===id&&(e.progressKey||'show')===PROGRESS_KEY)}
 function latestProgressEdit(id){const a=progressEditsFor(id);return a.length?a[a.length-1]:null}
 function progressRows(){const custom=entries.filter(e=>e.type==='progressRow'&&(e.progressKey||'show')===PROGRESS_KEY).map(e=>({id:e.scheduleId||e.id,order:typeof e.order==='number'?e.order:999,time:e.time||'',item:e.item||'',itemOwners:progressOwnerArray(e.itemOwners),primary:e.primary||'',helper:e.helper||'',note:e.note||'',noteOwners:progressOwnerArray(e.noteOwners)}));return[...SHOW_PROGRESS_BASE,...custom].map(r=>{const base={...r,itemOwners:progressOwnerArray(r.itemOwners),noteOwners:progressOwnerArray(r.noteOwners)};const ed=latestProgressEdit(base.id);return ed?{...base,time:ed.time??base.time,item:ed.item??base.item,itemOwners:Array.isArray(ed.itemOwners)?progressOwnerArray(ed.itemOwners):base.itemOwners,primary:ed.primary??base.primary,helper:ed.helper??base.helper,note:ed.note??base.note,noteOwners:Array.isArray(ed.noteOwners)?progressOwnerArray(ed.noteOwners):base.noteOwners,order:typeof ed.order==='number'?ed.order:base.order,hidden:!!ed.hidden}:base}).filter(r=>!r.hidden).sort((a,b)=>(a.order||0)-(b.order||0))}
-function renderProgress(){$('progressTitleText').textContent=progressTitle();const rows=progressRows();$('progressTable').innerHTML=`<thead><tr><th class="timeCol">時間</th><th class="itemCol">事項</th><th class="helperCol">協助負責人</th><th class="noteCol">備註</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="timeCol"><span class="progressCellText">${esc(r.time||'')}</span></td><td>${progressListCell(r,'item')}</td>${progressRoleCell(r.helper)}<td>${progressListCell(r,'note')}</td></tr>`).join('')}</tbody>`}
-function startRealtime(){onSnapshot(query(entriesCol,orderBy('createdAt','asc')),snap=>{entries=snap.docs.map(d=>({id:d.id,...d.data()}));renderProgress();$('statusText').textContent='資料已同步更新';},err=>{console.error(err);$('statusText').textContent='資料讀取失敗，請確認網路或 Firebase 權限。';})}
-signInAnonymously(auth).then(startRealtime).catch(err=>{console.error(err);$('statusText').textContent='Firebase 匿名登入失敗，請確認 Authentication 已啟用匿名登入。';});
+function renderProgress(){const rows=progressRows();$('progressTable').innerHTML=`<thead><tr><th class="timeCol">時間</th><th class="itemCol">事項</th><th class="helperCol">協助負責人</th><th class="noteCol">備註</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="timeCol"><span class="progressCellText">${esc(r.time||'')}</span></td><td>${progressListCell(r,'item')}</td>${progressRoleCell(r.helper)}<td>${progressListCell(r,'note')}</td></tr>`).join('')}</tbody>`}
+function startRealtime(){onSnapshot(query(entriesCol,orderBy('createdAt','asc')),snap=>{entries=snap.docs.map(d=>({id:d.id,...d.data()}));renderProgress();},err=>{console.error(err);})}
+signInAnonymously(auth).then(startRealtime).catch(err=>{console.error(err);});
 </script>
 </body>
 </html>
